@@ -10,7 +10,7 @@ import { AuthenticationService } from 'src/app/logic/services/authentication.ser
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  public loginForm!: FormGroup;
+  public loginForm: FormGroup;
   public hide: boolean = true;
   public loading: boolean = false;
 

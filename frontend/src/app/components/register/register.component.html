@@ -1,1 +1,70 @@
-<p>register works!</p>
+<div class="uk-margin-large-top">
+  <div class="uk-card uk-card-default uk-align-center uk-width-4-5">
+    <div class="uk-card-header">
+      <h3 class="uk-card-title">Registrierung</h3>
+    </div>
+
+    <div class="uk-card-body">
+
+      <form class="uk-form-horizontal uk-margin-large" [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()">
+
+        <div class="uk-margin">
+          <label class="uk-form-label" for="firstName">Vorname</label>
+          <div class="uk-form-controls">
+            <input class="uk-input uk-form-width-large"
+              [ngClass]="{'uk-form-danger': registerValue.firstName.invalid && (registerValue.firstName.dirty || registerValue.firstName.touched)}"
+              id="firstName" type="text" placeholder="Max" formControlName="firstName" required>
+          </div>
+        </div>
+
+        <div class="uk-margin">
+          <label class="uk-form-label" for="lastName">Nachname</label>
+          <div class="uk-form-controls">
+            <input class="uk-input uk-form-width-large"
+              [ngClass]="{'uk-form-danger': registerValue.lastName.invalid && (registerValue.lastName.dirty || registerValue.lastName.touched)}"
+              id="lastName" type="text" placeholder="Mustermann" formControlName="lastName" required>
+          </div>
+        </div>
+
+        <div class="uk-margin">
+          <label class="uk-form-label" for="email">E-Mail</label>
+          <div class="uk-form-controls">
+            <input class="uk-input uk-form-width-large"
+              [ngClass]="{'uk-form-danger': registerValue.email.invalid && (registerValue.email.dirty || registerValue.email.touched)}"
+              id="email" type="text" placeholder="max.muster@mail.com" formControlName="email" required>
+          </div>
+        </div>
+
+
+        <div class="uk-margin">
+          <label class="uk-form-label" for="companyCode">Unternehmen</label>
+          <div class="uk-form-controls">
+            <input class="uk-input uk-form-width-large"
+              [ngClass]="{'uk-form-danger': registerValue.companyCode.invalid && (registerValue.companyCode.dirty || registerValue.companyCode.touched)}"
+              id="companyCode" type="text" placeholder="" formControlName="companyCode" required>
+          </div>
+        </div>
+
+        <div class="uk-margin">
+          <label class="uk-form-label" for="password">Passwort</label>
+          <div class="uk-form-controls">
+            <div class="uk-inline">
+              <a *ngIf="hide" class="uk-form-icon uk-form-icon-flip" uk-icon="lock" (click)="hidePassword($event)"></a>
+              <a *ngIf="!hide" class="uk-form-icon uk-form-icon-flip" uk-icon="unlock"
+                (click)="hidePassword($event)"></a>
+              <input class="uk-input uk-form-width-large"
+                [ngClass]="{'uk-form-danger': registerValue.password.invalid && (registerValue.password.dirty || registerValue.password.touched)}"
+                id="password" [type]="hide ? 'password' : 'text'" placeholder=" ..." formControlName="password">
+            </div>
+          </div>
+        </div>
+
+        <div class="uk-margin">
+          <button class="uk-button uk-button-primary uk-align-right uk-width-1-3" type="submit"
+            [disabled]="registerForm.invalid">Registrieren</button>
+        </div>
+      </form>
+      <a class="uk-link-muted" [routerLink]="['/login']">Anmeldung</a>
+    </div>
+  </div>
+</div>
