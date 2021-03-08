@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  selector: 'app-share',
+  templateUrl: './share.component.html',
+  styleUrls: ['./share.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ShareComponent implements OnInit {
 
   constructor() { }
 
@@ -28,6 +28,5 @@ export class ProfileComponent implements OnInit {
       },
     ],
   };
-
 
 }

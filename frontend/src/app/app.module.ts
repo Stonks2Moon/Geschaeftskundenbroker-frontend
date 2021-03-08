@@ -17,6 +17,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { BuyComponent } from './components/buy/buy.component';
+import { ShareComponent } from './components/share/share.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { BuyComponent } from './components/buy/buy.component';
     DepotComponent,
     HistoryComponent,
     ProfileComponent,
-    BuyComponent    
+    BuyComponent,
+    ShareComponent    
   ],
   imports: [
     BrowserModule,

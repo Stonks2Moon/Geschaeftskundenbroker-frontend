@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { EChartsOption } from 'echarts';
-
+import { Share } from 'src/app/logic/data-models/data-models';
+import { ShareService } from 'src/app/logic/services/share.service';
 
 @Component({
   selector: 'app-trade',
@@ -8,25 +8,11 @@ import { EChartsOption } from 'echarts';
   styleUrls: ['./trade.component.scss']
 })
 export class TradeComponent implements OnInit {
+  public shareArray: Array<Share>;
 
-  constructor() { }
+  constructor(private shareService: ShareService,) { }
 
   ngOnInit(): void {
+    this.shareService.getAllShares({}).subscribe(shares => this.shareArray = shares);
   }
-
-  chartOption: EChartsOption = {
-    xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    },
-    yAxis: {
-      type: 'value',
-    },
-    series: [
-      {
-        data: [820, 932, 901, 934, 1290, 1330, 1320],
-        type: 'line',
-      },
-    ],
-  };
 }
