@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Customer } from 'src/app/logic/data-models/data-models';
 import { AuthenticationService } from 'src/app/logic/services/authentication.service';
 
 @Component({
@@ -9,10 +10,15 @@ import { AuthenticationService } from 'src/app/logic/services/authentication.ser
 })
 export class NavComponent implements OnInit {
 
+  public currentCustomer: Customer;
+
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
-  ) { }
+  ) {
+
+    this.authenticationService.currentCustomer.subscribe(customer => this.currentCustomer = customer);
+  }
 
   ngOnInit(): void {
   }
