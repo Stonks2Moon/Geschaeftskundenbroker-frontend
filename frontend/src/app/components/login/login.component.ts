@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { ControlsMap } from 'src/app/logic/data-models/data-models';
 import { AuthenticationService } from 'src/app/logic/services/authentication.service';
 
+declare var UIkit: any;
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -12,7 +14,7 @@ import { AuthenticationService } from 'src/app/logic/services/authentication.ser
 export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
   public hide: boolean = true;
-  public loading: boolean = false;
+  public error: boolean = false;
 
   constructor(
     private router: Router,
@@ -25,7 +27,7 @@ export class LoginComponent implements OnInit {
 
   public createForm(): void {
     this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required])
     });
   }
@@ -40,14 +42,13 @@ export class LoginComponent implements OnInit {
   }
 
   public onLoginSubmit(): void {
-    this.loading = true;
     this.authenticationService.signInWithEmailAndPassword(this.loginValue).subscribe(
       (data) => {
         this.router.navigate(['/home']);
-        this.loading = false;
+        this.error = false;
       },
       (error) => {
-        this.loading = false;
+        this.error = true;
       }
     );
   }

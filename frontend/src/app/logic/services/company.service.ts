@@ -25,7 +25,7 @@ export class CompanyService {
             return data;
           },
           (error) => {
-            console.log(error);
+            return error;
           }
         )
       );

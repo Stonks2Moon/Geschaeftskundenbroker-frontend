@@ -38,7 +38,7 @@ export class AuthenticationService {
             return data;
           },
           (error) => {
-            console.log('Fehler');
+            return error;
           }
         )
       )

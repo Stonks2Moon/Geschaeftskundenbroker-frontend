@@ -6,6 +6,12 @@
 
     <div class="uk-card-body">
 
+      <div *ngIf="error" class="uk-alert-danger" uk-alert>
+        <div class="uk-alert-danger" uk-alert>
+          <p>Anmeldung fehlgeschlagen!</p>
+        </div>
+      </div>
+
       <form class="uk-form-horizontal uk-margin-large" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
         <div class="uk-margin">
           <label class="uk-form-label" for="email">E-Mail</label>
@@ -25,16 +31,14 @@
                 (click)="hidePassword($event)"></a>
               <input class="uk-input uk-form-width-large"
                 [ngClass]="{'uk-form-danger': loginValue.password.invalid && (loginValue.password.dirty || loginValue.password.touched)}"
-                id="password" [type]="hide ? 'password' : 'text'" placeholder=" ..." formControlName="password">
+                id="password" [type]="hide ? 'password' : 'text'" placeholder="***" formControlName="password">
             </div>
           </div>
         </div>
         <div class="uk-margin">
           <button class="uk-button uk-button-primary uk-align-right uk-width-1-3" type="submit"
             [disabled]="loginForm.invalid">Anmelden</button>
-
         </div>
-
       </form>
       <a class="uk-link-muted" [routerLink]="['/register']">Registrierung</a>
     </div>

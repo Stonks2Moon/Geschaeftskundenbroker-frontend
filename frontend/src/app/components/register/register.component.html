@@ -6,6 +6,12 @@
 
     <div class="uk-card-body">
 
+      <div *ngIf="error" class="uk-alert-danger" uk-alert>
+        <div class="uk-alert-danger" uk-alert>
+          <p>Registrierung fehlgeschlagen!</p>
+        </div>
+      </div>
+
       <form class="uk-form-horizontal uk-margin-large" [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()">
 
         <div class="uk-margin">
@@ -61,7 +67,7 @@
                 (click)="hidePassword($event)"></a>
               <input class="uk-input uk-form-width-large"
                 [ngClass]="{'uk-form-danger': registerValue.password.invalid && (registerValue.password.dirty || registerValue.password.touched)}"
-                id="password" [type]="hide ? 'password' : 'text'" placeholder=" ..." formControlName="password">
+                id="password" [type]="hide ? 'password' : 'text'" placeholder="***" formControlName="password">
             </div>
           </div>
         </div>
@@ -75,7 +81,7 @@
                 (click)="hidePassword($event)"></a>
               <input class="uk-input uk-form-width-large"
                 [ngClass]="{'uk-form-danger': registerValue.vPassword.invalid && (registerValue.vPassword.dirty || registerValue.vPassword.touched)}"
-                id="vPassword" [type]="hide ? 'password' : 'text'" placeholder=" ..." formControlName="vPassword">
+                id="vPassword" [type]="hide ? 'password' : 'text'" placeholder="***" formControlName="vPassword">
             </div>
           </div>
         </div>

@@ -19,7 +19,7 @@ class ValueAndText {
 export class RegisterComponent implements OnInit {
   public registerForm: FormGroup;
   public hide: boolean = true;
-  public loading: boolean = false;
+  public error: boolean = false;
   public companyArray: Array<Company>;
 
   titleArray: ValueAndText[] = [new ValueAndText("Mister", "Mister-Text"),
@@ -58,14 +58,13 @@ export class RegisterComponent implements OnInit {
   }
 
   public onRegisterSubmit(): void {
-    this.loading = true;
     this.authenticationService.signUp(this.registerValue).subscribe(
       (data) => {
         this.router.navigate(['/home']);
-        this.loading = false;
+        this.error = false;
       },
       (error) => {
-        this.loading = false;
+        this.error = true;
       }
     );
   }
