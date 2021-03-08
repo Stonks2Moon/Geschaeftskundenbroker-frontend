@@ -50,7 +50,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles/styles.scss"
+              "src/styles/styles.scss",           
+              "node_modules/flatpickr/dist/flatpickr.min.css"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -123,7 +124,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles/styles.scss"
+              "src/styles/styles.scss",            
+              "node_modules/flatpickr/dist/flatpickr.min.css"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [

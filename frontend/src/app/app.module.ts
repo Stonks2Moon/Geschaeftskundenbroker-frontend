@@ -14,6 +14,7 @@ import { DepotComponent } from './components/depot/depot.component';
 import { HistoryComponent } from './components/history/history.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
+import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { BuyComponent } from './components/buy/buy.component';
 
@@ -35,6 +36,7 @@ import { BuyComponent } from './components/buy/buy.component';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    Ng2FlatpickrModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts'),
     })
