@@ -1,24 +1,101 @@
 <div class="uk-container">
-    <form class="uk-form">
-        <select class="uk-select">
-            <option>Markt-Preis</option>
-            <option>Limit-Preis</option>
-            <option>Stop-Preis</option>
+    <div class="uk-child-width-1-1@m" uk-grid>
+        <div>
+            <div class="uk-card uk-card-default uk-width-2-3@m">
+                <div class="uk-card-header">
+                    <div class="uk-grid-small uk-flex-middle" uk-grid>
+                        <div class="uk-width-expand">
+                            <h3 class="uk-card-title uk-margin-remove-bottom">SAP</h3>
+                            <p class="uk-text-meta uk-margin-remove-top">SAP.F</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-card-body">
+                    <form class="uk-form-horizontal uk-margin-large">
+                        <div class="uk-margin">
+                            <label for="uk-select" class="uk-select-label">Order-Preis</label>
+                            <div class="uk-form-controls">
+                                <select class="uk-select" id="uk-select">
+                                    <option>Markt-Preis</option>
+                                    <option>Limit-Preis</option>
+                                    <option>Stop-Preis</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>    
+                    <form class="uk-form-horizontal uk-margin-large">
+                        <div class="uk-margin">
+                            <label for="uk-select" class="uk-select-label">Gültig bis</label>
+                            <div class="uk-form-controls">
+                                <input class="uk-input" id="uk-input">
+                            </div>
+                        </div>
+                    </form>    
 
-        </select>
-        <select class="uk-select" data-uk-datepicker="{ format:'DD.MM.YYYY'}">
-
-
-        </select>
-
-        <ng2-flatpickr class="calendarst"></ng2-flatpickr>
-
-        <input class="uk-input">
-        <input class="uk-input">
-        <input class="uk-input">
-
-    </form>
-    <form>
-
-    </form>
+                    <form class="uk-grid-small" uk-grid>
+                        <div class="uk-width-2-5@s">
+                            <input class="uk-input" type="text" placeholder="Anzahl Aktien">
+                        </div>
+                        <div class="uk-width-1-5@s">
+                            <i class="fas fa-equals"></i>
+                            <label for="uk-input" class='uk-input-label'>=</label>
+                        </div>
+                        <div class="uk-width-2-5@s">
+                            <input class="uk-input" id="uk-input" type="text" placeholder="Wert der Aktien">
+                        </div>
+                    </form>
+                </div>
+                <div class="uk-card-footer">
+                    <a href="#" class="uk-button uk-button-text">Read more</a>
+                </div>
+            </div>
+            <div class="uk-card uk-card-default uk-width-1-3@m">
+                <div class="uk-card-header">
+                    <div class="uk-grid-small uk-flex-middle" uk-grid>
+                        <div class="uk-width-expand">
+                            <h3 class="uk-card-title uk-margin-remove-bottom">SAP</h3>
+                            <p class="uk-text-meta uk-margin-remove-top">SAP.F</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-card-body">
+                    <form class="uk-form-horizontal uk-margin-large">
+                        <div class="uk-margin">
+                            <label for="uk-select" class="uk-select-label">Order-Preis</label>
+                            <div class="uk-form-controls">
+                                <select class="uk-select" id="uk-select">
+                                    <option>Markt-Preis</option>
+                                    <option>Limit-Preis</option>
+                                    <option>Stop-Preis</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>    
+                    <form class="uk-form-horizontal uk-margin-large">
+                        <div class="uk-margin">
+                            <label for="uk-select" class="uk-select-label">Gültig bis</label>
+                            <div class="uk-form-controls">
+                                <input class="uk-input" id="uk-input">
+                            </div>
+                        </div>
+                    </form>    
+                    <form class="uk-grid-small" uk-grid>
+                        <div class="uk-width-2-5@s">
+                            <input class="uk-input" type="text" placeholder="Anzahl Aktien">
+                        </div>
+                        <div class="uk-width-1-5@s">
+                            <i class="fas fa-equals"></i>
+                            <label for="uk-input" class='uk-input-label'>=</label>
+                        </div>
+                        <div class="uk-width-2-5@s">
+                            <input class="uk-input" id="uk-input" type="text" placeholder="Wert der Aktien">
+                        </div>
+                    </form>
+                </div>
+                <div class="uk-card-footer">
+                    <a href="#" class="uk-button uk-button-text">Read more</a>
+                </div>
+            </div>
+        </div>
+    </div>   
 </div>
