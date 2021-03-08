@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
