@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { HistoricalData } from '../data-models/data-models';
 import { Share } from '../data-models/share.model';
 
 @Injectable({
@@ -37,9 +38,51 @@ export class ShareService {
       urlEnd += `search=${query.search}&`;
     }
 
-    console.log(urlEnd);
-
     return this.http.get<Array<Share>>(`${this.apiUrl}share/all?${urlEnd}`)
+      .pipe(
+        tap(
+          (data) => {
+            return data;
+          },
+          (error) => {
+            return error;
+          }
+        )
+      );
+  }
+
+  public getShareById(shareId: string): Observable<Share> {
+    return this.http.get<Share>(`${this.apiUrl}share/share/${shareId}`)
+      .pipe(
+        tap(
+          (data) => {
+            return data;
+          },
+          (error) => {
+            return error;
+          }
+        )
+      );
+  }
+
+
+  public getShareHistory(query: { shareId: string, fromDate: Date, toDate: Date }): Observable<HistoricalData> {
+
+    let urlEnd: string = '';
+
+    if (query.shareId) {
+      urlEnd += `shareId=${query.shareId}&`;
+    }
+
+    if (query.fromDate) {
+      urlEnd += `fromDate=${query.fromDate}&`;
+    }
+
+    if (query.toDate) {
+      urlEnd += `toDate=${query.toDate}&`;
+    }
+
+    return this.http.get<HistoricalData>(`${this.apiUrl}share/share/historical-data?${urlEnd}`)
       .pipe(
         tap(
           (data) => {

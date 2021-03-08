@@ -28,4 +28,32 @@ export class CompanyService {
       );
   }
 
+  public getCompanyById(companyId: string): Observable<Company> {
+    return this.http.get<Company>(`${this.apiUrl}company/id/${companyId}`)
+      .pipe(
+        tap(
+          (data) => {
+            return data;
+          },
+          (error) => {
+            return error;
+          }
+        )
+      );
+  }
+
+  public getCompanyByCode(companyCode: string): Observable<Company> {
+    return this.http.get<Company>(`${this.apiUrl}company/code/${companyCode}`)
+      .pipe(
+        tap(
+          (data) => {
+            return data;
+          },
+          (error) => {
+            return error;
+          }
+        )
+      );
+  }
+
 }
