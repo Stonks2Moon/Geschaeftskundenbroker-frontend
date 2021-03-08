@@ -1,5 +1,5 @@
 <div class="uk-margin-large-top">
-  <div class="uk-card uk-card-default uk-align-center uk-width-4-5">
+  <div class="uk-card uk-card-default uk-align-center uk-width-2-5@l uk-width-3-5@m">
     <div class="uk-card-header">
       <h3 class="uk-card-title">Registrierung</h3>
     </div>
@@ -9,16 +9,17 @@
       <form class="uk-form-horizontal uk-margin-large" [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()">
 
         <div class="uk-margin">
-          <label class="uk-form-label" for="firstName">Vorname</label>
+          <label class="uk-form-label" for="firstName">Vorname*</label>
           <div class="uk-form-controls">
             <input class="uk-input uk-form-width-large"
               [ngClass]="{'uk-form-danger': registerValue.firstName.invalid && (registerValue.firstName.dirty || registerValue.firstName.touched)}"
               id="firstName" type="text" placeholder="Max" formControlName="firstName" required>
           </div>
+
         </div>
 
         <div class="uk-margin">
-          <label class="uk-form-label" for="lastName">Nachname</label>
+          <label class="uk-form-label" for="lastName">Nachname*</label>
           <div class="uk-form-controls">
             <input class="uk-input uk-form-width-large"
               [ngClass]="{'uk-form-danger': registerValue.lastName.invalid && (registerValue.lastName.dirty || registerValue.lastName.touched)}"
@@ -27,26 +28,32 @@
         </div>
 
         <div class="uk-margin">
-          <label class="uk-form-label" for="email">E-Mail</label>
+          <label class="uk-form-label" for="email">E-Mail*</label>
           <div class="uk-form-controls">
             <input class="uk-input uk-form-width-large"
               [ngClass]="{'uk-form-danger': registerValue.email.invalid && (registerValue.email.dirty || registerValue.email.touched)}"
               id="email" type="text" placeholder="max.muster@mail.com" formControlName="email" required>
+            <div *ngIf="registerValue.email.errors?.email" class="uk-form-width-large">
+              Email ist nicht im richtigen Format
+            </div>
           </div>
         </div>
 
-
         <div class="uk-margin">
-          <label class="uk-form-label" for="companyCode">Unternehmen</label>
+          <label class="uk-form-label" for="companyCode">Unternehmen*</label>
           <div class="uk-form-controls">
-            <input class="uk-input uk-form-width-large"
+            <select class="uk-select uk-form-width-large"
               [ngClass]="{'uk-form-danger': registerValue.companyCode.invalid && (registerValue.companyCode.dirty || registerValue.companyCode.touched)}"
-              id="companyCode" type="text" placeholder="" formControlName="companyCode" required>
+              id="companyCode" formControlName="companyCode" required>
+              <option value="">Bitte auswählen ...</option>
+              <option *ngFor="let company of companyArray" [value]="company.companyCode">
+                {{company.companyName}}
+            </select>
           </div>
         </div>
 
         <div class="uk-margin">
-          <label class="uk-form-label" for="password">Passwort</label>
+          <label class="uk-form-label" for="password">Passwort*</label>
           <div class="uk-form-controls">
             <div class="uk-inline">
               <a *ngIf="hide" class="uk-form-icon uk-form-icon-flip" uk-icon="lock" (click)="hidePassword($event)"></a>
@@ -55,6 +62,20 @@
               <input class="uk-input uk-form-width-large"
                 [ngClass]="{'uk-form-danger': registerValue.password.invalid && (registerValue.password.dirty || registerValue.password.touched)}"
                 id="password" [type]="hide ? 'password' : 'text'" placeholder=" ..." formControlName="password">
+            </div>
+          </div>
+        </div>
+
+        <div class="uk-margin">
+          <label class="uk-form-label" for="vPassword">wdh. Passwort*</label>
+          <div class="uk-form-controls">
+            <div class="uk-inline">
+              <a *ngIf="hide" class="uk-form-icon uk-form-icon-flip" uk-icon="lock" (click)="hidePassword($event)"></a>
+              <a *ngIf="!hide" class="uk-form-icon uk-form-icon-flip" uk-icon="unlock"
+                (click)="hidePassword($event)"></a>
+              <input class="uk-input uk-form-width-large"
+                [ngClass]="{'uk-form-danger': registerValue.vPassword.invalid && (registerValue.vPassword.dirty || registerValue.vPassword.touched)}"
+                id="vPassword" [type]="hide ? 'password' : 'text'" placeholder=" ..." formControlName="vPassword">
             </div>
           </div>
         </div>
