@@ -9,19 +9,16 @@ import { Company } from '../data-models/data-models';
   providedIn: 'root'
 })
 export class CompanyService {
-
   private apiUrl: string = environment.apiUrl
 
   constructor(private http: HttpClient) { }
 
 
   public getAllCompanies(): Observable<Array<Company>> {
-
     return this.http.get<Array<Company>>(`${this.apiUrl}company/all`)
       .pipe(
         tap(
           (data) => {
-            console.log(data);
             return data;
           },
           (error) => {
@@ -30,4 +27,5 @@ export class CompanyService {
         )
       );
   }
+
 }
