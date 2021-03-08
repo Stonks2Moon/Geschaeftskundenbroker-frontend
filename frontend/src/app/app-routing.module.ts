@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DepotComponent } from './components/depot/depot.component';
 import { HistoryComponent } from './components/history/history.component';
 import { HomeComponent } from './components/home/home.component';
+import { BuyComponent } from './components/buy/buy.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -44,6 +45,11 @@ const routes: Routes = [
     path: 'profile',
     canActivate: [AuthenticationGuard],
     component: ProfileComponent
+  },
+  {
+    path: 'buy',
+    canActivate: [AuthenticationGuard],
+    component: BuyComponent
   },
   {
     path: '',

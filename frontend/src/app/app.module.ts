@@ -14,6 +14,9 @@ import { DepotComponent } from './components/depot/depot.component';
 import { HistoryComponent } from './components/history/history.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
+import { NgxEchartsModule } from 'ngx-echarts';
+import { BuyComponent } from './components/buy/buy.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,13 +27,17 @@ import { ProfileComponent } from './components/profile/profile.component';
     TradeComponent,
     DepotComponent,
     HistoryComponent,
-    ProfileComponent
+    ProfileComponent,
+    BuyComponent    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts'),
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
