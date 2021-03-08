@@ -1,16 +1,23 @@
 <nav class="uk-navbar-container uk-margin-large-bottom" uk-navbar>
 
-  <div class="uk-navbar-left">
-
+  <div class="nav-overlay uk-navbar-left">
     <a class="uk-navbar-item uk-logo">{{currentCustomer.company.companyName}}</a>
-
     <ul class="uk-navbar-nav">
       <li routerLinkActive="uk-active"><a [routerLink]="['/home']">Home</a></li>
     </ul>
-
   </div>
 
   <div class="uk-navbar-right">
+
+    <div class="uk-navbar-item">
+
+
+      <div class="uk-inline">
+        <a class="uk-form-icon uk-form-icon-flip" uk-icon="icon: search" (click)="onSearchPressed(query.value)"></a>
+        <input class="uk-input uk-form-width-medium uk-form-small" type="text" placeholder="Suche" #query>
+      </div>
+
+    </div>
 
     <ul class="uk-navbar-nav">
       <li routerLinkActive="uk-active"><a [routerLink]="['/trade']">Handel</a></li>
