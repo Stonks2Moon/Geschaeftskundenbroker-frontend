@@ -4,7 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { CustomerSession, Depot } from '../data-models/data-models';
+import { CreateDepot, CustomerSession, Depot, PlaceOrder, PlaceShareOrder } from '../data-models/data-models';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,6 @@ export class DepotService {
   constructor(private http: HttpClient, private cookieService: CookieService) { }
 
   public getAllDepotsBySession(): Observable<Array<Depot>> {
-
     if (this.cookieService.check('session')) {
       const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
       return this.http.post<Array<Depot>>(`${this.apiUrl}depot/all`, session)
@@ -35,4 +34,74 @@ export class DepotService {
       return null;
     }
   }
+
+  public getDepotById(depotId: string): Observable<Depot> {
+    if (this.cookieService.check('session')) {
+      const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
+      return this.http.post<Depot>(`${this.apiUrl}depot/show/${depotId}`, session)
+        .pipe(
+          tap(
+            (data) => {
+              return data;
+            },
+            (error) => {
+              console.log(error);
+              return error;
+            }
+          )
+        )
+    } else {
+      console.log('Nicht angemeldet');
+      return null;
+    }
+  }
+
+  public createDepot(param: { name: string, description?: string }): Observable<Depot> {
+    if (this.cookieService.check('session')) {
+      const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
+
+      const createDepot: CreateDepot = { session: session, name: param.name, description: param.description };
+
+      return this.http.put<Depot>(`${this.apiUrl}depot`, createDepot)
+        .pipe(
+          tap(
+            (data) => {
+              return data;
+            },
+            (error) => {
+              console.log(error);
+              return error;
+            }
+          )
+        )
+    } else {
+      console.log('Nicht angemeldet');
+      return null;
+    }
+  }
+
+  public createOrder(order: PlaceShareOrder): Observable<Depot> {
+    if (this.cookieService.check('session')) {
+      const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
+
+      const placeOrder: PlaceOrder = { customreSession: session, order: order };
+
+      return this.http.put<Depot>(`${this.apiUrl}depot/order`, placeOrder)
+        .pipe(
+          tap(
+            (data) => {
+              return data;
+            },
+            (error) => {
+              console.log(error);
+              return error;
+            }
+          )
+        )
+    } else {
+      console.log('Nicht angemeldet');
+      return null;
+    }
+  }
+
 }
