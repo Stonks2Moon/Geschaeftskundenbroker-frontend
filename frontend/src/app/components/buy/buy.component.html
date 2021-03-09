@@ -11,9 +11,7 @@
                     <div class="uk-margin uk-width-1-1">
                         <label class="uk-form-label" for="depotSelect">Depot</label>
                         <select class="uk-select" id="depotSelect">
-                            <option>Depot 1</option>
-                            <option>Depot 2</option>
-                            <option>Depot 3</option>
+                            <option *ngFor="let depot of depotArray" [value]="depot.depotId">{{ depot.name }}</option>
                         </select>
                     </div>
                     <div class="uk-margin uk-width-1-1">
