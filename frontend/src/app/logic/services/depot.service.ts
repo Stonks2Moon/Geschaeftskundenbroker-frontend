@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { CreateDepot, CustomerSession, Depot, PlaceOrder, PlaceShareOrder } from '../data-models/data-models';
+import { ControlsMap, CreateDepot, CustomerSession, Depot, PlaceOrder, PlaceShareOrder } from '../data-models/data-models';
 
 @Injectable({
   providedIn: 'root'
@@ -56,11 +57,11 @@ export class DepotService {
     }
   }
 
-  public createDepot(param: { name: string, description?: string }): Observable<Depot> {
+  public createDepot(depotValue: ControlsMap<AbstractControl>): Observable<Depot> {
     if (this.cookieService.check('session')) {
       const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
 
-      const createDepot: CreateDepot = { session: session, name: param.name, description: param.description };
+      const createDepot: CreateDepot = { session: session, name: depotValue.depotName.value, description: depotValue.depotDescription.value };
 
       return this.http.put<Depot>(`${this.apiUrl}depot`, createDepot)
         .pipe(
