@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { EChartsOption } from 'echarts';
+import { Location } from '@angular/common';
+import { Depot } from 'src/app/logic/data-models/data-models';
+import { DepotService } from 'src/app/logic/services/depot.service';
 
 @Component({
   selector: 'app-buy',
@@ -7,9 +11,36 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BuyComponent implements OnInit {
 
-  constructor() { }
+  public depotArray: Array<Depot> = [];
+
+  constructor(private location: Location, private depotService: DepotService) {
+
+   }
 
   ngOnInit(): void {
+    this.depotService.getAllDepotsBySession().subscribe(depots => {
+      this.depotArray = depots;
+    });
   }
 
+  chartOption: EChartsOption = {
+    xAxis: {
+      type: 'category',
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    },
+    yAxis: {
+      type: 'value',
+    },
+    series: [
+      {
+        data: [820, 932, 901, 1290, 1330, 1320],
+        type: 'line',
+      },
+    ],
+  };
+
+  // TODO
+  public cancel(): void {
+    //this.location.back()
+  }
 }

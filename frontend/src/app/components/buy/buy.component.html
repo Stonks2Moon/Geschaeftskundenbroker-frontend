@@ -1,24 +1,66 @@
-<div class="uk-container">
-    <form class="uk-form">
-        <select class="uk-select">
-            <option>Markt-Preis</option>
-            <option>Limit-Preis</option>
-            <option>Stop-Preis</option>
+<div class="uk-container uk-width-3-4@m uk-width-1-1@s">
+    <div uk-grid>
+        <div class="uk-card uk-card-default uk-width-3-5@m">
+            <div class="uk-card-header">
+                <h3 class="uk-card-title">Aktienname</h3>
+            </div>
 
-        </select>
-        <select class="uk-select" data-uk-datepicker="{ format:'DD.MM.YYYY'}">
+            <div class="uk-card-body">
 
+                <form class="uk-form-stacked uk-grid-small" uk-grid>
+                    <div class="uk-margin uk-width-1-1">
+                        <label class="uk-form-label" for="depotSelect">Depot</label>
+                        <select class="uk-select" id="depotSelect">
+                            <option *ngFor="let depot of depotArray" [value]="depot.depotId">{{ depot.name }}</option>
+                        </select>
+                    </div>
+                    <div class="uk-margin uk-width-1-1">
+                        <label class="uk-form-label" for="orderPrice">Order-Preis*</label>
+                        <select class="uk-select" id="orderPrice">
+                            <option>Markt-Preis</option>
+                            <option>Limit-Preis</option>
+                            <option>Stop-Preis</option>
+                        </select>
+                    </div>
+                    <div class="uk-margin uk-width-1-1">
+                        <label class="uk-form-label" for="expiredDate">Gültig bis</label>
+                        <input class="uk-input" type="text" id="expiredDate">
+                    </div>
 
-        </select>
+                    <div class="uk-margin uk-form-controls uk-width-2-5@s">
+                        <label class="uk-form-label" for="number">Anzahl der Aktien (in Stk.)</label>
+                        <input class="uk-input" type="text" id="number">
+                    </div>
 
-        <ng2-flatpickr class="calendarst"></ng2-flatpickr>
+                    <div class="uk-margin uk-width-1-5@s">
+                        <label class="uk-form-label" for="equal">&nbsp;</label>
+                        <div class="uk-input input-equal" id="equal"><i class="fas fa-equals"></i></div>
+                    </div>
 
-        <input class="uk-input">
-        <input class="uk-input">
-        <input class="uk-input">
+                    <div class="uk-margin uk-width-2-5@s">
+                        <label class="uk-form-label" for="number">Wert der Aktien (in €)</label>
+                        <input class="uk-input" type="text" id="number">
+                    </div>
 
-    </form>
-    <form>
+                    <div class="uk-margin uk-width-1-2">
+                        <button class="uk-button" (click)="cancel()">Abbrechen</button>
+                    </div>
+                    <div class="uk-margin uk-width-1-2">
+                        <button class="uk-button uk-button-primary uk-align-right" type="button">Kaufen</button>
+                    </div>
+                </form>
 
-    </form>
+            </div>
+        </div>
+        <div class="uk-card uk-width-2-5@l">
+            <div class="uk-card-header">
+                <h3 class="uk-card-title">Statistik</h3>
+            </div>
+            <div class="uk-card-body">
+                <div echarts [options]="chartOption" class="demo-chart"></div>
+                <div>Aktienkurs</div>
+                <div>Du besitzt xxx Aktien im Wert von xxx €</div>
+            </div>
+        </div>
+    </div>
 </div>
