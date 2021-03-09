@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-buy',
@@ -8,7 +9,8 @@ import { EChartsOption } from 'echarts';
 })
 export class BuyComponent implements OnInit {
 
-  constructor() { }
+  constructor(private location: Location) {
+   }
 
   ngOnInit(): void {
   }
@@ -29,4 +31,8 @@ export class BuyComponent implements OnInit {
     ],
   };
 
+  // TODO
+  public cancel(): void {
+    //this.location.back()
+  }
 }
