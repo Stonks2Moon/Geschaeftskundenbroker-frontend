@@ -9,6 +9,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
 import { TradeComponent } from './components/trade/trade.component';
 import { AuthenticationGuard } from './logic/guard/authentication.guard';
+import { ShareComponent } from './components/share/share.component';
 
 const routes: Routes = [
   {
@@ -50,6 +51,11 @@ const routes: Routes = [
     path: 'buy',
     canActivate: [AuthenticationGuard],
     component: BuyComponent
+  },
+  {
+    path: 'share/:shareId',
+    canActivate: [AuthenticationGuard],
+    component: ShareComponent
   },
   {
     path: '',

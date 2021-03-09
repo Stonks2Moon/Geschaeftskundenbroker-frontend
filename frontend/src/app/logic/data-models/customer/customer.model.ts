@@ -1,4 +1,4 @@
-import { Company } from "./data-models";
+import { Company } from "../data-models";
 
 export interface Customer {
     customerId?: string,

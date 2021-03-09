@@ -10,7 +10,7 @@ import { ShareService } from 'src/app/logic/services/share.service';
 export class TradeComponent implements OnInit {
   public shareArray: Array<Share>;
 
-  constructor(private shareService: ShareService,) { }
+  constructor(private shareService: ShareService) { }
 
   ngOnInit(): void {
     this.shareService.getAllShares({}).subscribe(shares => this.shareArray = shares);

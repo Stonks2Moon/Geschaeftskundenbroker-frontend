@@ -18,6 +18,7 @@ import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { BuyComponent } from './components/buy/buy.component';
 import { ShareComponent } from './components/share/share.component';
+import { DepotDetailComponent } from './components/depot-detail/depot-detail.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ShareComponent } from './components/share/share.component';
     HistoryComponent,
     ProfileComponent,
     BuyComponent,
-    ShareComponent    
+    ShareComponent,
+    DepotDetailComponent    
   ],
   imports: [
     BrowserModule,
