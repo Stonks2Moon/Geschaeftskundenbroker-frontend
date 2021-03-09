@@ -1,89 +1,60 @@
-<!-- <div class="uk-container">
-        <div uk-grid>
-            <div class="uk-card uk-card-default uk-width-2-3@m">
-                <div class="uk-card-header">
-                    <div class="uk-grid-small uk-flex-middle" uk-grid>
-                        <div class="uk-width-expand">
-                            <h3 class="uk-card-title uk-margin-remove-bottom">SAP</h3>
-                            <p class="uk-text-meta uk-margin-remove-top">SAP.F</p>
-                        </div>
+<div class="uk-container uk-width-3-4@m uk-width-1-1@s">
+    <div uk-grid>
+        <div class="uk-card uk-card-default uk-width-3-5@m">
+            <div class="uk-card-header">
+                <h3 class="uk-card-title">Aktienname</h3>
+            </div>
+
+            <div class="uk-card-body">
+
+                <form class="uk-form-stacked uk-grid-small" uk-grid>
+                    <div class="uk-margin uk-width-1-1">
+                        <label class="uk-form-label" for="orderPrice">Order-Preis*</label>
+                        <select class="uk-select" id="orderPrice">
+                            <option>Markt-Preis</option>
+                            <option>Limit-Preis</option>
+                            <option>Stop-Preis</option>
+                        </select>
                     </div>
-                </div>
-                <div class="uk-card-body">
-                    <form class="uk-form-horizontal uk-margin-large">
-                        <div class="uk-margin">
-                            <label for="uk-select" class="uk-select-label">Order-Preis</label>
-                            <div class="uk-form-controls">
-                                <select class="uk-select" id="uk-select">
-                                    <option>Markt-Preis</option>
-                                    <option>Limit-Preis</option>
-                                    <option>Stop-Preis</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>    
-                    <form class="uk-form-horizontal uk-margin-large">
-                        <div class="uk-margin">
-                            <label for="uk-select" class="uk-select-label">Gültig bis</label>
-                            <div class="uk-form-controls">
-                                <input class="uk-input" id="uk-input">
-                            </div>
-                        </div>
-                    </form>    
+                    <div class="uk-margin uk-width-1-1">
+                        <label class="uk-form-label" for="expiredDate">Gültig bis</label>
+                        <input class="uk-input" type="text" id="expiredDate">
+                    </div>
 
-                    <form class="uk-grid-small" uk-grid>
-                        <div class="uk-width-2-5@s">
-                            <input class="uk-input" type="text" placeholder="Anzahl Aktien">
-                        </div>
-                        <div class="uk-test">
-                            <i class="fas fa-equals"></i>
-                        </div>
-                        <div class="uk-width-2-5@s">
-                            <input class="uk-input" id="uk-input" type="text" placeholder="Wert der Aktien">
-                        </div>
-                    </form>
-                </div>
+                    <div class="uk-margin uk-form-controls uk-width-2-5@s">
+                        <label class="uk-form-label" for="number">Anzahl der Aktien (in Stk.)</label>
+                        <input class="uk-input" type="text" id="number">
+                    </div>
+
+                    <div class="uk-margin uk-width-1-5@s">
+                        <label class="uk-form-label" for="equal">&nbsp;</label>
+                        <div class="uk-input input-equal" id="equal"><i class="fas fa-equals"></i></div>
+                    </div>
+
+                    <div class="uk-margin uk-width-2-5@s">
+                        <label class="uk-form-label" for="number">Wert der Aktien (in €)</label>
+                        <input class="uk-input" type="text" id="number">
+                    </div>
+
+                    <div class="uk-margin uk-width-1-2">
+                        <button class="uk-button" [routerLink]="['/share/1']">Abbrechen</button>
+                    </div>
+                    <div class="uk-margin uk-margin uk-width-1-2">
+                        <button class="uk-button uk-button-primary uk-align-right" type="button">Kaufen</button>
+                    </div>
+                </form>
+
             </div>
-            <div class="uk-card uk-card-default uk-width-1-3@m">
-                <div class="uk-card-body">
-                    <h3 class="uk-card-title">Statistik</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                </div>
-            </div>   
         </div>
-    </div>    -->
-
-<div class="uk-card uk-card-default uk-align-center uk-width-2-5@l uk-width-3-5@m">
-    <div class="uk-card-header">
-        <h3 class="uk-card-title">SAP</h3>
-    </div>
-
-    <div class="uk-card-body">
-
-        <form class="uk-form-horizontal uk-margin-large">
-            <div class="uk-margin">
-                <label class="uk-form-label" for="orderPrice">Order-Preis*</label>
-                <div class="uk-form-controls">
-                    <select class="uk-select uk-form-width-large" id="orderPrice" formControlName="orderPrice" required>
-                        <option value="">Bitte auswählen ...</option>
-                    </select>
-                </div>
+        <div class="uk-card uk-width-2-5@l">
+            <div class="uk-card-header">
+                <h3 class="uk-card-title">Statistiken</h3>
             </div>
-            <div class="uk-margin">
-                <label class="uk-form-label" for="expireDate">Gültig bis*</label>
-                <div class="uk-form-controls">
-                    <input class="uk-input uk-form-width-large" id="expireDate" type="text" formControlName="expireDate"
-                        required>
-                </div>
+            <div class="uk-card-body">
+                <div echarts [options]="chartOption" class="demo-chart"></div>
+                <div>Aktienkurs</div>
+                <div>Du besitzt xxx Aktien im Wert von xxx €</div>
             </div>
-            <div class="uk-margin">
-                <div class="uk-form-controls">
-                    <input class="uk-input" id="form-stacked-text" type="text" placeholder="Some text...">
-                </div>
-            </div>
-            <div class="uk-margin">
-                <button class="uk-button uk-button-primary uk-align-right uk-width-1-3" type="submit">Kaufen</button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
