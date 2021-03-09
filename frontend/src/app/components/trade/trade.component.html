@@ -5,6 +5,7 @@
         <th>Aktienname</th>
         <th>WKN / ISIN</th>
         <th>Wert</th>
+        <th>Aktion</th>
       </tr>
     </thead>
     <tbody>
@@ -13,6 +14,7 @@
           <td>{{share.shareName}}</td>
           <td>{{share.wkn}} / {{share.isin}}</td>
           <td>{{share.lastRecordedValue}} {{share.currencyCode}}</td>
+          <td><button class="uk-button uk-button-primary" [routerLink]="['/share', share.shareId]">Details</button></td>
         </tr>
       </ng-container>
 

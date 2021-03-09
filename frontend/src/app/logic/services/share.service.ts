@@ -52,7 +52,7 @@ export class ShareService {
   }
 
   public getShareById(shareId: string): Observable<Share> {
-    return this.http.get<Share>(`${this.apiUrl}share/share/${shareId}`)
+    return this.http.get<Share>(`${this.apiUrl}share/${shareId}`)
       .pipe(
         tap(
           (data) => {
@@ -75,14 +75,14 @@ export class ShareService {
     }
 
     if (query.fromDate) {
-      urlEnd += `fromDate=${query.fromDate}&`;
+      urlEnd += `fromDate=${query.fromDate.toISOString()}&`;
     }
 
     if (query.toDate) {
-      urlEnd += `toDate=${query.toDate}&`;
+      urlEnd += `toDate=${query.toDate.toISOString()}`;
     }
 
-    return this.http.get<HistoricalData>(`${this.apiUrl}share/share/historical-data?${urlEnd}`)
+    return this.http.get<HistoricalData>(`${this.apiUrl}share/historical-data?${urlEnd}`)
       .pipe(
         tap(
           (data) => {
