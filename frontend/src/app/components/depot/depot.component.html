@@ -1,1 +1,53 @@
-<p>depot works!</p>
+<div class="uk-container">
+    <div class="uk-child-width-1-2@s uk-grid-small uk-text-center" uk-grid>
+        <!-- <div>
+            <div class="uk-tile uk-tile-muted uk-padding-remove">
+                <p class="uk-h4">Remove</p>
+            </div>
+        </div>
+        <div>
+            <div class="uk-tile uk-tile-primary uk-padding-small">
+                <p class="uk-h4">Small</p>
+            </div>
+        </div> -->
+        <ng-container *ngFor="let depots of depotArray">
+            <!--div wird für den Abstand benötigt-->
+            <div>
+                <div class="uk-card uk-card-hover uk-card-default uk-card-body">
+                    <h3 class="uk-card-title">{{depots.name}}</h3>
+                    <p>{{depots.description}}</p>
+                    <button class="uk-button uk-button-primary"
+                        [routerLink]="['/depot-detail', depots.depotId]">Details</button>
+                </div>
+            </div>
+
+
+        </ng-container>
+        <div>
+            <div class="uk-card uk-card-hover uk-card-default uk-card-body">
+                <h3 class="uk-card-title">Erstelle ein Depot</h3>
+                <p>Hier kannst du ein Depot für dein Unternehmen erstellen</p>
+                <form class="uk-form-horizontal uk-margin-large" [formGroup]="depotForm" (ngSubmit)="onDepotSubmit()">
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="depotName">Name des Depots*</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input uk-form-width-large"                                
+                                id="depotName" type="text" placeholder="Name des Depots" formControlName="depotName"
+                                required>
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="depotDescription">Beschreibung</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input uk-form-width-large"                               
+                                id="depotDescription" type="text" placeholder="Beschreibung" formControlName="depotDescription"
+                                required>
+                        </div>
+                    </div>
+                    <button type="submit" class="uk-button uk-button-primary">Erstellen</button>
+                </form>
+            
+            </div>
+        </div>
+    </div>
+</div>

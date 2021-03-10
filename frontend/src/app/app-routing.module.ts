@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DepotComponent } from './components/depot/depot.component';
+import { DepotDetailComponent } from './components/depot-detail/depot-detail.component';
 import { HistoryComponent } from './components/history/history.component';
 import { HomeComponent } from './components/home/home.component';
 import { BuyComponent } from './components/buy/buy.component';
@@ -36,6 +37,11 @@ const routes: Routes = [
     path: 'depot',
     canActivate: [AuthenticationGuard],
     component: DepotComponent
+  },
+  {
+    path: 'depot-detail/:depotId',
+    canActivate: [AuthenticationGuard],
+    component: DepotDetailComponent
   },
   {
     path: 'history',

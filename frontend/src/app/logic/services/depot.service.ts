@@ -62,7 +62,7 @@ export class DepotService {
       const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
 
       const createDepot: CreateDepot = { session: session, name: depotValue.depotName.value, description: depotValue.depotDescription.value };
-
+      console.log(createDepot);
       return this.http.put<Depot>(`${this.apiUrl}depot`, createDepot)
         .pipe(
           tap(
