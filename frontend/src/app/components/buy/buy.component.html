@@ -14,13 +14,35 @@
                             <option *ngFor="let depot of depotArray" [value]="depot.depotId">{{ depot.name }}</option>
                         </select>
                     </div>
-                    <div class="uk-margin uk-width-1-1">
-                        <label class="uk-form-label" for="orderPrice">Order-Preis*</label>
-                        <select class="uk-select" id="orderPrice">
-                            <option>Markt-Preis</option>
-                            <option>Limit-Preis</option>
-                            <option>Stop-Preis</option>
+                    <div class="uk-margin uk-width-1-2">
+                        <label class="uk-form-label" for="orderType">Order-Art*</label>
+                        <select #orderType class="uk-select" id="orderType" (change)="onOptionsSelected($event)">
+                            <option value="marketPrice">Markt-Preis</option>
+                            <option value="limitPrice">Limit-Preis</option>
+                            <option value="stopPrice">Stop-Preis</option>
                         </select>
+                    </div>
+                    <div class="uk-margin uk-width-1-2">
+                        <div *ngIf="selected !== 'stopPrice' && selected !== 'limitPrice'">
+                            <label class="uk-form-label" for="orderPrice">Order-Preis</label>
+                            <input class="uk-input" id="orderPrice" disabled value="120€">
+                        </div>
+                        <div *ngIf="selected === 'limitPrice'; else second">
+                            <label class="uk-form-label" for="orderPrice">Order-Preis</label>
+                            <input class="uk-input" id="orderPrice">
+                        </div>
+                        <ng-template #second>
+                            <div *ngIf="selected === 'stopPrice'" uk-grid>
+                                <div class="uk-margin uk-width-1-2">
+                                    <label class="uk-form-label" for="minimum">Minimum</label>
+                                    <input class="uk-input" id="minimum">
+                                </div>
+                                <div class="uk-width-1-2">
+                                    <label class="uk-form-label" for="maximum">Maximum</label>
+                                    <input class="uk-input" id="maximum">
+                                </div>
+                            </div>
+                        </ng-template>
                     </div>
                     <div class="uk-margin uk-width-1-1">
                         <label class="uk-form-label" for="expiredDate">Gültig bis</label>
