@@ -12,6 +12,7 @@ import { DepotService } from 'src/app/logic/services/depot.service';
 export class BuyComponent implements OnInit {
 
   public depotArray: Array<Depot> = [];
+  selected: string;
 
   constructor(private location: Location, private depotService: DepotService) {
 
@@ -43,4 +44,10 @@ export class BuyComponent implements OnInit {
   public cancel(): void {
     //this.location.back()
   }
+
+  onOptionsSelected(event: any){
+    this.selected = event.target.value;
+  }
+
+  
 }
