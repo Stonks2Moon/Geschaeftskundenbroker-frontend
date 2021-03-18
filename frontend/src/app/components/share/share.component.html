@@ -1,9 +1,9 @@
 <div class="uk-container">
   <h2 class="uk-align-left uk-h3">{{share?.shareName}}</h2>
 
-  <a class="uk-button uk-button-primary default uk-align-right" [routerLink]="['/buy']">Aktien kaufen</a>
+  <a class="uk-button uk-button-primary default uk-align-right" [routerLink]="['/buy, share?.shareId']">Aktien kaufen</a>
 
-  <a class="uk-button uk-button-primary uk-align-right" [routerLink]="['/buy']">Aktien verkaufen</a>
+  <a class="uk-button uk-button-primary uk-align-right" [routerLink]="['/buy', share?.shareId]">Aktien verkaufen</a>
 
 </div>
 

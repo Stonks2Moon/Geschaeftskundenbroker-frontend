@@ -23,7 +23,7 @@ export class ShareComponent implements OnInit {
     private route: ActivatedRoute,
     private shareService: ShareService,
   ) {
-    this.fromDate.setDate(this.fromDate.getDate() - 30);
+    this.fromDate.setDate(this.fromDate.getDate() - 365);
   }
 
   ngOnInit(): void {
@@ -47,7 +47,8 @@ export class ShareComponent implements OnInit {
     let y: Array<number> = [];
     let data: Array<any> = [];
     let dates: Array<string> = [];
-    let averages: Array<number> =[];
+    let dailyaverages: Array<number> =[];
+    let weeklyaverages: Array<number> =[];
 
     //this sorts the data. should not be necessary, would be best if the backend does this
     this.historicalData.chartValues = this.historicalData.chartValues.sort((n1,n2) => {
@@ -66,6 +67,7 @@ export class ShareComponent implements OnInit {
     let close = 0
     let lowest = 0
     let highest = 0
+    console.log(this.historicalData?.chartValues.length)
     this.historicalData?.chartValues.forEach(element => {
       let newDate = new Date(element.recordedAt)
       if(newDate.getFullYear() == currentDate.getFullYear() && newDate.getMonth() == currentDate.getMonth() && newDate.getDay() == currentDate.getDay()){
@@ -82,7 +84,17 @@ export class ShareComponent implements OnInit {
       }else{
         data.push([open,close,lowest,highest])
         let average = (lowest+highest+close+open)/4
-        averages.push(average)
+        dailyaverages.push(Number(average.toFixed(2)))
+        if(dailyaverages.length <= 7){
+          var weekstart = 0
+        }else{
+          var weekstart = (dailyaverages.length-7)
+        }
+        var count=0;
+          for (var i=weekstart; i<dailyaverages.length; i++) {
+              count+=dailyaverages[i];
+          }
+        weeklyaverages.push(Number((count/7).toFixed(2)))
         open = element.recordedValue
         close = element.recordedValue
         lowest = element.recordedValue
@@ -111,6 +123,7 @@ export class ShareComponent implements OnInit {
         feature: {
             dataZoom: {
                 yAxisIndex: 'none'
+
             },
             restore: {},
             saveAsImage: {}
@@ -128,7 +141,9 @@ export class ShareComponent implements OnInit {
       },
       dataZoom: [{
         type: 'inside',
-        filterMode: 'filter'
+        filterMode: 'filter',
+        startValue: Math.floor(data.length * 0.8),
+        endValue: data.length
         
     }, {
         filterMode: 'empty'
@@ -139,29 +154,43 @@ export class ShareComponent implements OnInit {
           data: data,
           type: 'candlestick',
           itemStyle:{
-            color : '#00da3c',
-            color0 :'#ec0000',
-            borderColor: '#00da3c',
-            borderColor0: '#ec0000',
+            color : '#28B557',
+            color0 :'#B54643',
+            borderColor: '#28B557',
+            borderColor0: '#B54643',
             
           },
     
           
         },
         {
-          name: "Durschnitt",
-          data: averages,
+          name: "Tagesdurschnitt",
+          data: dailyaverages,
           type: 'line',
           smooth: false,
           symbol: 'diamond',
           itemStyle:{
-            color : '#666',
-            borderColor: '#666',
+            color : '#B5791F',
+            borderColor: '#B5791F',
             
             
           },
+          
     
           
+        },
+        {
+          name: "Wochendurschnitt",
+          data: weeklyaverages,
+          type: 'line',
+          smooth: false,
+          symbol: 'diamond',
+          itemStyle:{
+            color : '#3A80B5',
+            borderColor: '#3A80B5',
+            
+            
+          },
         },
         
       ],
