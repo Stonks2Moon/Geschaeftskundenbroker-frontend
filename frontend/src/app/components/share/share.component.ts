@@ -1,6 +1,7 @@
 import { AfterContentInit, AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EChartsOption } from 'echarts';
+import { color, EChartsOption } from 'echarts';
+import { ComplexOuterSubscriber } from 'rxjs/internal/innerSubscribe';
 import { min } from 'rxjs/operators';
 import { HistoricalData, Share } from 'src/app/logic/data-models/data-models';
 import { ShareService } from 'src/app/logic/services/share.service';
@@ -46,6 +47,7 @@ export class ShareComponent implements OnInit {
     let y: Array<number> = [];
     let data: Array<any> = [];
     let dates: Array<string> = [];
+    let averages: Array<number> =[];
 
     //this sorts the data. should not be necessary, would be best if the backend does this
     this.historicalData.chartValues = this.historicalData.chartValues.sort((n1,n2) => {
@@ -79,6 +81,8 @@ export class ShareComponent implements OnInit {
         }
       }else{
         data.push([open,close,lowest,highest])
+        let average = (lowest+highest+close+open)/4
+        averages.push(average)
         open = element.recordedValue
         close = element.recordedValue
         lowest = element.recordedValue
@@ -112,14 +116,15 @@ export class ShareComponent implements OnInit {
             saveAsImage: {}
         }
     },
+    
       xAxis: {
         type: 'category',
-        boundaryGap: false,
-        data: dates
+        data: dates,
+        min:'dataMin',
+        max:'dataMax',
       },
       yAxis: {
         type: 'value',
-        boundaryGap: [0, '100%']
       },
       dataZoom: [{
         type: 'inside',
@@ -133,8 +138,32 @@ export class ShareComponent implements OnInit {
           name: this.historicalData.share.shareName,
           data: data,
           type: 'candlestick',
+          itemStyle:{
+            color : '#00da3c',
+            color0 :'#ec0000',
+            borderColor: '#00da3c',
+            borderColor0: '#ec0000',
+            
+          },
+    
           
         },
+        {
+          name: "Durschnitt",
+          data: averages,
+          type: 'line',
+          smooth: false,
+          symbol: 'diamond',
+          itemStyle:{
+            color : '#666',
+            borderColor: '#666',
+            
+            
+          },
+    
+          
+        },
+        
       ],
     };
   }
