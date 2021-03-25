@@ -1,0 +1,88 @@
+<div class="uk-container uk-width-3-4@m uk-width-1-1@s">
+    <div uk-grid>
+        <div class="uk-card uk-card-default uk-width-3-5@m">
+            <div class="uk-card-header">
+                <h3 class="uk-card-title">Aktienname</h3>
+            </div>
+
+            <div class="uk-card-body">
+
+                <form class="uk-form-stacked uk-grid-small" uk-grid>
+                    <div class="uk-margin uk-width-1-1">
+                        <label class="uk-form-label" for="depotSelect">Depot</label>
+                        <select class="uk-select" id="depotSelect">
+                            <option *ngFor="let depot of depotArray" [value]="depot.depotId">{{ depot.name }}</option>
+                        </select>
+                    </div>
+                    <div class="uk-margin uk-width-1-2">
+                        <label class="uk-form-label" for="orderType">Order-Art*</label>
+                        <select #orderType class="uk-select" id="orderType" (change)="onOptionsSelected($event)">
+                            <option value="marketPrice">Markt-Preis</option>
+                            <option value="limitPrice">Limit-Preis</option>
+                            <option value="stopPrice">Stop-Preis</option>
+                        </select>
+                    </div>
+                    <div class="uk-margin uk-width-1-2">
+                        <div *ngIf="selected !== 'stopPrice' && selected !== 'limitPrice'">
+                            <label class="uk-form-label" for="orderPrice">Order-Preis</label>
+                            <input class="uk-input" id="orderPrice" disabled value="120€">
+                        </div>
+                        <div *ngIf="selected === 'limitPrice'; else second">
+                            <label class="uk-form-label" for="orderPrice">Order-Preis</label>
+                            <input class="uk-input" id="orderPrice">
+                        </div>
+                        <ng-template #second>
+                            <div *ngIf="selected === 'stopPrice'" uk-grid>
+                                <div class="uk-margin uk-width-1-2">
+                                    <label class="uk-form-label" for="minimum">Minimum</label>
+                                    <input class="uk-input" id="minimum">
+                                </div>
+                                <div class="uk-width-1-2">
+                                    <label class="uk-form-label" for="maximum">Maximum</label>
+                                    <input class="uk-input" id="maximum">
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                    <div class="uk-margin uk-width-1-1">
+                        <label class="uk-form-label" for="expiredDate">Gültig bis</label>
+                        <input class="uk-input" type="text" id="expiredDate">
+                    </div>
+
+                    <div class="uk-margin uk-form-controls uk-width-2-5@s">
+                        <label class="uk-form-label" for="number">Anzahl der Aktien (in Stk.)</label>
+                        <input class="uk-input" type="text" id="number">
+                    </div>
+
+                    <div class="uk-margin uk-width-1-5@s">
+                        <label class="uk-form-label" for="equal">&nbsp;</label>
+                        <div class="uk-input input-equal" id="equal"><i class="fas fa-equals"></i></div>
+                    </div>
+
+                    <div class="uk-margin uk-width-2-5@s">
+                        <label class="uk-form-label" for="number">Wert der Aktien (in €)</label>
+                        <input class="uk-input" type="text" id="number">
+                    </div>
+
+                    <div class="uk-margin uk-width-1-2">
+                        <button class="uk-button" (click)="cancel()">Abbrechen</button>
+                    </div>
+                    <div class="uk-margin uk-width-1-2">
+                        <button class="uk-button uk-button-primary uk-align-right" type="button">Kaufen</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <div class="uk-card uk-width-2-5@l">
+            <div class="uk-card-header">
+                <h3 class="uk-card-title">Statistik</h3>
+            </div>
+            <div class="uk-card-body">
+                <div echarts [options]="chartOption" class="demo-chart"></div>
+                <div>Aktienkurs</div>
+                <div>Du besitzt xxx Aktien im Wert von xxx €</div>
+            </div>
+        </div>
+    </div>
+</div>
