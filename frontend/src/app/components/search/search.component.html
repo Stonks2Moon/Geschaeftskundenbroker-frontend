@@ -1,0 +1,28 @@
+<div class="uk-container">
+  <h2 class="uk-align-left uk-h3">Suchergebnisse</h2>
+  <table class="uk-table uk-table-striped">
+    <thead>
+      <tr>
+        <th>Aktienname</th>
+        <th>WKN / ISIN</th>
+        <th>Wert</th>
+        <th>Aktion</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let share of shareArray">
+        <tr>
+          <td>{{share.shareName}}</td>
+          <td>{{share.wkn}} / {{share.isin}}</td>
+          <td>{{share.lastRecordedValue}} {{share.currencyCode}}</td>
+          <td><button class="uk-button uk-button-primary" [routerLink]="['/share', share.shareId]">Details</button></td>
+        </tr>
+      </ng-container>
+      <ng-container *ngIf="error">
+        <tr>
+          <td colspan="4">Keine Ergbnisse</td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>

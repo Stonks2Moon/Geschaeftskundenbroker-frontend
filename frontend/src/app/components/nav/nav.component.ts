@@ -16,7 +16,6 @@ export class NavComponent implements OnInit {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
-    private shareService: ShareService,
   ) {
 
     this.authenticationService.currentCustomer.subscribe(customer => this.currentCustomer = customer);
@@ -26,12 +25,8 @@ export class NavComponent implements OnInit {
   }
 
   public onSearchPressed(query: string): void {
-    this.shareService.getAllShares({ search: query }).subscribe(
-      (data) => {
-        console.log(data);
-        return data;
-      }
-    )
+    this.router.navigate(['search', query]);
+
   }
 
   public onLogoutPressed(): void {
