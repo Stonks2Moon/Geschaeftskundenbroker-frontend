@@ -11,6 +11,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { TradeComponent } from './components/trade/trade.component';
 import { AuthenticationGuard } from './logic/guard/authentication.guard';
 import { ShareComponent } from './components/share/share.component';
+import { SearchComponent } from './components/search/search.component';
 
 const routes: Routes = [
   {
@@ -62,6 +63,11 @@ const routes: Routes = [
     path: 'share/:shareId',
     canActivate: [AuthenticationGuard],
     component: ShareComponent
+  },
+  {
+    path: 'search/:query',
+    canActivate: [AuthenticationGuard],
+    component: SearchComponent
   },
   {
     path: '',
