@@ -55,7 +55,7 @@ const routes: Routes = [
     component: ProfileComponent
   },
   {
-    path: 'buy',
+    path: 'buy/:shareId',
     canActivate: [AuthenticationGuard],
     component: BuyComponent
   },
