@@ -9,5 +9,5 @@ export interface PlaceShareOrder {
     stop?: number,
     stopLimit?: number,
     market?: string,
-    shareId?: number,
+    shareId?: string,
 }
