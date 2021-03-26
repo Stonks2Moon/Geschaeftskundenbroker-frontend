@@ -19,6 +19,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import { BuyComponent } from './components/buy/buy.component';
 import { ShareComponent } from './components/share/share.component';
 import { DepotDetailComponent } from './components/depot-detail/depot-detail.component';
+import { SearchComponent } from './components/search/search.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { DepotDetailComponent } from './components/depot-detail/depot-detail.com
     ProfileComponent,
     BuyComponent,
     ShareComponent,
-    DepotDetailComponent    
+    DepotDetailComponent,
+    SearchComponent    
   ],
   imports: [
     BrowserModule,
