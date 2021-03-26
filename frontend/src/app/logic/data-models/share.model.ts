@@ -1,5 +1,5 @@
 export interface Share {
-    shareId: number,
+    shareId: string,
     shareName: string,
     isin: string,
     wkn: string,
