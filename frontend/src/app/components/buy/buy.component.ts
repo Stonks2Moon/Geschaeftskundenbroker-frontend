@@ -20,6 +20,7 @@ export class BuyComponent implements OnInit {
   private historicalData: HistoricalData;
   private fromDate: Date = new Date();
   private toDate: Date = new Date();
+  sharePrice: number;
 
   constructor(private location: Location, private depotService: DepotService,    private shareService: ShareService,private route: ActivatedRoute,) {
 
@@ -113,6 +114,13 @@ export class BuyComponent implements OnInit {
 
   onOptionsSelected(event: any){
     this.selected = event.target.value;
+  }
+
+  public calculateSharePrice(event: any): void {
+    var currentValue = this.share.lastRecordedValue;
+    var numberOfShares = event.target.value;
+
+    this.sharePrice = numberOfShares*currentValue;
   }
 
   
