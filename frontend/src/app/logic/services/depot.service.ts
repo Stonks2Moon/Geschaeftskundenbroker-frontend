@@ -81,11 +81,11 @@ export class DepotService {
     }
   }
 
-  public createOrder(order: PlaceShareOrder): Observable<Depot> {
+  public createOrder(order: PlaceShareOrder, tradeAlgorithm?: number): Observable<Depot> {    
     if (this.cookieService.check('session')) {
       const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
 
-      const placeOrder: PlaceOrder = { customreSession: session, order: order };
+      const placeOrder: PlaceOrder = { customreSession: session, order: order, tradeAlgorithm: tradeAlgorithm ?? 0 };
 
       return this.http.put<Depot>(`${this.apiUrl}depot/order`, placeOrder)
         .pipe(
