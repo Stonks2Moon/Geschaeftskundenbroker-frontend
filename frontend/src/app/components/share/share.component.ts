@@ -13,7 +13,10 @@ import { ShareService } from 'src/app/logic/services/share.service';
 })
 export class ShareComponent implements OnInit {
   public chartOption: EChartsOption;
+  public dayChartOption: EChartsOption;
   public share: Share;
+  public dataAvailable: number; //0= no Data available, 1= only one Day available, 2= more dates available
+  public dayView: boolean;
   private shareId: string;
   private historicalData: HistoricalData;
   private fromDate: Date = new Date();
@@ -29,8 +32,8 @@ export class ShareComponent implements OnInit {
   ngOnInit(): void {
     this.shareId = this.route.snapshot.paramMap.get('shareId');
     this.shareService.getShareById(this.shareId).subscribe(share => this.share = share);
-
-    this.shareService.getShareHistory({ shareId: this.shareId, fromDate: this.fromDate, toDate: this.toDate })
+    try{
+      this.shareService.getShareHistory({ shareId: this.shareId, fromDate: this.fromDate, toDate: this.toDate })
       .toPromise()
       .then(
         data => {
@@ -38,6 +41,21 @@ export class ShareComponent implements OnInit {
           this.createChart();
         }
       );
+    }catch(err){
+      this.dataAvailable = 0
+      console.log(err)
+    }
+    
+  }
+
+  public changeView(event): void{
+    if(event.target.id == "history"){
+      this.dayView = false
+    }else if(event.target.id =="today"){
+      this.dayView = true
+    }else{
+      console.log("error with viewbutton")
+    }
   }
 
   public createChart(): void {
@@ -62,6 +80,21 @@ export class ShareComponent implements OnInit {
   
       return 0;
   });
+
+    if(this.historicalData.chartValues.length != 0){
+      let firstDate = new Date(this.historicalData.chartValues[0].recordedAt)
+      let lastDate = new Date(this.historicalData.chartValues[this.historicalData.chartValues.length -1].recordedAt)
+      if(firstDate.getFullYear() == lastDate.getFullYear() && firstDate.getMonth() == lastDate.getMonth() && firstDate.getDay() == lastDate.getDay()){
+        //nur ein Tag
+        this.dataAvailable = 1
+        this.createDayChart()
+      }else{
+        this.dataAvailable = 2
+      }
+    }else{
+      //keine Daten verfügbar
+      this.dataAvailable = 0
+    }
     let currentDate = new Date(this.historicalData.chartValues[0].recordedAt)
     let open = 0
     let close = 0
@@ -198,16 +231,14 @@ export class ShareComponent implements OnInit {
   }
 
 
-  /**
-   * This is for the small views of the chart, where not much detail is needed
-   * public createChart(): void {
+  public createDayChart(): void {
     console.log(this.historicalData);
 
     let x: Array<Date> = [];
     let y: Array<number> = [];
     let data: Array<any> = [];
 
-    //this sorts the data. should not be necessary, would be best if the backend does this
+    //this sorts the data. should not be necessary, would be best if the backend did this
     this.historicalData.chartValues = this.historicalData.chartValues.sort((n1,n2) => {
       if (n1.recordedAt > n2.recordedAt) {
           return 1;
@@ -219,36 +250,26 @@ export class ShareComponent implements OnInit {
   
       return 0;
   });
-
+    let lastDay = new Date(this.historicalData?.chartValues[0].recordedAt)
     this.historicalData?.chartValues.forEach(element => {
-      x.push(element.recordedAt);
-      y.push(element.recordedValue);
-      data.push([element.recordedAt ,element.recordedValue])
+      let dayElement = new Date(element.recordedAt)
+      if(dayElement.getFullYear() == lastDay.getFullYear() && dayElement.getMonth() == lastDay.getMonth() && dayElement.getDay() == lastDay.getDay()){
+        x.push(element.recordedAt);
+        y.push(element.recordedValue);
+        data.push([element.recordedAt ,element.recordedValue])
+      }
     });
 
     console.log(data)
-    this.chartOption = {
+    this.dayChartOption = {
       tooltip: {
         trigger: 'axis',
-            axisPointer: {
-                type: 'cross'
-            },
             borderWidth: 1,
             borderColor: '#ccc',
             padding: 10,
             textStyle: {
                 color: '#000'
             },
-    
-    },
-      toolbox: {
-        feature: {
-            dataZoom: {
-                yAxisIndex: 'none'
-            },
-            restore: {},
-            saveAsImage: {}
-        }
     },
       xAxis: {
         type: 'time',
@@ -256,15 +277,8 @@ export class ShareComponent implements OnInit {
       },
       yAxis: {
         type: 'value',
-        boundaryGap: [0, '100%']
       },
-      dataZoom: [{
-        type: 'inside',
-        filterMode: 'filter'
-        
-    }, {
-        filterMode: 'empty'
-    }],
+      
       series: [
         {
           name: this.historicalData.share.shareName,
@@ -277,7 +291,6 @@ export class ShareComponent implements OnInit {
       ],
     };
   }
-   */
 
 
 }

@@ -11,11 +11,36 @@
   <hr>
 </div>
 
-
-<div class="uk-container">
-  <div echarts [options]="chartOption" class="demo-chart"></div>
-
+<div *ngIf="dataAvailable == 2">
+  <div class="uk-container">
+    <div uk-switcher="animation: uk-animation-fade; toggle: > *" class="uk-align-right">
+      <button class="uk-button uk-button-default" type="button" (click)="changeView($event)" id="history">History</button>
+      <button class="uk-button uk-button-default" type="button" (click)="changeView($event)" id="today">Today</button>
+    </div>
+  </div>
+  <div *ngIf="dayView">
+  <div class="uk-container">
+    <div echarts [options]="dayChartOption" class="demo-chart"></div>
+  </div>
+  </div>
+  <div *ngIf="!dayView">
+    <div class="uk-container">
+      <div echarts [options]="chartOption" class="demo-chart"></div>
+    </div>
+    </div>
 </div>
+<div *ngIf="dataAvailable == 1">
+  <div class="uk-container">
+    <div echarts [options]="dayChartOption" class="demo-chart"></div>
+  </div>
+</div>
+<div *ngIf="dataAvailable == 0">
+  <div class="uk-container">
+    <h2 class="uk-align-left">No Data Available!</h2>
+  </div>
+</div>
+
+
 <div class="uk-container">
   <hr>
 </div>
@@ -40,7 +65,7 @@
         </ul>
         <ul class="uk-subnav-divider">
           <li>
-            <p>200,00 EUR</p>
+            <p>{{share?.lastRecordedValue}}</p>
           </li>
           <li>
             <p>1,40 EUR</p>
