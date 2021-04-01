@@ -22,9 +22,9 @@ export class BuyComponent implements OnInit {
   private toDate: Date = new Date();
   sharePrice: number;
 
-  constructor(private location: Location, private depotService: DepotService,    private shareService: ShareService,private route: ActivatedRoute,) {
+  constructor(private location: Location, private depotService: DepotService, private shareService: ShareService, private route: ActivatedRoute,) {
 
-   }
+  }
 
   ngOnInit(): void {
     this.fromDate.setDate(this.fromDate.getDate() - 30)
@@ -43,6 +43,7 @@ export class BuyComponent implements OnInit {
         }
       );
   }
+  
   public createChart(): void {
     console.log(this.historicalData);
 
@@ -51,35 +52,35 @@ export class BuyComponent implements OnInit {
     let data: Array<any> = [];
 
     //this sorts the data. should not be necessary, would be best if the backend does this
-    this.historicalData.chartValues = this.historicalData.chartValues.sort((n1,n2) => {
+    this.historicalData.chartValues = this.historicalData.chartValues.sort((n1, n2) => {
       if (n1.recordedAt > n2.recordedAt) {
-          return 1;
+        return 1;
       }
-  
+
       if (n1.recordedAt < n2.recordedAt) {
-          return -1;
+        return -1;
       }
-  
+
       return 0;
-  });
+    });
 
     this.historicalData?.chartValues.forEach(element => {
       x.push(element.recordedAt);
       y.push(element.recordedValue);
-      data.push([element.recordedAt ,element.recordedValue])
+      data.push([element.recordedAt, element.recordedValue])
     });
 
     console.log(data)
     this.chartOption = {
       tooltip: {
         trigger: 'axis',
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            textStyle: {
-                color: '#000'
-            },
-    },
+        borderWidth: 1,
+        borderColor: '#ccc',
+        padding: 10,
+        textStyle: {
+          color: '#000'
+        },
+      },
       xAxis: {
         type: 'time',
         boundaryGap: false,
@@ -90,10 +91,10 @@ export class BuyComponent implements OnInit {
       dataZoom: [{
         type: 'inside',
         filterMode: 'filter'
-        
-    }, {
+
+      }, {
         filterMode: 'empty'
-    }],
+      }],
       series: [
         {
           name: this.historicalData.share.shareName,
@@ -106,13 +107,13 @@ export class BuyComponent implements OnInit {
       ],
     };
   }
-  
+
   // TODO
   public cancel(): void {
     //this.location.back()
   }
 
-  onOptionsSelected(event: any){
+  onOptionsSelected(event: any) {
     this.selected = event.target.value;
   }
 
@@ -120,8 +121,8 @@ export class BuyComponent implements OnInit {
     var currentValue = this.share.lastRecordedValue;
     var numberOfShares = event.target.value;
 
-    this.sharePrice = numberOfShares*currentValue;
+    this.sharePrice = numberOfShares * currentValue;
   }
 
-  
+
 }
