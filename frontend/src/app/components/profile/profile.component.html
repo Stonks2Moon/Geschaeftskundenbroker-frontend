@@ -56,20 +56,49 @@
 <div class="uk-card uk-width-3-4@m uk-width-1-1@s uk-position-center uk-card-default">
   <div class="uk-card-header ">
     <span class="uk-align-left" uk-icon="icon: user; ratio:4"></span>
-    <h3 class="uk-align-left uk-card-title">Hans Peter der 5.</h3>
+    <h3 class="uk-align-left uk-card-title">{{currentCustomer.firstName}} {{currentCustomer.lastName}}</h3>
   </div>
   <div class="uk-card-body">
-    <div class="uk-grid">
+    <table class="uk-table uk-table-striped">
+      <tbody>
+        <tr>
+          <td> Unternehemen des Nutzers</td>
+
+          <td> {{currentCustomer.company.companyName}}</td>
+        </tr>
+        <tr>
+          <td> Unternehemennummer</td>
+
+          <td> {{currentCustomer.company.companyCode}}</td>
+        </tr>
+        <tr>
+          <td>Adresse des Unternehmens</td>
+          <td>{{currentCustomer.company.address.postCode}} {{currentCustomer.company.address.city}} <br> 
+            {{currentCustomer.company.address.street}} {{currentCustomer.company.address.houseNumber}}
+          </td>
+
+        </tr>
+        <tr>
+          <td> E-Mail des Benutzers</td>
+
+          <td> {{currentCustomer.email}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- <div class="uk-grid">
       <div class="uk-width-1-2">
         <p>Unternehemen des Nutzers</p>
-        <p>Anzahl der Depots</p>
-        <p>E-Mail-Adresse</p>
+        <p>Unternehemennummer</p>
+        <p>Adresse des Unternehmens</p>
+        <p>E-Mail des Benutzers</p>
       </div>
       <div class="uk-width-1-2">
-        <p>Finanzhaie Mannheim GmbH</p>
-        <p>4</p>
-        <p>hans-peter-fünf@mail.com</p>
+        <p>{{currentCustomer.company.companyName}}</p>
+        <p>{{currentCustomer.company.companyCode}}</p>
+        <p>{{currentCustomer.company.address.postCode}} {{currentCustomer.company.address.city}}</p>
+        <p>{{currentCustomer.company.address.street}} {{currentCustomer.company.address.houseNumber}}</p>
+        <p>{{currentCustomer.email}}</p>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
