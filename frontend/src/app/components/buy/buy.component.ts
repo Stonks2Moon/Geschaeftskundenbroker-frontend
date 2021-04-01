@@ -5,13 +5,16 @@ import { Depot, HistoricalData, Share } from 'src/app/logic/data-models/data-mod
 import { DepotService } from 'src/app/logic/services/depot.service';
 import { ShareService } from 'src/app/logic/services/share.service';
 import { ActivatedRoute } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-buy',
   templateUrl: './buy.component.html',
   styleUrls: ['./buy.component.scss']
 })
+
 export class BuyComponent implements OnInit {
+  public buyForm: FormGroup;
   public chartOption: EChartsOption;
   public depotArray: Array<Depot> = [];
   selected: string;
@@ -21,6 +24,8 @@ export class BuyComponent implements OnInit {
   private fromDate: Date = new Date();
   private toDate: Date = new Date();
   sharePrice: number;
+  currentPrice: number;
+  selectedOrderType: string;
 
   constructor(private location: Location, private depotService: DepotService, private shareService: ShareService, private route: ActivatedRoute,) {
 
@@ -42,6 +47,21 @@ export class BuyComponent implements OnInit {
           this.createChart();
         }
       );
+      this.createForm();
+  }
+
+  public createForm(): void {
+    this.buyForm = new FormGroup({
+      limitPrice: new FormControl('', Validators.required),
+      maxPrice: new FormControl('', Validators.required),
+      minPrice: new FormControl('', Validators.required),
+      numberOfShares: new FormControl('', Validators.required),
+      sharePrice: new FormControl('', Validators.required)
+    });
+  }
+
+  public onBuySubmit(): void {
+
   }
   
   public createChart(): void {
@@ -113,15 +133,46 @@ export class BuyComponent implements OnInit {
     //this.location.back()
   }
 
-  onOptionsSelected(event: any) {
+  onOptionsSelected(event: any): void {
     this.selected = event.target.value;
+    if (this.selected === "limitPrice") {
+      this.buyForm.patchValue({
+        minPrice: "", 
+        maxPrice: "",
+        numberOfShares: "",
+        sharePrice: ""
+      });
+    }
+    else if (this.selected === "stopPrice") {
+      this.buyForm.patchValue({
+        limitPrice: "",
+        numberOfShares: "",
+        sharePrice: ""
+      });
+    } else if (this.selected === "marketPrice") {
+      this.buyForm.setValue({
+        limitPrice: "",
+        minPrice: "", 
+        maxPrice: "",
+        numberOfShares: "",
+        sharePrice: ""
+      });
+    }
   }
 
   public calculateSharePrice(event: any): void {
-    var currentValue = this.share.lastRecordedValue;
     var numberOfShares = event.target.value;
+    if (this.selected === "limitPrice") {
+      this.currentPrice = this.buyForm.controls.limitPrice.value;
+    } else if (this.selected === "stopPrice") {
+      var maxPrice = this.buyForm.controls.maxPrice.value;
+      var minPrice = this.buyForm.controls.minPrice.value;
+      this.currentPrice = (maxPrice + minPrice) / 2;
+    } else {
+      this.currentPrice = this.share.lastRecordedValue;
+    }
 
-    this.sharePrice = numberOfShares * currentValue;
+    this.sharePrice = numberOfShares * this.currentPrice;
   }
 
 
