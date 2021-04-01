@@ -25,7 +25,6 @@ export class BuyComponent implements OnInit {
   private toDate: Date = new Date();
   sharePrice: number;
   currentPrice: number;
-  selectedOrderType: string;
 
   constructor(private location: Location, private depotService: DepotService, private shareService: ShareService, private route: ActivatedRoute,) {
 
@@ -161,12 +160,12 @@ export class BuyComponent implements OnInit {
   }
 
   public calculateSharePrice(event: any): void {
-    var numberOfShares = event.target.value;
+    let numberOfShares: number = event.target.value;
     if (this.selected === "limitPrice") {
-      this.currentPrice = this.buyForm.controls.limitPrice.value;
+      this.currentPrice = +this.buyForm.controls.limitPrice.value;
     } else if (this.selected === "stopPrice") {
-      var maxPrice = this.buyForm.controls.maxPrice.value;
-      var minPrice = this.buyForm.controls.minPrice.value;
+      let maxPrice: number = +this.buyForm.controls.maxPrice.value;
+      let minPrice: number = +this.buyForm.controls.minPrice.value;
       this.currentPrice = (maxPrice + minPrice) / 2;
     } else {
       this.currentPrice = this.share.lastRecordedValue;
