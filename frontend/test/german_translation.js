@@ -65,7 +65,7 @@ module.exports = {
       sendDeleteRequest: 'mache_einen_delete_request',
       sendPostRequest: 'mache_einen_post_request',
       switchTo: 'wechlse_in_iframe',
-      startMocking: 'starte_mocken',
-      stopMocking: 'ende_mocken',
+    //   startMocking: 'starte_mocken',
+    //   stopMocking: 'ende_mocken',
     },
   };

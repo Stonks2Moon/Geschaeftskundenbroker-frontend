@@ -13,6 +13,9 @@ exports.config = {
       show: true,
       windowSize: '1200x900'
     },
+    MockRequestHelper: {
+      require: '@codeceptjs/mock-request',
+    },
  
   },
   translation: './german_translation.js',
