@@ -7,7 +7,7 @@
 
             <div class="uk-card-body">
 
-                <form class="uk-form-stacked uk-grid-small" uk-grid>
+                <form [formGroup]="buyForm" class="uk-form-stacked uk-grid-small" uk-grid (ngSubmit)="onBuySubmit()">
                     <div class="uk-margin uk-width-1-1">
                         <label class="uk-form-label" for="depotSelect">Depot</label>
                         <select class="uk-select" id="depotSelect">
@@ -25,21 +25,21 @@
                     <div class="uk-margin uk-width-1-2">
                         <div *ngIf="selected !== 'stopPrice' && selected !== 'limitPrice'">
                             <label class="uk-form-label" for="orderPrice">Order-Preis</label>
-                            <input class="uk-input" id="orderPrice" disabled value={{share.lastRecordedValue}}>
+                            <input class="uk-input" id="orderPrice" type="number" disabled value={{share.lastRecordedValue}} >
                         </div>
                         <div *ngIf="selected === 'limitPrice'; else second">
                             <label class="uk-form-label" for="orderPrice">Order-Preis</label>
-                            <input class="uk-input" id="orderPrice">
+                            <input class="uk-input" id="orderPrice" type="number" formControlName="limitPrice">
                         </div>
                         <ng-template #second>
                             <div *ngIf="selected === 'stopPrice'" uk-grid>
                                 <div class="uk-margin uk-width-1-2">
                                     <label class="uk-form-label" for="minimum">Minimum</label>
-                                    <input class="uk-input" id="minimum">
+                                    <input class="uk-input" type="number" id="minimum" formControlName="minPrice">
                                 </div>
                                 <div class="uk-width-1-2">
                                     <label class="uk-form-label" for="maximum">Maximum</label>
-                                    <input class="uk-input" id="maximum">
+                                    <input class="uk-input" type="number" id="maximum" formControlName="maxPrice">
                                 </div>
                             </div>
                         </ng-template>
@@ -51,7 +51,7 @@
 
                     <div class="uk-margin uk-form-controls uk-width-2-5@s">
                         <label class="uk-form-label" for="number">Anzahl der Aktien (in Stk.)</label>
-                        <input class="uk-input" type="text" id="number" (keyup)="calculateSharePrice($event)">
+                        <input class="uk-input" type="number" id="number" (keyup)="calculateSharePrice($event)" formControlName="numberOfShares">
                     </div>
 
                     <div class="uk-margin uk-width-1-5@s">
@@ -61,14 +61,31 @@
 
                     <div class="uk-margin uk-width-2-5@s">
                         <label class="uk-form-label" for="number">Wert der Aktien (in €)</label>
-                        <input class="uk-input" type="text" id="number" disabled value={{sharePrice}}>
+                        <input class="uk-input" type="number" id="number" disabled value={{sharePrice}} formControlName="sharePrice">
                     </div>
 
                     <div class="uk-margin uk-width-1-2">
                         <button class="uk-button" (click)="cancel()">Abbrechen</button>
                     </div>
                     <div class="uk-margin uk-width-1-2">
-                        <button class="uk-button uk-button-primary uk-align-right" type="button">Kaufen</button>
+                        <a class="uk-button uk-button-primary uk-align-right" href="#modal-center" uk-toggle>Verkaufen</a>
+                    </div>
+                    <div id="modal-center" class="uk-flex-top" uk-modal>
+                        <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+                    
+                            <button class="uk-modal-close-default" type="button" uk-close></button>
+                            <div class="uk-modal-header">
+                                <h2 class="uk-modal-title">Weiter?</h2>
+                            </div>
+                            <div class="uk-modal-body">
+                            <p>Sind Sie sicher, dass Sie die Aktien verkaufen wollen?</p>
+                            <div class="uk-modal-footer uk-text-right">
+                                <button class="uk-button uk-button-default uk-modal-close" type="button">Abbrechen</button>
+                                <button class="uk-button uk-button-primary" type="button">Weiter</button>
+                            </div>
+                        </div>
+    
+                        </div>
                     </div>
                 </form>
 
