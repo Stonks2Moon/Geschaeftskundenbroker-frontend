@@ -25,7 +25,8 @@
                     <div class="uk-margin uk-width-1-2">
                         <div *ngIf="selected !== 'stopPrice' && selected !== 'limitPrice'">
                             <label class="uk-form-label" for="orderPrice">Order-Preis</label>
-                            <input class="uk-input" id="orderPrice" type="number" disabled value={{share.lastRecordedValue}} >
+                            <input class="uk-input" id="orderPrice" type="number" disabled
+                                value={{share.lastRecordedValue}}>
                         </div>
                         <div *ngIf="selected === 'limitPrice'; else second">
                             <label class="uk-form-label" for="orderPrice">Order-Preis</label>
@@ -47,16 +48,14 @@
                     <div class="uk-margin uk-width-1-1">
                         <label class="uk-form-label" for="expiredDateSelect">Gültig bis</label>
                         <select class="uk-select" id="expiredDateSelect" formControlName="dateOfExpiry">
-                            <option value="1">Morgen</option>
-                            <option value="7">7 Tage</option>
-                            <option value="14">14 Tage</option>
-                            <option value="30">30 Tage</option>
+                            <option *ngFor="let expiredDate of expiredDateArray" [value]="expiredDate.value">{{expiredDate.name}}</option>
                         </select>
                     </div>
 
                     <div class="uk-margin uk-form-controls uk-width-2-5@s">
                         <label class="uk-form-label" for="numberOfShares">Anzahl der Aktien (in Stk.)</label>
-                        <input class="uk-input" type="number" id="numberOfShares" (keyup)="calculateSharePrice($event)" formControlName="numberOfShares">
+                        <input class="uk-input" type="number" id="numberOfShares" (keyup)="calculateSharePrice($event)"
+                            formControlName="numberOfShares">
                     </div>
 
                     <div class="uk-margin uk-width-1-5@s">
@@ -66,13 +65,15 @@
 
                     <div class="uk-margin uk-width-2-5@s">
                         <label class="uk-form-label" for="number">Wert der Aktien (in €)</label>
-                        <input class="uk-input" type="number" id="sharePrice" disabled value={{sharePrice}} formControlName="sharePrice">
+                        <input class="uk-input" type="number" id="sharePrice" value={{sharePrice}}
+                            formControlName="sharePrice">
                     </div>
 
                     <div class="uk-margin uk-width-1-1">
-                        <label class="uk-form-label" for="algorithmicTradingType">Gültig bis</label>
+                        <label class="uk-form-label" for="algorithmicTradingType">Algorithmisches Handeln:</label>
                         <select class="uk-select" id="algorithmicTradingType" formControlName="algorithmicTradingType">
-                            <option ></option>
+                            <option [value]="metaConst.ALGORITHMS.NO_ALG">Kein Algorithmus</option>
+                            <option [value]="metaConst.ALGORITHMS.SPLIT_ALG">Split Algorithmus</option>
                         </select>
                     </div>
 
@@ -81,26 +82,29 @@
                     </div>
                     <div class="uk-margin uk-width-1-2">
                         <!-- TODO: correct validation -->
-                        <button class="uk-button uk-button-primary uk-align-right" type="submit" href="#modal-center" uk-toggle [disabled]="buyForm.controls.numberOfShares.invalid">Verkaufen</button>
+                        <button class="uk-button uk-button-primary uk-align-right" type="submit" href="#modal-center"
+                            uk-toggle [disabled]="buyForm.controls.numberOfShares.invalid">Verkaufen</button>
                     </div>
-                    <div id="modal-center" class="uk-flex-top" uk-modal>
-                        <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
-                    
-                            <button class="uk-modal-close-default" type="button" uk-close></button>
-                            <div class="uk-modal-header">
-                                <h2 class="uk-modal-title">Weiter?</h2>
-                            </div>
-                            <div class="uk-modal-body">
+                </form>
+
+                <div id="modal-center" class="uk-flex-top" uk-modal>
+                    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+
+                        <button class="uk-modal-close-default" type="button" uk-close></button>
+                        <div class="uk-modal-header">
+                            <h2 class="uk-modal-title">Weiter?</h2>
+                        </div>
+                        <div class="uk-modal-body">
                             <p>Sind Sie sicher, dass Sie die Aktien verkaufen wollen?</p>
                             <div class="uk-modal-footer uk-text-right">
-                                <button class="uk-button uk-button-default uk-modal-close" type="button">Abbrechen</button>
+                                <button class="uk-button uk-button-default uk-modal-close"
+                                    type="button">Abbrechen</button>
                                 <button class="uk-button uk-button-primary" type="button">Weiter</button>
                             </div>
                         </div>
-    
-                        </div>
+
                     </div>
-                </form>
+                </div>
 
             </div>
         </div>

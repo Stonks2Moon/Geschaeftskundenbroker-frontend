@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import { Location } from '@angular/common';
-import { Depot, HistoricalData, Share } from 'src/app/logic/data-models/data-models';
+import { Depot, HistoricalData, MetaConst, Share } from 'src/app/logic/data-models/data-models';
 import { DepotService } from 'src/app/logic/services/depot.service';
 import { ShareService } from 'src/app/logic/services/share.service';
 import { ActivatedRoute } from '@angular/router';
@@ -20,16 +20,22 @@ export class BuyComponent implements OnInit {
   public depotArray: Array<Depot> = [];
   selected: string;
   public share: Share;
+  public metaConst: MetaConst;
+  public expiredDateArray: Array<{}>;
   private shareId: string;
   private historicalData: HistoricalData;
   private fromDate: Date = new Date();
   private toDate: Date = new Date();
   sharePrice: number;
   currentPrice: number;
-  private metaData: string;
 
-  constructor(private location: Location, private depotService: DepotService, private shareService: ShareService, private metaService: MetaService, private route: ActivatedRoute,) {
-
+  constructor(private location: Location,
+    private depotService: DepotService,
+    private shareService: ShareService,
+    private metaService: MetaService,
+    private route: ActivatedRoute,
+  ) {
+    this.buildExpiredDateArray();
   }
 
   ngOnInit(): void {
@@ -38,7 +44,6 @@ export class BuyComponent implements OnInit {
       this.depotArray = depots;
     });
     this.shareId = this.route.snapshot.paramMap.get('shareId');
-    console.log(this.shareId)
     this.shareService.getShareById(this.shareId).subscribe(share => this.share = share);
     this.shareService.getShareHistory({ shareId: this.shareId, fromDate: this.fromDate, toDate: this.toDate })
       .toPromise()
@@ -48,9 +53,28 @@ export class BuyComponent implements OnInit {
           this.createChart();
         }
       );
-      this.metaService.getAllMetaData().subscribe(data => console.log(data));
-      this.createForm();
+    this.metaService.getAllMetaData().subscribe(metaConst => this.metaConst = metaConst);
+    this.createForm();
   }
+
+  buildExpiredDateArray() {
+    let today: Date = new Date();
+    let sevenDays: Date = new Date(today);
+    let fourteenDays: Date = new Date(today);
+    let thirtyDays: Date = new Date(today);
+
+    sevenDays.setDate(sevenDays.getDate() + 7);
+    fourteenDays.setDate(sevenDays.getDate() + 14);
+    thirtyDays.setDate(sevenDays.getDate() + 30);
+
+    this.expiredDateArray = [
+      { name: 'Morgen', value: today },
+      { name: '7 Tage', value: sevenDays },
+      { name: '14 Tage', value: fourteenDays },
+      { name: '30 Tage', value: thirtyDays },
+    ];
+  }
+
 
   public createForm(): void {
     this.buyForm = new FormGroup({
@@ -60,7 +84,7 @@ export class BuyComponent implements OnInit {
       minPrice: new FormControl('', Validators.required),
       dateOfExpiry: new FormControl('', Validators.required),
       numberOfShares: new FormControl('', Validators.required),
-      sharePrice: new FormControl('', Validators.required),
+      sharePrice: new FormControl({value: '', disabled: true}, Validators.required),
       algorithmicTradingType: new FormControl('', Validators.required),
     });
   }
@@ -68,10 +92,8 @@ export class BuyComponent implements OnInit {
   public onBuySubmit(): void {
 
   }
-  
-  public createChart(): void {
-    console.log(this.historicalData);
 
+  public createChart(): void {
     let x: Array<Date> = [];
     let y: Array<number> = [];
     let data: Array<any> = [];
@@ -95,7 +117,6 @@ export class BuyComponent implements OnInit {
       data.push([element.recordedAt, element.recordedValue])
     });
 
-    console.log(data)
     this.chartOption = {
       tooltip: {
         trigger: 'axis',
@@ -142,7 +163,7 @@ export class BuyComponent implements OnInit {
     this.selected = event.target.value;
     if (this.selected === "limitPrice") {
       this.buyForm.patchValue({
-        minPrice: "", 
+        minPrice: "",
         maxPrice: "",
         numberOfShares: "",
         sharePrice: ""
@@ -157,7 +178,7 @@ export class BuyComponent implements OnInit {
     } else if (this.selected === "marketPrice") {
       this.buyForm.setValue({
         limitPrice: "",
-        minPrice: "", 
+        minPrice: "",
         maxPrice: "",
         numberOfShares: "",
         sharePrice: ""
