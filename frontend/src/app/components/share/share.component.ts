@@ -108,12 +108,14 @@ export class ShareComponent implements OnInit {
           this.dataAvailable = 3
         }else{
           this.dataAvailable = 2
+          console.log(this.todayData)
         }
       }
     }else{
       //keine Daten verfügbar
       this.dataAvailable = 0
     }
+    console.log(this.dataAvailable)
     let currentDate = new Date(this.historicalData.chartValues[0].recordedAt)
     let open = 0
     let close = 0
