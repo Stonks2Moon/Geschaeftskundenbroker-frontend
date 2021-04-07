@@ -11,6 +11,11 @@
   <hr>
 </div>
 
+<div *ngIf="dataAvailable == 3">
+    <div class="uk-container">
+      <div echarts [options]="chartOption" class="demo-chart"></div>
+    </div>
+</div>
 <div *ngIf="dataAvailable == 2">
   <div class="uk-container">
     <div uk-switcher="animation: uk-animation-fade; toggle: > *" class="uk-align-right">

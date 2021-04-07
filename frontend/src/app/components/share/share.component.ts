@@ -19,7 +19,9 @@ export class ShareComponent implements OnInit {
   public dayView: boolean;
   private shareId: string;
   private historicalData: HistoricalData;
+  private todayData: HistoricalData;
   private fromDate: Date = new Date();
+  private yesterday: Date = new Date();
   private toDate: Date = new Date();
 
   constructor(
@@ -27,6 +29,7 @@ export class ShareComponent implements OnInit {
     private shareService: ShareService,
   ) {
     this.fromDate.setDate(this.fromDate.getDate() - 365);
+    this.yesterday.setDate(this.fromDate.getDate() - 1);
   }
 
   ngOnInit(): void {
@@ -43,6 +46,17 @@ export class ShareComponent implements OnInit {
       );
     }catch(err){
       this.dataAvailable = 0
+      console.log(err)
+    }
+    try{
+      this.shareService.getShareHistory({ shareId: this.shareId, fromDate: this.yesterday, toDate: this.toDate })
+      .toPromise()
+      .then(
+        data => {
+          this.todayData = data;
+        }
+      );
+    }catch(err){
       console.log(err)
     }
     
@@ -89,7 +103,12 @@ export class ShareComponent implements OnInit {
         this.dataAvailable = 1
         this.createDayChart()
       }else{
-        this.dataAvailable = 2
+        if(this.todayData.chartValues.length == 0){
+          //nur vergangenheitsdaten
+          this.dataAvailable = 3
+        }else{
+          this.dataAvailable = 2
+        }
       }
     }else{
       //keine Daten verfügbar
@@ -251,13 +270,8 @@ export class ShareComponent implements OnInit {
       return 0;
   });
     let lastDay = new Date(this.historicalData?.chartValues[0].recordedAt)
-    this.historicalData?.chartValues.forEach(element => {
-      let dayElement = new Date(element.recordedAt)
-      if(dayElement.getFullYear() == lastDay.getFullYear() && dayElement.getMonth() == lastDay.getMonth() && dayElement.getDay() == lastDay.getDay()){
-        x.push(element.recordedAt);
-        y.push(element.recordedValue);
+    this.todayData?.chartValues.forEach(element => {
         data.push([element.recordedAt ,element.recordedValue])
-      }
     });
 
     console.log(data)
