@@ -12,7 +12,7 @@ export class MetaService {
   constructor(private http: HttpClient,) { }
 
   public getAllMetaData() {
-    return this.http.get(`${this.apiUrl}meta`)
+    return this.http.get(`${this.apiUrl}meta/const`)
       .pipe(
         tap(
           (data) => {

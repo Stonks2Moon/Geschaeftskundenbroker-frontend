@@ -6,6 +6,7 @@ import { DepotService } from 'src/app/logic/services/depot.service';
 import { ShareService } from 'src/app/logic/services/share.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MetaService } from 'src/app/logic/services/meta.service';
 
 @Component({
   selector: 'app-buy',
@@ -25,8 +26,9 @@ export class BuyComponent implements OnInit {
   private toDate: Date = new Date();
   sharePrice: number;
   currentPrice: number;
+  private metaData: string;
 
-  constructor(private location: Location, private depotService: DepotService, private shareService: ShareService, private route: ActivatedRoute,) {
+  constructor(private location: Location, private depotService: DepotService, private shareService: ShareService, private metaService: MetaService, private route: ActivatedRoute,) {
 
   }
 
@@ -46,16 +48,20 @@ export class BuyComponent implements OnInit {
           this.createChart();
         }
       );
+      this.metaService.getAllMetaData().subscribe(data => console.log(data));
       this.createForm();
   }
 
   public createForm(): void {
     this.buyForm = new FormGroup({
+      depot: new FormControl('', Validators.required),
       limitPrice: new FormControl('', Validators.required),
       maxPrice: new FormControl('', Validators.required),
       minPrice: new FormControl('', Validators.required),
+      dateOfExpiry: new FormControl('', Validators.required),
       numberOfShares: new FormControl('', Validators.required),
-      sharePrice: new FormControl('', Validators.required)
+      sharePrice: new FormControl('', Validators.required),
+      algorithmicTradingType: new FormControl('', Validators.required),
     });
   }
 
