@@ -10,7 +10,7 @@
                 <form [formGroup]="buyForm" class="uk-form-stacked uk-grid-small" uk-grid (ngSubmit)="onBuySubmit()">
                     <div class="uk-margin uk-width-1-1">
                         <label class="uk-form-label" for="depotSelect">Depot</label>
-                        <select class="uk-select" id="depotSelect">
+                        <select class="uk-select" id="depotSelect" formControlName="depot">
                             <option *ngFor="let depot of depotArray" [value]="depot.depotId">{{ depot.name }}</option>
                         </select>
                     </div>
@@ -45,13 +45,18 @@
                         </ng-template>
                     </div>
                     <div class="uk-margin uk-width-1-1">
-                        <label class="uk-form-label" for="expiredDate">Gültig bis</label>
-                        <input class="uk-input" type="text" id="expiredDate">
+                        <label class="uk-form-label" for="expiredDateSelect">Gültig bis</label>
+                        <select class="uk-select" id="expiredDateSelect" formControlName="dateOfExpiry">
+                            <option value="1">Morgen</option>
+                            <option value="7">7 Tage</option>
+                            <option value="14">14 Tage</option>
+                            <option value="30">30 Tage</option>
+                        </select>
                     </div>
 
                     <div class="uk-margin uk-form-controls uk-width-2-5@s">
-                        <label class="uk-form-label" for="number">Anzahl der Aktien (in Stk.)</label>
-                        <input class="uk-input" type="number" id="number" (keyup)="calculateSharePrice($event)" formControlName="numberOfShares">
+                        <label class="uk-form-label" for="numberOfShares">Anzahl der Aktien (in Stk.)</label>
+                        <input class="uk-input" type="number" id="numberOfShares" (keyup)="calculateSharePrice($event)" formControlName="numberOfShares">
                     </div>
 
                     <div class="uk-margin uk-width-1-5@s">
@@ -61,14 +66,22 @@
 
                     <div class="uk-margin uk-width-2-5@s">
                         <label class="uk-form-label" for="number">Wert der Aktien (in €)</label>
-                        <input class="uk-input" type="number" id="number" disabled value={{sharePrice}} formControlName="sharePrice">
+                        <input class="uk-input" type="number" id="sharePrice" disabled value={{sharePrice}} formControlName="sharePrice">
+                    </div>
+
+                    <div class="uk-margin uk-width-1-1">
+                        <label class="uk-form-label" for="algorithmicTradingType">Gültig bis</label>
+                        <select class="uk-select" id="algorithmicTradingType" formControlName="algorithmicTradingType">
+                            <option ></option>
+                        </select>
                     </div>
 
                     <div class="uk-margin uk-width-1-2">
                         <button class="uk-button" (click)="cancel()">Abbrechen</button>
                     </div>
                     <div class="uk-margin uk-width-1-2">
-                        <a class="uk-button uk-button-primary uk-align-right" href="#modal-center" uk-toggle>Verkaufen</a>
+                        <!-- TODO: correct validation -->
+                        <button class="uk-button uk-button-primary uk-align-right" type="submit" href="#modal-center" uk-toggle [disabled]="buyForm.controls.numberOfShares.invalid">Verkaufen</button>
                     </div>
                     <div id="modal-center" class="uk-flex-top" uk-modal>
                         <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
