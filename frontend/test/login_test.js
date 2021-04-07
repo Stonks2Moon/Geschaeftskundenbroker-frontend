@@ -5,15 +5,15 @@ Before(({Ich}) => {
 });
 
 Scenario('Ich teste das Einloggen', ({ Ich }) => {
-    Ich.fülle_das_feld('E-Mail', 'jojo@mail.com');
-    Ich.fülle_das_feld('Passwort', '1234');
+    Ich.fülle_das_feld('E-Mail', 'test@hannes.de');
+    Ich.fülle_das_feld('Passwort', 'test');
     Ich.klicke('Anmelden');
     // pause();
 
 });
 
 Scenario('Ich teste das Einloggen', ({ Ich }) => {
-    Ich.fülle_das_feld('E-Mail', 'jojo@mail.com');
+    Ich.fülle_das_feld('E-Mail', 'test@hannes.de');
     Ich.fülle_das_feld('Passwort', '12345');
     Ich.klicke('Anmelden');
     Ich.sehe('Anmeldung fehlgeschlagen!');
@@ -22,8 +22,8 @@ Scenario('Ich teste das Einloggen', ({ Ich }) => {
 });
 
 Scenario('Ich teste das Einloggen', ({ Ich }) => {
-    Ich.fülle_das_feld('E-Mail', 'jojo@maila.com');
-    Ich.fülle_das_feld('Passwort', '12345');
+    Ich.fülle_das_feld('E-Mail', 'test@hanne.de');
+    Ich.fülle_das_feld('Passwort', 'test');
     Ich.klicke('Anmelden');
     Ich.sehe('Anmeldung fehlgeschlagen!');
     // pause();

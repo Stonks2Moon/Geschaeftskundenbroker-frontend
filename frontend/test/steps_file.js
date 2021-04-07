@@ -2,9 +2,11 @@
 
 module.exports = function() {
   return actor({
-
-    // Define custom steps here, use 'this' to access default methods of I.
-    // It is recommended to place a general 'login' function here.
-
+    logge_mich_ein: function(email, password) {
+      this.bin_auf_seite('/');
+      this.fülle_das_feld('Email', email);
+      this.fülle_das_feld('Password', password);
+      this.klicke('Anmelden');
+    },
   });
 }
