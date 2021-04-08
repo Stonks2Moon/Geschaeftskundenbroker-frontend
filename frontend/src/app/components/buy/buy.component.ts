@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import { Location } from '@angular/common';
-import { Depot, HistoricalData, Share } from 'src/app/logic/data-models/data-models';
+import { Depot, HistoricalData, MetaConst, Share } from 'src/app/logic/data-models/data-models';
 import { DepotService } from 'src/app/logic/services/depot.service';
 import { ShareService } from 'src/app/logic/services/share.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MetaService } from 'src/app/logic/services/meta.service';
 
 @Component({
   selector: 'app-buy',
@@ -17,17 +18,26 @@ export class BuyComponent implements OnInit {
   public buyForm: FormGroup;
   public chartOption: EChartsOption;
   public depotArray: Array<Depot> = [];
-  selected: string;
+  public selectedOrderType: string;
   public share: Share;
+  public metaConst: MetaConst;
+  public expiredDateArray: Array<{}>;
   private shareId: string;
   private historicalData: HistoricalData;
   private fromDate: Date = new Date();
   private toDate: Date = new Date();
-  sharePrice: number;
+  public sharePrice: number;
   currentPrice: number;
+  selectedDepot: any;
+  depotName: string;
 
-  constructor(private location: Location, private depotService: DepotService, private shareService: ShareService, private route: ActivatedRoute,) {
-
+  constructor(private location: Location,
+    private depotService: DepotService,
+    private shareService: ShareService,
+    private metaService: MetaService,
+    private route: ActivatedRoute,
+  ) {
+    this.buildExpiredDateArray();
   }
 
   ngOnInit(): void {
@@ -36,7 +46,6 @@ export class BuyComponent implements OnInit {
       this.depotArray = depots;
     });
     this.shareId = this.route.snapshot.paramMap.get('shareId');
-    console.log(this.shareId)
     this.shareService.getShareById(this.shareId).subscribe(share => this.share = share);
     this.shareService.getShareHistory({ shareId: this.shareId, fromDate: this.fromDate, toDate: this.toDate })
       .toPromise()
@@ -46,26 +55,47 @@ export class BuyComponent implements OnInit {
           this.createChart();
         }
       );
-      this.createForm();
+    this.metaService.getAllMetaData().subscribe(metaConst => this.metaConst = metaConst);
+    this.createForm();
   }
+
+  buildExpiredDateArray() {
+    let today: Date = new Date();
+    let sevenDays: Date = new Date(today);
+    let fourteenDays: Date = new Date(today);
+    let thirtyDays: Date = new Date(today);
+
+    sevenDays.setDate(sevenDays.getDate() + 7);
+    fourteenDays.setDate(sevenDays.getDate() + 14);
+    thirtyDays.setDate(sevenDays.getDate() + 30);
+
+    this.expiredDateArray = [
+      { name: 'Morgen', value: today },
+      { name: '7 Tage', value: sevenDays },
+      { name: '14 Tage', value: fourteenDays },
+      { name: '30 Tage', value: thirtyDays },
+    ];
+  }
+
 
   public createForm(): void {
     this.buyForm = new FormGroup({
+      depot: new FormControl('', Validators.required),
       limitPrice: new FormControl('', Validators.required),
       maxPrice: new FormControl('', Validators.required),
       minPrice: new FormControl('', Validators.required),
+      dateOfExpiry: new FormControl('', Validators.required),
       numberOfShares: new FormControl('', Validators.required),
-      sharePrice: new FormControl('', Validators.required)
+      sharePrice: new FormControl({value: '', disabled: true}, Validators.required),
+      algorithmicTradingType: new FormControl('', Validators.required),
     });
   }
 
   public onBuySubmit(): void {
 
   }
-  
-  public createChart(): void {
-    console.log(this.historicalData);
 
+  public createChart(): void {
     let x: Array<Date> = [];
     let y: Array<number> = [];
     let data: Array<any> = [];
@@ -89,7 +119,6 @@ export class BuyComponent implements OnInit {
       data.push([element.recordedAt, element.recordedValue])
     });
 
-    console.log(data)
     this.chartOption = {
       tooltip: {
         trigger: 'axis',
@@ -132,26 +161,35 @@ export class BuyComponent implements OnInit {
     //this.location.back()
   }
 
-  onOptionsSelected(event: any): void {
-    this.selected = event.target.value;
-    if (this.selected === "limitPrice") {
+  onDepotSelected(event: any): void {
+    this.selectedDepot = event.target.value;
+    this.depotArray.forEach(depot => {
+      if (depot.depotId === this.selectedDepot) {
+        this.depotName = depot.name;
+      }
+    });
+  }
+
+  onOrderTypeSelected(event: any): void {
+    this.selectedOrderType = event.target.value;
+    if (this.selectedOrderType === "limitPrice") {
       this.buyForm.patchValue({
-        minPrice: "", 
+        minPrice: "",
         maxPrice: "",
         numberOfShares: "",
         sharePrice: ""
       });
     }
-    else if (this.selected === "stopPrice") {
+    else if (this.selectedOrderType === "stopPrice") {
       this.buyForm.patchValue({
         limitPrice: "",
         numberOfShares: "",
         sharePrice: ""
       });
-    } else if (this.selected === "marketPrice") {
+    } else if (this.selectedOrderType === "marketPrice") {
       this.buyForm.setValue({
         limitPrice: "",
-        minPrice: "", 
+        minPrice: "",
         maxPrice: "",
         numberOfShares: "",
         sharePrice: ""
@@ -161,9 +199,9 @@ export class BuyComponent implements OnInit {
 
   public calculateSharePrice(event: any): void {
     let numberOfShares: number = event.target.value;
-    if (this.selected === "limitPrice") {
+    if (this.selectedOrderType === "limitPrice") {
       this.currentPrice = +this.buyForm.controls.limitPrice.value;
-    } else if (this.selected === "stopPrice") {
+    } else if (this.selectedOrderType === "stopPrice") {
       let maxPrice: number = +this.buyForm.controls.maxPrice.value;
       let minPrice: number = +this.buyForm.controls.minPrice.value;
       this.currentPrice = (maxPrice + minPrice) / 2;

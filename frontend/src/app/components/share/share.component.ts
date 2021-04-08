@@ -73,8 +73,6 @@ export class ShareComponent implements OnInit {
   }
 
   public createChart(): void {
-    console.log(this.historicalData);
-
     let x: Array<Date> = [];
     let y: Array<number> = [];
     let data: Array<any> = [];
@@ -122,7 +120,6 @@ export class ShareComponent implements OnInit {
     let close = 0
     let lowest = 0
     let highest = 0
-    console.log(this.historicalData?.chartValues.length)
     this.historicalData?.chartValues.forEach(element => {
       let newDate = new Date(element.recordedAt)
       if(newDate.getFullYear() == currentDate.getFullYear() && newDate.getMonth() == currentDate.getMonth() && newDate.getDay() == currentDate.getDay()){
@@ -159,7 +156,6 @@ export class ShareComponent implements OnInit {
       }
     });
 
-    console.log(data)
     this.chartOption = {
       tooltip: {
         trigger: 'axis',
@@ -253,8 +249,6 @@ export class ShareComponent implements OnInit {
 
 
   public createDayChart(): void {
-    console.log(this.historicalData);
-
     let x: Array<Date> = [];
     let y: Array<number> = [];
     let data: Array<any> = [];
