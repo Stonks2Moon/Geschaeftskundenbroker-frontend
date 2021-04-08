@@ -9,7 +9,6 @@ Scenario('Ich teste das Einloggen', ({ Ich }) => {
     Ich.fülle_das_feld('Passwort', 'test');
     Ich.klicke('Anmelden');
     // pause();
-
 });
 
 Scenario('Ich teste das Einloggen', ({ Ich }) => {
@@ -17,8 +16,7 @@ Scenario('Ich teste das Einloggen', ({ Ich }) => {
     Ich.fülle_das_feld('Passwort', '12345');
     Ich.klicke('Anmelden');
     Ich.sehe('Anmeldung fehlgeschlagen!');
-    // pause();
-  
+    // pause(); 
 });
 
 Scenario('Ich teste das Einloggen', ({ Ich }) => {

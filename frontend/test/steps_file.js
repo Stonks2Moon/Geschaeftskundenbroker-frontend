@@ -4,8 +4,8 @@ module.exports = function() {
   return actor({
     logge_mich_ein: function(email, password) {
       this.bin_auf_seite('/');
-      this.fülle_das_feld('Email', email);
-      this.fülle_das_feld('Password', password);
+      this.fülle_das_feld('E-Mail', email);
+      this.fülle_das_feld('Passwort', password);
       this.klicke('Anmelden');
     },
   });

@@ -5,7 +5,8 @@ Before(({ Ich }) => {
 });
 
 Scenario('Ich teste das Ausloggen', ({ Ich }) => {
-  Ich.logge_mich_ein('test@hannes.de.', 'test');
+  Ich.logge_mich_ein('test@hannes.de', 'test');
   Ich.klicke('Abmelden');
+  Ich.sehe('Anmeldung');
   // pause();
 });
