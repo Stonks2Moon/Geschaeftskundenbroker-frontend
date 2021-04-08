@@ -45,10 +45,19 @@
                             </div>
                         </ng-template>
                     </div>
-                    <div class="uk-margin uk-width-1-1">
+                    <div class="uk-margin uk-width-1-2">
                         <label class="uk-form-label" for="expiredDateSelect">Gültig bis</label>
                         <select class="uk-select" id="expiredDateSelect" formControlName="dateOfExpiry">
-                            <option *ngFor="let expiredDate of expiredDateArray" [value]="expiredDate.value">{{expiredDate.name}}</option>
+                            <option *ngFor="let expiredDate of expiredDateArray" [value]="expiredDate.value">
+                                {{expiredDate.name}}</option>
+                        </select>
+                    </div>
+
+                    <div class="uk-margin uk-width-1-2">
+                        <label class="uk-form-label" for="algorithmicTradingType">Algorithmisches Handeln:</label>
+                        <select class="uk-select" id="algorithmicTradingType" formControlName="algorithmicTradingType">
+                            <option [value]="metaConst.ALGORITHMS.NO_ALG">Kein Algorithmus</option>
+                            <option [value]="metaConst.ALGORITHMS.SPLIT_ALG">Split Algorithmus</option>
                         </select>
                     </div>
 
@@ -69,13 +78,6 @@
                             formControlName="sharePrice">
                     </div>
 
-                    <div class="uk-margin uk-width-1-1">
-                        <label class="uk-form-label" for="algorithmicTradingType">Algorithmisches Handeln:</label>
-                        <select class="uk-select" id="algorithmicTradingType" formControlName="algorithmicTradingType">
-                            <option [value]="metaConst.ALGORITHMS.NO_ALG">Kein Algorithmus</option>
-                            <option [value]="metaConst.ALGORITHMS.SPLIT_ALG">Split Algorithmus</option>
-                        </select>
-                    </div>
 
                     <div class="uk-margin uk-width-1-2">
                         <button class="uk-button" (click)="cancel()">Abbrechen</button>
