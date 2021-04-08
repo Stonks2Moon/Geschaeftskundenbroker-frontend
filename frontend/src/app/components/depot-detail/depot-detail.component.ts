@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EChartsOption } from 'echarts';
-import { Depot, DepotPosition } from 'src/app/logic/data-models/data-models';
+import { Depot, DepotPosition, Share } from 'src/app/logic/data-models/data-models';
 import { DepotService } from 'src/app/logic/services/depot.service';
+import { ShareService } from 'src/app/logic/services/share.service';
+
 
 @Component({
   selector: 'app-depot-detail',
@@ -11,7 +13,7 @@ import { DepotService } from 'src/app/logic/services/depot.service';
 })
 export class DepotDetailComponent implements OnInit {
 
-  constructor(private depotService: DepotService,
+  constructor(private depotService: DepotService, private shareService: ShareService,
     private route: ActivatedRoute,) {
 
   }
@@ -19,17 +21,22 @@ export class DepotDetailComponent implements OnInit {
 
   public depot: Depot;
   public depotId: string;
+  public share: Share;
+  public shareArray: Array<Share> = [];
 
 
   ngOnInit(): void {
     this.depotId = this.route.snapshot.paramMap.get('depotId');
     this.depotService.getDepotById(this.depotId).subscribe(depot => {
-
       this.depot = depot;
+      console.log(depot);
       this.createChart();
       this.createPieChart();
-
     });
+    // this.shareService.getAllShares().subscribe(shares => {
+    //   this.shareArray = shares;
+    // }
+    // )
 
   }
   public createPieChart(): void {
@@ -80,7 +87,7 @@ export class DepotDetailComponent implements OnInit {
     }
   }
   public createChart(): void {
-    
+
   }
 
   chartOption: EChartsOption = {

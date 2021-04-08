@@ -6,5 +6,6 @@ export interface DepotPosition {
     amount: number,
     costValue: number,
     currentValue: number,
+    profit: number,
     percentageChange: number,
 }

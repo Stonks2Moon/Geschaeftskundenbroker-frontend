@@ -12,7 +12,7 @@ Scenario('Ich teste das Einloggen', ({ Ich }) => {
     pause();
 });
 
-Scenario('Ich teste das Einloggen', ({ Ich }) => {
+Scenario('Ich teste das Einloggen mit falscher E-Mail', ({ Ich }) => {
     Ich.fülle_das_feld('E-Mail', 'test@hannes.de');
     Ich.fülle_das_feld('Passwort', '12345');
     Ich.klicke('Anmelden');
@@ -20,7 +20,7 @@ Scenario('Ich teste das Einloggen', ({ Ich }) => {
     // pause(); 
 });
 
-Scenario('Ich teste das Einloggen', ({ Ich }) => {
+Scenario('Ich teste das Einloggen mit flaschem Passwort', ({ Ich }) => {
     Ich.fülle_das_feld('E-Mail', 'test@hanne.de');
     Ich.fülle_das_feld('Passwort', 'test');
     Ich.klicke('Anmelden');

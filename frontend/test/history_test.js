@@ -7,8 +7,14 @@ Before(({ Ich }) => {
 
 Scenario('Ich teste die Historie', ({ Ich }) => {
   Ich.klicke('Historie');
-  Ich.sehe('Offene Transaktionen');
-  Ich.sehe('Order-Preis');
-  Ich.sehe('Gültig bis');
+  Ich.sehe('OFFENE TRANSAKTIONEN');
+  Ich.sehe('ORDER-PREIS');
+  Ich.sehe('GÜLTIG BIS');
+  Ich.klicke('Ausgeführt');
+  Ich.sehe('DATUM');
+  Ich.sehe('ORDERNUMMER');
+  Ich.klicke('Abgelaufen');
+  Ich.sehe('DATUM');
+  Ich.sehe('ORDERNUMMER');
   // pause();
 });

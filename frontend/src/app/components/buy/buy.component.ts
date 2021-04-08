@@ -230,7 +230,7 @@ export class BuyComponent implements OnInit {
 
   onAlgorithmicTradeSelected(event: any): void {
     this.selectedAlgorithm = event.target.value;
-    this.algorithmName = (this.algorithmTypesArray.filter(type => type.value == this.selectedDate))[0].name;
+    // this.algorithmName = (this.algorithmTypesArray.filter(type => type.value == this.selectedDate))[0].name;
   }
 
   public calculateSharePrice(event: any): void {
