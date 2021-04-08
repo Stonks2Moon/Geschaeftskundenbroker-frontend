@@ -2,7 +2,7 @@ import { AfterContentInit, AfterViewInit, Component, OnInit } from '@angular/cor
 import { ActivatedRoute, Router } from '@angular/router';
 import { color, EChartsOption } from 'echarts';
 import { ComplexOuterSubscriber } from 'rxjs/internal/innerSubscribe';
-import { min } from 'rxjs/operators';
+import { first, min } from 'rxjs/operators';
 import { HistoricalData, Share } from 'src/app/logic/data-models/data-models';
 import { ShareService } from 'src/app/logic/services/share.service';
 
@@ -98,7 +98,7 @@ export class ShareComponent implements OnInit {
     if(this.historicalData.chartValues.length != 0){
       let firstDate = new Date(this.historicalData.chartValues[0].recordedAt)
       let lastDate = new Date(this.historicalData.chartValues[this.historicalData.chartValues.length -1].recordedAt)
-      if(firstDate.getFullYear() == lastDate.getFullYear() && firstDate.getMonth() == lastDate.getMonth() && firstDate.getDay() == lastDate.getDay()){
+      if(firstDate.getFullYear() == lastDate.getFullYear() && firstDate.getMonth() == lastDate.getMonth() && firstDate.getDate() == lastDate.getDate()){
         //nur ein Tag
         this.dataAvailable = 1
         this.createDayChart()
@@ -108,6 +108,7 @@ export class ShareComponent implements OnInit {
           this.dataAvailable = 3
         }else{
           this.dataAvailable = 2
+          this.createDayChart()
           console.log(this.todayData)
         }
       }
@@ -214,7 +215,6 @@ export class ShareComponent implements OnInit {
             borderColor0: '#B54643',
             
           },
-    
           
         },
         {
@@ -276,7 +276,6 @@ export class ShareComponent implements OnInit {
         data.push([element.recordedAt ,element.recordedValue])
     });
 
-    console.log(data)
     this.dayChartOption = {
       tooltip: {
         trigger: 'axis',
@@ -294,7 +293,13 @@ export class ShareComponent implements OnInit {
       yAxis: {
         type: 'value',
       },
-      
+      dataZoom: [{
+        type: 'inside',
+        filterMode: 'filter'
+
+      }, {
+        filterMode: 'empty'
+      }],
       series: [
         {
           name: this.historicalData.share.shareName,
