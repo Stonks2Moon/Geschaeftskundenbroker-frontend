@@ -2,7 +2,7 @@ import { AfterContentInit, AfterViewInit, Component, OnInit } from '@angular/cor
 import { ActivatedRoute, Router } from '@angular/router';
 import { color, EChartsOption } from 'echarts';
 import { ComplexOuterSubscriber } from 'rxjs/internal/innerSubscribe';
-import { min } from 'rxjs/operators';
+import { first, min } from 'rxjs/operators';
 import { HistoricalData, Share } from 'src/app/logic/data-models/data-models';
 import { ShareService } from 'src/app/logic/services/share.service';
 
@@ -96,7 +96,7 @@ export class ShareComponent implements OnInit {
     if(this.historicalData.chartValues.length != 0){
       let firstDate = new Date(this.historicalData.chartValues[0].recordedAt)
       let lastDate = new Date(this.historicalData.chartValues[this.historicalData.chartValues.length -1].recordedAt)
-      if(firstDate.getFullYear() == lastDate.getFullYear() && firstDate.getMonth() == lastDate.getMonth() && firstDate.getDay() == lastDate.getDay()){
+      if(firstDate.getFullYear() == lastDate.getFullYear() && firstDate.getMonth() == lastDate.getMonth() && firstDate.getDate() == lastDate.getDate()){
         //nur ein Tag
         this.dataAvailable = 1
         this.createDayChart()
@@ -106,12 +106,15 @@ export class ShareComponent implements OnInit {
           this.dataAvailable = 3
         }else{
           this.dataAvailable = 2
+          this.createDayChart()
+          console.log(this.todayData)
         }
       }
     }else{
       //keine Daten verfügbar
       this.dataAvailable = 0
     }
+    console.log(this.dataAvailable)
     let currentDate = new Date(this.historicalData.chartValues[0].recordedAt)
     let open = 0
     let close = 0
@@ -152,6 +155,20 @@ export class ShareComponent implements OnInit {
         currentDate = new Date(element.recordedAt)
       }
     });
+    data.push([open,close,lowest,highest])
+    let average = (lowest+highest+close+open)/4
+    dailyaverages.push(Number(average.toFixed(2)))
+    if(dailyaverages.length <= 7){
+      var weekstart = 0
+    }else{
+      var weekstart = (dailyaverages.length-7)
+    }
+    var count=0;
+      for (var i=weekstart; i<dailyaverages.length; i++) {
+          count+=dailyaverages[i];
+      }
+    weeklyaverages.push(Number((count/7).toFixed(2)))
+    dates.push([currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate()].join('/'))
 
     this.chartOption = {
       tooltip: {
@@ -208,7 +225,6 @@ export class ShareComponent implements OnInit {
             borderColor0: '#B54643',
             
           },
-    
           
         },
         {
@@ -285,7 +301,13 @@ export class ShareComponent implements OnInit {
       yAxis: {
         type: 'value',
       },
-      
+      dataZoom: [{
+        type: 'inside',
+        filterMode: 'filter'
+
+      }, {
+        filterMode: 'empty'
+      }],
       series: [
         {
           name: this.historicalData.share.shareName,
