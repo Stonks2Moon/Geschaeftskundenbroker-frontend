@@ -155,6 +155,20 @@ export class ShareComponent implements OnInit {
         currentDate = new Date(element.recordedAt)
       }
     });
+    data.push([open,close,lowest,highest])
+    let average = (lowest+highest+close+open)/4
+    dailyaverages.push(Number(average.toFixed(2)))
+    if(dailyaverages.length <= 7){
+      var weekstart = 0
+    }else{
+      var weekstart = (dailyaverages.length-7)
+    }
+    var count=0;
+      for (var i=weekstart; i<dailyaverages.length; i++) {
+          count+=dailyaverages[i];
+      }
+    weeklyaverages.push(Number((count/7).toFixed(2)))
+    dates.push([currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate()].join('/'))
 
     this.chartOption = {
       tooltip: {
