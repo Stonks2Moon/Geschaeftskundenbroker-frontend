@@ -18,7 +18,7 @@ export class BuyComponent implements OnInit {
   public buyForm: FormGroup;
   public chartOption: EChartsOption;
   public depotArray: Array<Depot> = [];
-  selected: string;
+  public selectedOrderType: string;
   public share: Share;
   public metaConst: MetaConst;
   public expiredDateArray: Array<{}>;
@@ -26,8 +26,10 @@ export class BuyComponent implements OnInit {
   private historicalData: HistoricalData;
   private fromDate: Date = new Date();
   private toDate: Date = new Date();
-  sharePrice: number;
+  public sharePrice: number;
   currentPrice: number;
+  selectedDepot: any;
+  depotName: string;
 
   constructor(private location: Location,
     private depotService: DepotService,
@@ -159,9 +161,18 @@ export class BuyComponent implements OnInit {
     //this.location.back()
   }
 
-  onOptionsSelected(event: any): void {
-    this.selected = event.target.value;
-    if (this.selected === "limitPrice") {
+  onDepotSelected(event: any): void {
+    this.selectedDepot = event.target.value;
+    this.depotArray.forEach(depot => {
+      if (depot.depotId === this.selectedDepot) {
+        this.depotName = depot.name;
+      }
+    });
+  }
+
+  onOrderTypeSelected(event: any): void {
+    this.selectedOrderType = event.target.value;
+    if (this.selectedOrderType === "limitPrice") {
       this.buyForm.patchValue({
         minPrice: "",
         maxPrice: "",
@@ -169,13 +180,13 @@ export class BuyComponent implements OnInit {
         sharePrice: ""
       });
     }
-    else if (this.selected === "stopPrice") {
+    else if (this.selectedOrderType === "stopPrice") {
       this.buyForm.patchValue({
         limitPrice: "",
         numberOfShares: "",
         sharePrice: ""
       });
-    } else if (this.selected === "marketPrice") {
+    } else if (this.selectedOrderType === "marketPrice") {
       this.buyForm.setValue({
         limitPrice: "",
         minPrice: "",
@@ -188,9 +199,9 @@ export class BuyComponent implements OnInit {
 
   public calculateSharePrice(event: any): void {
     let numberOfShares: number = event.target.value;
-    if (this.selected === "limitPrice") {
+    if (this.selectedOrderType === "limitPrice") {
       this.currentPrice = +this.buyForm.controls.limitPrice.value;
-    } else if (this.selected === "stopPrice") {
+    } else if (this.selectedOrderType === "stopPrice") {
       let maxPrice: number = +this.buyForm.controls.maxPrice.value;
       let minPrice: number = +this.buyForm.controls.minPrice.value;
       this.currentPrice = (maxPrice + minPrice) / 2;
