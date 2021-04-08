@@ -40,6 +40,22 @@ export class BuyComponent implements OnInit {
     this.buildExpiredDateArray();
   }
 
+  orderTypes: Array<{}> = [
+    {
+      name: "Markt Preis",
+      value: "marketPrice"
+    },
+    {
+      name: "Limit Preis",
+      value: "limitPrice"
+    },
+    {
+      name: "Stop Preis",
+      value: "stopPrice"
+    },
+  ];
+
+
   ngOnInit(): void {
     this.fromDate.setDate(this.fromDate.getDate() - 30)
     this.depotService.getAllDepotsBySession().subscribe(depots => {

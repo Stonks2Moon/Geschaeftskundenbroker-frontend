@@ -11,15 +11,13 @@
                     <div class="uk-margin uk-width-1-1">
                         <label class="uk-form-label" for="depotSelect">Depot</label>
                         <select class="uk-select" id="depotSelect" formControlName="depot" (change)="onDepotSelected($event)">
-                            <option *ngFor="let depot of depotArray" [value]="depot.depotId">{{ depot.name }}</option>
+                            <option *ngFor="let depot of depotArray" [value]="depot.depotId">{{depot.name}}</option>
                         </select>
                     </div>
                     <div class="uk-margin uk-width-1-2">
                         <label class="uk-form-label" for="orderType">Order-Art*</label>
                         <select #orderType class="uk-select" id="orderType" (change)="onOrderTypeSelected($event)">
-                            <option value="marketPrice">Markt-Preis</option>
-                            <option value="limitPrice">Limit-Preis</option>
-                            <option value="stopPrice">Stop-Preis</option>
+                            <option *ngFor="let orderType of orderTypes" [value]="orderType.value">{{orderType.name}}</option>
                         </select>
                     </div>
                     <div class="uk-margin uk-width-1-2">
