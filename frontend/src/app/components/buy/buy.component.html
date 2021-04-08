@@ -61,7 +61,7 @@
 
                     <div class="uk-margin uk-form-controls uk-width-2-5@s">
                         <label class="uk-form-label" for="numberOfShares">Anzahl der Aktien (in Stk.)</label>
-                        <input class="uk-input" type="number" id="numberOfShares" (keyup)="calculateSharePrice($event)"
+                        <input class="uk-input" type="number" id="numberOfShares" (keyup)="calculateSharePrice($event)" (change)="calculateSharePrice($event)"
                             formControlName="numberOfShares">
                     </div>
 
@@ -117,7 +117,7 @@
                                     </tr>
                                     <tr>
                                         <td>Gültig bis:</td>
-                                        <td>Table Data</td>
+                                        <td>{{dateName}}</td>
                                         <td></td>
                                         <td></td>
                                     </tr>

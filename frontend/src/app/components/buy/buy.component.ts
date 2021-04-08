@@ -21,7 +21,7 @@ export class BuyComponent implements OnInit {
   public selectedOrderType: string;
   public share: Share;
   public metaConst: MetaConst;
-  public expiredDateArray: Array<{}>;
+  public expiredDateArray: Array<{name: string, value: Date}>;
   private shareId: string;
   private historicalData: HistoricalData;
   private fromDate: Date = new Date();
@@ -30,6 +30,8 @@ export class BuyComponent implements OnInit {
   currentPrice: number;
   selectedDepot: any;
   depotName: string;
+  selectedDate: any;
+  dateName: {}[];
 
   constructor(private location: Location,
     private depotService: DepotService,
@@ -211,6 +213,11 @@ export class BuyComponent implements OnInit {
         sharePrice: ""
       });
     }
+  }
+
+  onExpiredDateSelected(event: any): void {
+    this.selectedDate = event.target.value;
+    this.dateName = (this.expiredDateArray.filter(date => date.value === this.selectedDate))[0].name;
   }
 
   public calculateSharePrice(event: any): void {
