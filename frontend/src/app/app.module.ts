@@ -20,6 +20,7 @@ import { BuyComponent } from './components/buy/buy.component';
 import { ShareComponent } from './components/share/share.component';
 import { DepotDetailComponent } from './components/depot-detail/depot-detail.component';
 import { SearchComponent } from './components/search/search.component';
+import { SellComponent } from './components/sell/sell.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { SearchComponent } from './components/search/search.component';
     BuyComponent,
     ShareComponent,
     DepotDetailComponent,
-    SearchComponent    
+    SearchComponent,
+    SellComponent    
   ],
   imports: [
     BrowserModule,

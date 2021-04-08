@@ -12,6 +12,7 @@ import { TradeComponent } from './components/trade/trade.component';
 import { AuthenticationGuard } from './logic/guard/authentication.guard';
 import { ShareComponent } from './components/share/share.component';
 import { SearchComponent } from './components/search/search.component';
+import { SellComponent } from './components/sell/sell.component';
 
 const routes: Routes = [
   {
@@ -55,14 +56,19 @@ const routes: Routes = [
     component: ProfileComponent
   },
   {
+    path: 'share/:shareId',
+    canActivate: [AuthenticationGuard],
+    component: ShareComponent
+  },
+  {
     path: 'buy/:shareId',
     canActivate: [AuthenticationGuard],
     component: BuyComponent
   },
   {
-    path: 'share/:shareId',
+    path: 'sell/:shareId',
     canActivate: [AuthenticationGuard],
-    component: ShareComponent
+    component: SellComponent
   },
   {
     path: 'search/:query',
