@@ -8,7 +8,8 @@ Scenario('Ich teste das Einloggen', ({ Ich }) => {
     Ich.fülle_das_feld('E-Mail', 'test@hannes.de');
     Ich.fülle_das_feld('Passwort', 'test');
     Ich.klicke('Anmelden');
-    // pause();
+    Ich.sehe('Deine beliebtesten Aktien');
+    pause();
 });
 
 Scenario('Ich teste das Einloggen', ({ Ich }) => {
