@@ -212,5 +212,4 @@ export class BuyComponent implements OnInit {
     this.sharePrice = numberOfShares * this.currentPrice;
   }
 
-
 }
