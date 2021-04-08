@@ -29,9 +29,11 @@ export class BuyComponent implements OnInit {
   public sharePrice: number;
   currentPrice: number;
   selectedDepot: any;
-  depotName: string;
+  public depotName: string;
   selectedDate: any;
-  dateName: {}[];
+  public dateName: string;
+  selectedAlgorithm: any;
+  public algorithmName: string;
 
   constructor(private location: Location,
     private depotService: DepotService,
@@ -42,7 +44,7 @@ export class BuyComponent implements OnInit {
     this.buildExpiredDateArray();
   }
 
-  orderTypes: Array<{}> = [
+  orderTypesArray: Array<{name: string, value: string}> = [
     {
       name: "Markt Preis",
       value: "marketPrice"
@@ -57,6 +59,16 @@ export class BuyComponent implements OnInit {
     },
   ];
 
+  // algorithmTypesArray: Array<{name: string, value: string}> = [
+  //   {
+  //     name: "Kein Algorithmus",
+  //     value: this.metaConst.ALGORITHMS.NO_ALG
+  //   },
+  //   {
+  //     name: "Split Algorithmus",
+  //     value: this.metaConst.ALGORITHMS.SPLIT_ALG
+  //   }
+  // ];
 
   ngOnInit(): void {
     this.fromDate.setDate(this.fromDate.getDate() - 30)
@@ -181,11 +193,7 @@ export class BuyComponent implements OnInit {
 
   onDepotSelected(event: any): void {
     this.selectedDepot = event.target.value;
-    this.depotArray.forEach(depot => {
-      if (depot.depotId === this.selectedDepot) {
-        this.depotName = depot.name;
-      }
-    });
+    this.depotName = (this.depotArray.filter(depot => depot.depotId == this.selectedDepot))[0].name;
   }
 
   onOrderTypeSelected(event: any): void {
@@ -217,7 +225,12 @@ export class BuyComponent implements OnInit {
 
   onExpiredDateSelected(event: any): void {
     this.selectedDate = event.target.value;
-    this.dateName = (this.expiredDateArray.filter(date => date.value === this.selectedDate))[0].name;
+    this.dateName = (this.expiredDateArray.filter(date => date.value == this.selectedDate))[0].name;
+  }
+
+  onAlgorithmicTradeSelected(event: any): void {
+    this.selectedAlgorithm = event.target.value;
+    this.algorithmName = (this.algorithmTypesArray.filter(type => type.value == this.selectedDate))[0].name;
   }
 
   public calculateSharePrice(event: any): void {
