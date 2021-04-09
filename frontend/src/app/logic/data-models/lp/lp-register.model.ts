@@ -5,5 +5,5 @@ export interface LpRegister {
   depotId: string,
   customerSession: CustomerSession,
   shareId: string,
-  lqQuote: string
+  lqQuote: number
 }

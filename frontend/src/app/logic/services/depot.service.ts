@@ -5,7 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { ControlsMap, CreateDepot, CustomerSession, Depot, JobWrapper, PlaceOrder, PlaceShareOrder, ReturnShareOrder } from '../data-models/data-models';
+import { ControlsMap, CreateDepot, CustomerSession, Depot, JobWrapper, LpCancel, LpPosition, LpRegister, PlaceOrder, PlaceShareOrder, ReturnShareOrder } from '../data-models/data-models';
 
 @Injectable({
   providedIn: 'root'
@@ -81,7 +81,7 @@ export class DepotService {
     }
   }
 
-  public createOrder(order: PlaceShareOrder, tradeAlgorithm?: number): Observable<Depot> {    
+  public createOrder(order: PlaceShareOrder, tradeAlgorithm?: number): Observable<Depot> {
     if (this.cookieService.check('session')) {
       const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
 
@@ -179,4 +179,92 @@ export class DepotService {
       return null;
     }
   }
+
+  public registerAsLp(depotId: string, shareId: string, lqQuote: number): Observable<LpPosition> {
+    if (this.cookieService.check('session')) {
+      const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
+
+      let register: LpRegister = {
+        depotId: depotId,
+        customerSession: session,
+        shareId: shareId,
+        lqQuote: lqQuote,
+      }
+
+      return this.http.post<LpPosition>(`${this.apiUrl}depot/lp/register`, register)
+        .pipe(
+          tap(
+            (data) => {
+              return data;
+            },
+            (error) => {
+              console.log(error);
+              return error;
+            }
+          )
+        )
+    } else {
+      console.log('Nicht angemeldet');
+      return null;
+    }
+  }
+
+  public cancelLp(lpId: number): Observable<LpPosition> {
+    if (this.cookieService.check('session')) {
+      const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
+
+      let cancel: LpCancel = {
+        lpId: lpId,
+        customerSession: session,
+      }
+
+      return this.http.post<LpPosition>(`${this.apiUrl}depot/lp/cancel`, cancel)
+        .pipe(
+          tap(
+            (data) => {
+              return data;
+            },
+            (error) => {
+              console.log(error);
+              return error;
+            }
+          )
+        )
+    } else {
+      console.log('Nicht angemeldet');
+      return null;
+    }
+  }
+
+  public getLpBy(depotId: string): Observable<LpPosition> {
+    if (this.cookieService.check('session')) {
+      const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
+
+      return this.http.post<LpPosition>(`${this.apiUrl}depot/lp/show/${depotId}`, session)
+        .pipe(
+          tap(
+            (data) => {
+              return data;
+            },
+            (error) => {
+              console.log(error);
+              return error;
+            }
+          )
+        )
+    } else {
+      console.log('Nicht angemeldet');
+      return null;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
 }

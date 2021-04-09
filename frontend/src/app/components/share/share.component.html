@@ -54,32 +54,60 @@
   <a class="uk-button uk-button-primary default uk-align-right" href="#">Liquiditätsspender werden</a>
 </div>
 <div class="uk-container">
-  <div class="uk-grid-match uk-child-width-1-2@m" uk-grid>
-    <div class="uk-card uk-margin-left">
+  <div class="uk-grid-small uk-child-width-1-2@s" uk-grid>
+    <div class="uk-card">
       <div class="uk-grid-match uk-child-width-1-2@m" uk-grid>
-        <ul class="uk-subnav-divider">
+        <ul class="uk-list">
           <li>
             <p>Aktueller Kurs:</p>
           </li>
           <li>
-            <p>Veränderung</p>
+            <p>Veränderung pro Tag:</p>
           </li>
           <li>
             <p>Veränderung in %:</p>
           </li>
         </ul>
-        <ul class="uk-subnav-divider">
+        <ul class="uk-list">
           <li>
             <p>{{share?.lastRecordedValue}}</p>
           </li>
           <li>
-            <p>1,40 EUR</p>
+            <p>{{statistics?.difference}}</p>
           </li>
           <li>
-            <p>0,50 %</p>
+            <p>{{statistics?.percent}} %</p>
+          </li>
+        </ul>    
+      </div>
+      
+    </div>
+    <div class="uk-card">
+      <div class="uk-grid-match uk-child-width-1-2@m" uk-grid>
+        <ul class="uk-list">
+          <li>
+            <p>ISIN:</p>
+          </li>
+          <li>
+            <p>WKN:</p>
+          </li>
+          <li>
+            <p>Währung:</p>
           </li>
         </ul>
+        <ul class="uk-list">
+          <li>
+            <p>{{share?.isin}}</p>
+          </li>
+          <li>
+            <p>{{share?.wkn}}</p>
+          </li>
+          <li>
+            <p>{{share?.currencyName}} ({{share?.currencyCode}})</p>
+          </li>
+        </ul>    
       </div>
+      
     </div>
   </div>
 </div>

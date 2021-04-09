@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { MetaConst } from '../data-models/data-models';
+import { MetaConst, StockExchangePricing } from '../data-models/data-models';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class MetaService {
 
   constructor(private http: HttpClient,) { }
 
-  public getAllMetaData(): Observable<MetaConst> {
+  public getMetaConsts(): Observable<MetaConst> {
     return this.http.get<MetaConst>(`${this.apiUrl}meta/const`)
       .pipe(
         tap(
@@ -26,4 +26,19 @@ export class MetaService {
         )
       );
   }
+
+  public getMetaPricing(): Observable<StockExchangePricing> {
+    return this.http.get<StockExchangePricing>(`${this.apiUrl}meta/pricing`)
+      .pipe(
+        tap(
+          (data) => {
+            return data;
+          },
+          (error) => {
+            return error;
+          }
+        )
+      );
+  }
+
 }
