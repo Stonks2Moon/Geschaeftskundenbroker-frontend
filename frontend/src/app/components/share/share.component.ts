@@ -4,6 +4,7 @@ import { color, EChartsOption } from 'echarts';
 import { ComplexOuterSubscriber } from 'rxjs/internal/innerSubscribe';
 import { first, min } from 'rxjs/operators';
 import { HistoricalData, Share } from 'src/app/logic/data-models/data-models';
+import { Statistics } from 'src/app/logic/data-models/statistics.model';
 import { ShareService } from 'src/app/logic/services/share.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class ShareComponent implements OnInit {
   public chartOption: EChartsOption;
   public dayChartOption: EChartsOption;
   public share: Share;
+  public statistics: Statistics;
   public dataAvailable: number; //0= no Data available, 1= only one Day available, 2= more dates available, 3= only historical data
   public dayView: boolean;
   private shareId: string;
@@ -23,6 +25,7 @@ export class ShareComponent implements OnInit {
   private fromDate: Date = new Date();
   private yesterday: Date = new Date();
   private toDate: Date = new Date();
+
 
   constructor(
     private route: ActivatedRoute,
@@ -54,6 +57,17 @@ export class ShareComponent implements OnInit {
       .then(
         data => {
           this.todayData = data;
+        }
+      );
+    }catch(err){
+      console.log(err)
+    }
+    try{
+      this.shareService.getStatisticsById(this.shareId)
+      .toPromise()
+      .then(
+        data => {
+          this.statistics = data;
         }
       );
     }catch(err){

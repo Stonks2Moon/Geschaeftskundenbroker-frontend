@@ -5,6 +5,7 @@ import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { HistoricalData } from '../data-models/data-models';
 import { Share } from '../data-models/share.model';
+import { Statistics } from '../data-models/statistics.model';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +54,25 @@ export class ShareService {
 
   public getShareById(shareId: string): Observable<Share> {
     return this.http.get<Share>(`${this.apiUrl}share/${shareId}`)
+      .pipe(
+        tap(
+          (data) => {
+            return data;
+          },
+          (error) => {
+            return error;
+          }
+        )
+      );
+  }
+
+  public getStatisticsById(shareId: string): Observable<Statistics> {
+    let urlEnd: string = '';
+
+    if (shareId) {
+      urlEnd += `shareId=${shareId}&`;
+    }
+    return this.http.get<Statistics>(`${this.apiUrl}share/statistics?${urlEnd}`)
       .pipe(
         tap(
           (data) => {
