@@ -15,7 +15,7 @@ export class ShareComponent implements OnInit {
   public chartOption: EChartsOption;
   public dayChartOption: EChartsOption;
   public share: Share;
-  public dataAvailable: number; //0= no Data available, 1= only one Day available, 2= more dates available
+  public dataAvailable: number; //0= no Data available, 1= only one Day available, 2= more dates available, 3= only historical data
   public dayView: boolean;
   private shareId: string;
   private historicalData: HistoricalData;
@@ -80,19 +80,6 @@ export class ShareComponent implements OnInit {
     let dailyaverages: Array<number> =[];
     let weeklyaverages: Array<number> =[];
 
-    //this sorts the data. should not be necessary, would be best if the backend does this
-    this.historicalData.chartValues = this.historicalData.chartValues.sort((n1,n2) => {
-      if (n1.recordedAt > n2.recordedAt) {
-          return 1;
-      }
-  
-      if (n1.recordedAt < n2.recordedAt) {
-          return -1;
-      }
-  
-      return 0;
-  });
-
     if(this.historicalData.chartValues.length != 0){
       let firstDate = new Date(this.historicalData.chartValues[0].recordedAt)
       let lastDate = new Date(this.historicalData.chartValues[this.historicalData.chartValues.length -1].recordedAt)
@@ -105,6 +92,7 @@ export class ShareComponent implements OnInit {
           //nur vergangenheitsdaten
           this.dataAvailable = 3
         }else{
+          //daten für mehrere tage
           this.dataAvailable = 2
           this.createDayChart()
           console.log(this.todayData)
@@ -182,7 +170,6 @@ export class ShareComponent implements OnInit {
             textStyle: {
                 color: '#000'
             },
-    
     },
       toolbox: {
         feature: {
@@ -238,10 +225,7 @@ export class ShareComponent implements OnInit {
             borderColor: '#B5791F',
             
             
-          },
-          
-    
-          
+          },         
         },
         {
           name: "Wochendurschnitt",
@@ -251,9 +235,7 @@ export class ShareComponent implements OnInit {
           symbol: 'diamond',
           itemStyle:{
             color : '#3A80B5',
-            borderColor: '#3A80B5',
-            
-            
+            borderColor: '#3A80B5',        
           },
         },
         
@@ -267,18 +249,6 @@ export class ShareComponent implements OnInit {
     let y: Array<number> = [];
     let data: Array<any> = [];
 
-    //this sorts the data. should not be necessary, would be best if the backend did this
-    this.historicalData.chartValues = this.historicalData.chartValues.sort((n1,n2) => {
-      if (n1.recordedAt > n2.recordedAt) {
-          return 1;
-      }
-  
-      if (n1.recordedAt < n2.recordedAt) {
-          return -1;
-      }
-  
-      return 0;
-  });
     let lastDay = new Date(this.historicalData?.chartValues[0].recordedAt)
     this.todayData?.chartValues.forEach(element => {
         data.push([element.recordedAt ,element.recordedValue])
