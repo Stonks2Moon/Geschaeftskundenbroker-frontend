@@ -21,7 +21,10 @@ export class BuyComponent implements OnInit {
   public selectedOrderType: string;
   public share: Share;
   public metaConst: MetaConst;
-  public expiredDateArray: Array<{name: string, value: Date}>;
+  public expiredDateArray: Array<{ name: string, value: Date }>;
+  public dateName: string;
+  public selectedAlgorithm: any;
+  public algorithmName: string;
   private shareId: string;
   private historicalData: HistoricalData;
   private fromDate: Date = new Date();
@@ -31,9 +34,7 @@ export class BuyComponent implements OnInit {
   selectedDepot: any;
   public depotName: string;
   selectedDate: any;
-  public dateName: string;
-  selectedAlgorithm: any;
-  public algorithmName: string;
+
 
   constructor(private location: Location,
     private depotService: DepotService,
