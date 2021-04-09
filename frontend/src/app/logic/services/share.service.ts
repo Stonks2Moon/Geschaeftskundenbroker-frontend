@@ -67,12 +67,7 @@ export class ShareService {
   }
 
   public getStatisticsById(shareId: string): Observable<Statistics> {
-    let urlEnd: string = '';
-
-    if (shareId) {
-      urlEnd += `shareId=${shareId}&`;
-    }
-    return this.http.get<Statistics>(`${this.apiUrl}share/statistics?${urlEnd}`)
+    return this.http.get<Statistics>(`${this.apiUrl}share/statistics/${shareId}`)
       .pipe(
         tap(
           (data) => {
