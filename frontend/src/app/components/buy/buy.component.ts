@@ -87,7 +87,7 @@ export class BuyComponent implements OnInit {
           this.createChart();
         }
       );
-    this.metaService.getAllMetaData().subscribe(metaConst => this.metaConst = metaConst);
+    this.metaService.getMetaConsts().subscribe(metaConst => this.metaConst = metaConst);
     this.createForm();
   }
 
