@@ -1,74 +1,159 @@
 <div *ngIf="positionArray.length > 0" class="uk-container">
-    <div class="uk-container">
-        <div class=" uk-child-width-1-3@s uk-grid-small" uk-grid>
-            <div class="uk-width-1-3@m">
-                <div echarts [options]="pieChartOption" class="demo-chart "></div>
-            </div>
-            <div class="uk-width-2-3@m">
-                <div echarts [options]="chartOption" class="demo-chart "></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="uk-child-width-1-2@s uk-grid-small  " uk-grid>
-        <div *ngFor="let position of positionArray">
-            <div class="uk-card uk-card-default uk-card-body uk-card-medium uk-padding-small ">
-                <h3 class="uk-card-title u-align-left  uk-margin-remove-bottom">{{ position.share.shareName}}
-                </h3>
-                <p class=" uk-text-meta uk-margin-remove-top">{{ position.share.wkn}}</p>
-
-                <div class="uk-grid">
-                    <div class="uk-text-bold uk-width-1-2 uk-margin-bottom-small">
-                        <p>Anzahl der Aktien im Depot</p>
+    <ul class="uk-subnav uk-subnav-pill uk-flex-around" uk-switcher>
+        <li><a href="#">Aktienbestand</a></li>
+        <li><a href="#">Laufende Aufträge</a></li>
+        <li><a href="#">Abgeschlossene Aufträge</a></li>
+    </ul>
+    <ul class="uk-switcher uk-margin">
+        <li>
+            <div class="uk-container">
+                <div class=" uk-child-width-1-3@s uk-grid-small" uk-grid>
+                    <div class="uk-width-1-3@m">
+                        <div echarts [options]="pieChartOption" class="demo-chart "></div>
                     </div>
-                    <div class="uk-width-1-2 uk-margin-bottom-small">
-                        <p class="uk-align-right">{{ position.amount}}</p>
-                    </div>
-                    <div class="uk-width-3-5 uk-text-bold uk-margin-bottom-small">
-                        <p> Aktueller Wert einer Aktie</p>
-                    </div>
-                    <div class="uk-width-2-5 uk-margin-bottom-small">
-                        <p class="uk-align-right">{{ position.share.lastRecordedValue }} {{
-                            position.share.currencyCode }}</p>
-                    </div>
-                    <hr class="uk-width-1-1 uk-align-right uk-margin-small">
-                    <div class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
-                        <p>Aktienwert im Depot</p>
-                    </div>
-                    <div class="uk-width-1-2 uk-margin-bottom-small">
-                        <p class="uk-align-right">{{ position.currentValue  }} {{
-                            position.share.currencyCode }}</p>
-                    </div>
-
-                    <div class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
-                        <p>Investierter Wert</p>
-                    </div>
-                    <div class="uk-width-1-2 uk-margin-bottom-small">
-                        <p class="uk-align-right">{{ position.costValue }} {{
-                            position.share.currencyCode }}</p>
-                    </div>
-                    <hr class="uk-width-1-1 uk-align-right uk-margin-small">
-                    <div class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
-                        <p>Gewinn</p>
-                    </div>
-                    <div class="uk-width-1-2 uk-margin-bottom-small">
-                        <p class="uk-align-right">{{ position.profit }}
-                            {{
-                            position.share.currencyCode }}</p>
-                    </div>
-
-                    <div class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
-                        <p>Gewinn in %</p>
-                    </div>
-                    <div class="uk-width-1-2 uk-margin-bottom-small">
-                        <p class="uk-align-right">{{ position.percentageChange }} %</p>
+                    <div class="uk-width-2-3@m">
+                        <div echarts [options]="chartOption" class="demo-chart "></div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+            <div class="uk-child-width-1-2@s uk-grid-small  " uk-grid>
+                <div *ngFor="let position of positionArray">
+                    <div class="uk-card uk-card-default uk-card-body uk-card-medium uk-padding-small ">
+                        <h3 class="uk-card-title u-align-left  uk-margin-remove-bottom">{{ position.share.shareName}}
+                        </h3>
+                        <p class=" uk-text-meta uk-margin-remove-top">{{ position.share.wkn}}</p>
+
+                        <div class="uk-grid">
+                            <div class="uk-text-bold uk-width-1-2 uk-margin-bottom-small">
+                                <p>Anzahl der Aktien im Depot</p>
+                            </div>
+                            <div class="uk-width-1-2 uk-margin-bottom-small">
+                                <p class="uk-align-right">{{ position.amount | number: '.' | removeComma}}</p>
+                            </div>
+                            <div class="uk-width-3-5 uk-text-bold uk-margin-bottom-small">
+                                <p> Aktueller Wert einer Aktie</p>
+                            </div>
+                            <div class="uk-width-2-5 uk-margin-bottom-small">
+                                <p class="uk-align-right">{{ position.share.lastRecordedValue | number: '.2-2' |
+                                    removeComma}} {{
+                                    position.share.currencyCode }}</p>
+                            </div>
+                            <hr class="uk-width-1-1 uk-align-right uk-margin-small">
+                            <div class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
+                                <p>Aktienwert im Depot</p>
+                            </div>
+                            <div class="uk-width-1-2 uk-margin-bottom-small">
+                                <p class="uk-align-right">{{ position.currentValue | number: '.2-2' | removeComma}} {{
+                                    position.share.currencyCode }}
+                                </p>
+                            </div>
+
+                            <div class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
+                                <p>Investierter Wert</p>
+                            </div>
+                            <div class="uk-width-1-2 uk-margin-bottom-small">
+                                <p class="uk-align-right">{{ position.costValue | number: '.2-2' | removeComma }} {{
+                                    position.share.currencyCode }}</p>
+                            </div>
+                            <hr class="uk-width-1-1 uk-align-right uk-margin-small">
+                            <div class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
+                                <p>Gewinn</p>
+                            </div>
+                            <div class="uk-width-1-2 uk-margin-bottom-small">
+                                <p class="uk-align-right">{{ position.profit | number: '.2-2' | removeComma }}
+                                    {{
+                                    position.share.currencyCode }}</p>
+                            </div>
+
+                            <div class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
+                                <p>Gewinn in %</p>
+                            </div>
+                            <div class="uk-width-1-2 uk-margin-bottom-small">
+                                <p class="uk-align-right">{{ position.percentageChange }} %</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <li>
+            <table class="uk-table uk-table-divider">
+
+                <thead>
+                    <tr>
+                        <th>Auftragstyp</th>
+                        <th>Aktienname</th>
+                        <th>Order-ID</th>
+                        <th>Order-Art</th>
+                        <th>Anzahl</th>
+                        <th>Preis pro Aktie</th>
+                        <th>Ablaufdatum</th>
+                        <th>Aktion</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let jobWrapper of jobWrapperArray">
+                        <td>{{jobWrapper.jobType}}</td>
+                        <td>{{jobWrapper.share.shareName}}</td>
+                        <td>{{jobWrapper.exchangeOrderId}}</td>
+                        <td>{{jobWrapper.detail}}</td>
+
+                        <td>platzhalter</td>
+
+                        <td>platzhalter</td>
+                        <td>{{jobWrapper.orderValidity | date:'dd.MM.yyyy'}}</td>
+                        <td><button class="uk-button uk-button-primary" (click)="cancelJobWrapper()">Löschen</button>
+                        </td>
+
+
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </li>
+        <li>
+            <table class="uk-table uk-table-divider">
+
+                <thead>
+                    <tr>
+                        <th>Auftragstyp</th>
+                        <th>Aktienname</th>
+                        <th>Order-Art</th>
+                        <th>Anzahl</th>
+                        <th>Preis</th>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let returnShareOrder of returnShareOrderArray">
+                        <td>{{returnShareOrder.type}}</td>
+                        <td>{{returnShareOrder.share.shareName}}</td>
+                        <td>{{returnShareOrder.detail}}</td>
+
+                        <td>{{returnShareOrder.amount | number: '.' | removeComma}}</td>
+                        <td>{{returnShareOrder.limit}}</td>
+                        <td>{{returnShareOrder.stop}}</td>
+                        <td>{{returnShareOrder.stopLimit}}</td>
+                        <td>1234</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </li>
+
+    </ul>
+
+
+
 </div>
 
+
+<!-- Empty Depot -->
 <div *ngIf="positionArray.length == 0" class="uk-container">
     <div>
         <div class="uk-card uk-position-center uk-card-body uk-card-default uk-text-center">

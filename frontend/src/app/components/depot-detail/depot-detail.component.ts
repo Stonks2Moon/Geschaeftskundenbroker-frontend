@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EChartsOption } from 'echarts';
-import { Depot, DepotPosition, Share } from 'src/app/logic/data-models/data-models';
+import { Depot, DepotPosition, JobWrapper, ReturnShareOrder, Share } from 'src/app/logic/data-models/data-models';
 import { DepotService } from 'src/app/logic/services/depot.service';
 import { ShareService } from 'src/app/logic/services/share.service';
-
 
 @Component({
   selector: 'app-depot-detail',
@@ -23,15 +22,25 @@ export class DepotDetailComponent implements OnInit {
   public depotId: string;
 
   public positionArray: Array<DepotPosition> = [];
+  public returnShareOrderArray: Array<ReturnShareOrder> = [];
+  public jobWrapperArray: Array<JobWrapper> = [];
+  public date: Date;
 
 
   ngOnInit(): void {
     this.depotId = this.route.snapshot.paramMap.get('depotId');
+
     this.depotService.getDepotById(this.depotId).subscribe(depot => {
       this.depot = depot;
       this.positionArray = depot.positions;
       this.createChart();
       this.createPieChart();
+    });
+    this.depotService.getCompletedOrdersByDepotIdAndSession(this.depotId).subscribe(data => {
+      this.returnShareOrderArray = data; 
+    });
+    this.depotService.getPendingOrdersByDepotIdAndSession(this.depotId).subscribe(data => {
+      this.jobWrapperArray = data;
     });
 
   }
@@ -100,5 +109,10 @@ export class DepotDetailComponent implements OnInit {
         type: 'line',
       },
     ],
-  };
+  }
+
+  cancelJobWrapper(){
+    
+  }
 }
+
