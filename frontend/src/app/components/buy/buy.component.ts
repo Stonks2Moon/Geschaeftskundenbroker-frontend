@@ -34,6 +34,7 @@ export class BuyComponent implements OnInit {
   selectedDepot: any;
   public depotName: string;
   selectedDate: any;
+  orderName: string = '';
 
 
   constructor(private location: Location,
@@ -199,29 +200,36 @@ export class BuyComponent implements OnInit {
 
   onOrderTypeSelected(event: any): void {
     this.selectedOrderType = event.target.value;
-    if (this.selectedOrderType === "limitPrice") {
-      this.buyForm.patchValue({
-        minPrice: "",
-        maxPrice: "",
-        numberOfShares: "",
-        sharePrice: ""
-      });
-    }
-    else if (this.selectedOrderType === "stopPrice") {
-      this.buyForm.patchValue({
-        limitPrice: "",
-        numberOfShares: "",
-        sharePrice: ""
-      });
-    } else if (this.selectedOrderType === "marketPrice") {
-      this.buyForm.setValue({
-        limitPrice: "",
-        minPrice: "",
-        maxPrice: "",
-        numberOfShares: "",
-        sharePrice: ""
-      });
-    }
+      // if selected order type is markt price
+      if (this.selectedOrderType == this.orderTypesArray[0].value) {
+        this.buyForm.patchValue({
+          minPrice: "",
+          maxPrice: "",
+          limitPrice: "",
+          numberOfShares: "",
+          sharePrice: ""
+        });
+        this.orderName = this.orderTypesArray[0].name;
+      }
+      // if selected order type is limit price
+      else if (this.selectedOrderType == this.orderTypesArray[1].value) {
+        this.buyForm.patchValue({
+          minPrice: "",
+          maxPrice: "",
+          numberOfShares: "",
+          sharePrice: ""
+        });
+        this.orderName = this.orderTypesArray[1].name;
+      } 
+      // if selected order type is stop price
+      else if (this.selectedOrderType == this.orderTypesArray[2].value) {
+        this.buyForm.patchValue({
+          limitPrice: "",
+          numberOfShares: "",
+          sharePrice: ""
+        });
+        this.orderName = this.orderTypesArray[2].name;
+      }
   }
 
   onExpiredDateSelected(event: any): void {
@@ -234,8 +242,7 @@ export class BuyComponent implements OnInit {
     // this.algorithmName = (this.algorithmTypesArray.filter(type => type.value == this.selectedDate))[0].name;
   }
 
-  public calculateSharePrice(event: any): void {
-    let numberOfShares: number = event.target.value;
+  public calculateSharePrice(): void {
     if (this.selectedOrderType === "limitPrice") {
       this.currentPrice = +this.buyForm.controls.limitPrice.value;
     } else if (this.selectedOrderType === "stopPrice") {
@@ -246,7 +253,7 @@ export class BuyComponent implements OnInit {
       this.currentPrice = this.share.lastRecordedValue;
     }
 
-    this.sharePrice = numberOfShares * this.currentPrice;
+    this.sharePrice = this.buyForm.controls.numberOfShares.value * this.currentPrice;
   }
 
 }
