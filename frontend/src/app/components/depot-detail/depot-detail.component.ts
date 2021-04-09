@@ -21,30 +21,26 @@ export class DepotDetailComponent implements OnInit {
 
   public depot: Depot;
   public depotId: string;
-  public share: Share;
-  public shareArray: Array<Share> = [];
+
+  public positionArray: Array<DepotPosition> = [];
 
 
   ngOnInit(): void {
     this.depotId = this.route.snapshot.paramMap.get('depotId');
     this.depotService.getDepotById(this.depotId).subscribe(depot => {
       this.depot = depot;
-      console.log(depot);
+      this.positionArray = depot.positions;
       this.createChart();
       this.createPieChart();
     });
-    // this.shareService.getAllShares().subscribe(shares => {
-    //   this.shareArray = shares;
-    // }
-    // )
 
   }
   public createPieChart(): void {
 
     let data: Array<any> = [];
 
-    this.depot.positions?.forEach(element => {
-      let dataObj = { value: element.amount, name: element.share.shareName }
+    this.depot.positions?.forEach(position => {
+      let dataObj = { value: position.amount, name: position.share.shareName }
       data.push(dataObj);
     });
 

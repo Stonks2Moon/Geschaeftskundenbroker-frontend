@@ -1,4 +1,4 @@
-<div class="uk-container">
+<div *ngIf="positionArray.length > 0" class="uk-container">
     <div class="uk-container">
         <div class=" uk-child-width-1-3@s uk-grid-small" uk-grid>
             <div class="uk-width-1-3@m">
@@ -9,67 +9,72 @@
             </div>
         </div>
     </div>
+
     <div class="uk-child-width-1-2@s uk-grid-small  " uk-grid>
-       
-        <div>
+        <div *ngFor="let position of positionArray">
             <div class="uk-card uk-card-default uk-card-body uk-card-medium uk-padding-small ">
-
-
-                <h3 class="uk-card-title u-align-left  uk-margin-remove-bottom">{{ depot.positions[0].share.shareName}}
+                <h3 class="uk-card-title u-align-left  uk-margin-remove-bottom">{{ position.share.shareName}}
                 </h3>
-                <p class=" uk-text-meta uk-margin-remove-top">{{ depot.positions[0].share.wkn}}</p>
+                <p class=" uk-text-meta uk-margin-remove-top">{{ position.share.wkn}}</p>
 
                 <div class="uk-grid">
                     <div class="uk-text-bold uk-width-1-2 uk-margin-bottom-small">
                         <p>Anzahl der Aktien im Depot</p>
                     </div>
                     <div class="uk-width-1-2 uk-margin-bottom-small">
-                        <p class="uk-align-right">{{ depot.positions[0].amount}}</p>
+                        <p class="uk-align-right">{{ position.amount}}</p>
                     </div>
                     <div class="uk-width-3-5 uk-text-bold uk-margin-bottom-small">
                         <p> Aktueller Wert einer Aktie</p>
                     </div>
                     <div class="uk-width-2-5 uk-margin-bottom-small">
-                        <p class="uk-align-right">{{ depot.positions[0].share.lastRecordedValue }} {{
-                            depot.positions[0].share.currencyCode }}</p>
+                        <p class="uk-align-right">{{ position.share.lastRecordedValue }} {{
+                            position.share.currencyCode }}</p>
                     </div>
                     <hr class="uk-width-1-1 uk-align-right uk-margin-small">
                     <div class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
                         <p>Aktienwert im Depot</p>
                     </div>
                     <div class="uk-width-1-2 uk-margin-bottom-small">
-                        <p class="uk-align-right">{{ depot.positions[0].currentValue }} {{
-                            depot.positions[0].share.currencyCode }}</p>
+                        <p class="uk-align-right">{{ position.currentValue }} {{
+                            position.share.currencyCode }}</p>
                     </div>
 
                     <div class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
                         <p>Investierter Wert</p>
                     </div>
                     <div class="uk-width-1-2 uk-margin-bottom-small">
-                        <p class="uk-align-right">{{ depot.positions[0].costValue }} {{
-                            depot.positions[0].share.currencyCode }}</p>
+                        <p class="uk-align-right">{{ position.costValue }} {{
+                            position.share.currencyCode }}</p>
                     </div>
                     <hr class="uk-width-1-1 uk-align-right uk-margin-small">
                     <div class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
                         <p>Gewinn</p>
                     </div>
                     <div class="uk-width-1-2 uk-margin-bottom-small">
-                        <p class="uk-align-right">{{ depot.positions[0].profit }}
+                        <p class="uk-align-right">{{ position.profit }}
                             {{
-                            depot.positions[0].share.currencyCode }}</p>
+                            position.share.currencyCode }}</p>
                     </div>
 
                     <div class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
                         <p>Gewinn in %</p>
                     </div>
                     <div class="uk-width-1-2 uk-margin-bottom-small">
-                        <p class="uk-align-right">{{ depot.positions[0].percentageChange }} %</p>
+                        <p class="uk-align-right">{{ position.percentageChange }} %</p>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </div>
+</div>
 
+<div *ngIf="positionArray.length == 0" class="uk-container">
+    <div>
+        <div class="uk-card uk-position-center uk-card-body uk-card-default uk-text-center">
+            <h3 class="uk-card-title">{{depot.name}}</h3>
+            <p>Diesem Depot wurden noch keine Aktien hinzugefügt. Gerne können Aktien gekauft werden.</p>
+            <button class="uk-button uk-button-primary " [routerLink]="['/trade']">Aktien kaufen</button>
+        </div>
+    </div>
 </div>
