@@ -1,11 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { ControlsMap, CreateDepot, CustomerSession, Depot, PlaceOrder, PlaceShareOrder } from '../data-models/data-models';
+import { ControlsMap, CreateDepot, CustomerSession, Depot, JobWrapper, PlaceOrder, PlaceShareOrder, ReturnShareOrder } from '../data-models/data-models';
 
 @Injectable({
   providedIn: 'root'
@@ -105,4 +105,78 @@ export class DepotService {
     }
   }
 
+
+  public getCompletedOrdersByDepotIdAndSession(depotId: string): Observable<Array<ReturnShareOrder>> {
+    if (this.cookieService.check('session')) {
+      const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
+
+      return this.http.post<Array<ReturnShareOrder>>(`${this.apiUrl}depot/order/completed/${depotId}`, session)
+        .pipe(
+          tap(
+            (data) => {
+              return data;
+            },
+            (error) => {
+              console.log(error);
+              return error;
+            }
+          )
+        )
+    } else {
+      console.log('Nicht angemeldet');
+      return null;
+    }
+  }
+
+  public getPendingOrdersByDepotIdAndSession(depotId: string): Observable<Array<JobWrapper>> {
+    if (this.cookieService.check('session')) {
+      const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
+
+      return this.http.post<Array<JobWrapper>>(`${this.apiUrl}depot/order/pending/${depotId}`, session)
+        .pipe(
+          tap(
+            (data) => {
+              return data;
+            },
+            (error) => {
+              console.log(error);
+              return error;
+            }
+          )
+        )
+    } else {
+      console.log('Nicht angemeldet');
+      return null;
+    }
+  }
+
+  public deleteOrderBySession(orderId: string): Observable<PlaceShareOrder> {
+    if (this.cookieService.check('session')) {
+      const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
+
+
+      const options = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+        body: session,
+      };
+
+      return this.http.delete<PlaceShareOrder>(`${this.apiUrl}depot/order/${orderId}`, options)
+        .pipe(
+          tap(
+            (data) => {
+              return data;
+            },
+            (error) => {
+              console.log(error);
+              return error;
+            }
+          )
+        )
+    } else {
+      console.log('Nicht angemeldet');
+      return null;
+    }
+  }
 }
