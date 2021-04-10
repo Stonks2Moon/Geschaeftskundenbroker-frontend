@@ -11,7 +11,6 @@ import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 import { TradeComponent } from './components/trade/trade.component';
 import { DepotComponent } from './components/depot/depot.component';
-import { HistoryComponent } from './components/history/history.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
@@ -32,7 +31,6 @@ import { RemoveCommaPipe } from './remove-comma.pipe';
     HomeComponent,
     TradeComponent,
     DepotComponent,
-    HistoryComponent,
     ProfileComponent,
     BuyComponent,
     ShareComponent,

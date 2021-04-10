@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DepotComponent } from './components/depot/depot.component';
 import { DepotDetailComponent } from './components/depot-detail/depot-detail.component';
-import { HistoryComponent } from './components/history/history.component';
 import { HomeComponent } from './components/home/home.component';
 import { BuyComponent } from './components/buy/buy.component';
 import { LoginComponent } from './components/login/login.component';
@@ -44,11 +43,6 @@ const routes: Routes = [
     path: 'depot-detail/:depotId',
     canActivate: [AuthenticationGuard],
     component: DepotDetailComponent
-  },
-  {
-    path: 'history',
-    canActivate: [AuthenticationGuard],
-    component: HistoryComponent
   },
   {
     path: 'profile',
