@@ -1,4 +1,6 @@
 <div class="uk-container">
+
+  <h3>{{depot?.name}}</h3>
   <ul class="uk-subnav uk-subnav-pill uk-flex-around" uk-switcher="animation: uk-animation-fade">
     <li><a href="#">Aktienbestand</a></li>
     <li><a href="#">Laufende Aufträge</a></li>
@@ -215,23 +217,21 @@
           <p class="uk-align-right">{{ positionModalLp.amount | number: '.' | removeComma}} STK</p>
         </div>
 
-
-
         <div class="uk-width-1-1 ">
-
           <form [formGroup]="lpForm">
-            <label class="uk-form-label " for="lpPercent">LQ-Quote*</label>
-            <input class="uk-input uk-align-right" id="lpPercent" type="number" formControlName="">
+            <div class="uk-margin">
+              <label class="uk-form-label " for="lpPercent">LQ-Quote*</label>
+              <input class="uk-input uk-align-right" id="lpPercent" type="number" formControlName="lqQuote">
+            </div>
+            <div class="uk-margin">
+              <button class="uk-button uk-button-default uk-modal-close" type="button">Abbrechen</button>
+              <button class="uk-button uk-button-primary uk-modal-close" type="button" [disabled]="lpForm.invalid"
+                (click)="onLpSubmit()">Spender
+                werden</button>
+            </div>
           </form>
-
-
         </div>
-        <button class="uk-button uk-button-default uk-modal-close " type="button">Abbrechen</button>
-        <button class="uk-button uk-button-primary uk-modal-close  " type="button" (click)="onLpSubmit()">Spender
-          werden</button>
       </div>
     </div>
   </div>
-</div>
-</div>
 </div>

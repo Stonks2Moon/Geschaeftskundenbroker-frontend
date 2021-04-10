@@ -23,6 +23,10 @@ import { SellComponent } from './components/sell/sell.component';
 import { RemoveCommaPipe } from './remove-comma.pipe';
 import { ShareDepotOverviewComponent } from './components/_sub-components/share-depot-overview/share-depot-overview.component';
 
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +43,7 @@ import { ShareDepotOverviewComponent } from './components/_sub-components/share-
     SearchComponent,
     SellComponent,
     RemoveCommaPipe,
-    ShareDepotOverviewComponent    
+    ShareDepotOverviewComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +53,9 @@ import { ShareDepotOverviewComponent } from './components/_sub-components/share-
     Ng2FlatpickrModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts'),
-    })
+    }),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
