@@ -198,22 +198,40 @@
 </ng-template>
 
 <div id="modal-lp" class="uk-flex-top" uk-modal>
-  <div *ngIf="positionModalLp != undefined" class="uk-modal-dialog uk-width-3-5@m uk-margin-auto-vertical">
+  <div *ngIf="positionModalLp != undefined" class="uk-modal-dialog uk-width-2-5@m uk-margin-auto-vertical">
     <button class="uk-modal-close-default" type="button" uk-close></button>
     <div class="uk-modal-header">
-      <h2 class="uk-modal-title">Weiter?</h2>
+      <h2 class="uk-modal-title">Liquiditätsspender</h2>
     </div>
     <div class="uk-modal-body">
-      <div class="uk-child-width-1-2@s uk-grid-small " uk-grid>
+      <div class="uk-child-width-1-2@s uk-grid-small" uk-grid>
         <div class="uk-width-1-2 uk-margin-bottom">
-          <div class="uk-text-bold uk-width-1-2 uk-margin-bottom-small">
+          <div>
             <p>Anzahl der Aktien im Depot</p>
           </div>
-          <div class="uk-width-1-2 uk-margin-bottom-small">
-            <p class="uk-align-right">{{ positionModalLp.amount | number: '.' | removeComma}} STK</p>
-          </div>
+
         </div>
+        <div class="uk-width-1-2 ">
+          <p class="uk-align-right">{{ positionModalLp.amount | number: '.' | removeComma}} STK</p>
+        </div>
+
+
+
+        <div class="uk-width-1-1 ">
+
+          <form [formGroup]="lpForm">
+            <label class="uk-form-label " for="lpPercent">LQ-Quote*</label>
+            <input class="uk-input uk-align-right" id="lpPercent" type="number" formControlName="">
+          </form>
+
+
+        </div>
+        <button class="uk-button uk-button-default uk-modal-close " type="button">Abbrechen</button>
+        <button class="uk-button uk-button-primary uk-modal-close  " type="button" (click)="onLpSubmit()">Spender
+          werden</button>
       </div>
     </div>
   </div>
+</div>
+</div>
 </div>

@@ -1,8 +1,9 @@
 import { Position } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EChartsOption } from 'echarts';
-import { Depot, DepotPosition, JobWrapper, ReturnShareOrder, Share } from 'src/app/logic/data-models/data-models';
+import { Depot, DepotPosition, JobWrapper, LpRegister, ReturnShareOrder, Share } from 'src/app/logic/data-models/data-models';
 import { DepotService } from 'src/app/logic/services/depot.service';
 
 
@@ -29,6 +30,7 @@ export class DepotDetailComponent implements OnInit {
   public date: Date;
   public positionModalLp: DepotPosition;
 
+  public lpForm: FormGroup;
 
   ngOnInit(): void {
     this.depotId = this.route.snapshot.paramMap.get('depotId');
@@ -129,6 +131,20 @@ export class DepotDetailComponent implements OnInit {
 
   public openModalLp(position: DepotPosition): void {
     this.positionModalLp = position;
+  }
+
+  public createForm(): void {
+    this.lpForm = new FormGroup({
+      lqQuote: new FormControl('', Validators.required)
+    });
+  }
+
+  public onLpSubmit(): void {
+    this.depotService.registerAsLp(this.positionModalLp.depotId,
+      this.positionModalLp.share.shareId,
+      this.lpForm.controls.lqQuote.value).subscribe(
+        data => console.log(data)
+      )
   }
 }
 
