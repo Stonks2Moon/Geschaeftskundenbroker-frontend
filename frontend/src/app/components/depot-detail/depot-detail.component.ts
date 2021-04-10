@@ -1,3 +1,4 @@
+import { Position } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EChartsOption } from 'echarts';
@@ -26,6 +27,7 @@ export class DepotDetailComponent implements OnInit {
   public returnShareOrderArray: Array<ReturnShareOrder> = [];
   public jobWrapperArray: Array<JobWrapper> = [];
   public date: Date;
+  public positionModalLp: DepotPosition;
 
 
   ngOnInit(): void {
@@ -123,6 +125,10 @@ export class DepotDetailComponent implements OnInit {
     this.depotService.getPendingOrdersByDepotIdAndSession(this.depotId).subscribe(data => {
       this.jobWrapperArray = data;
     });
+  }
+
+  public openModalLp(position: DepotPosition): void {
+    this.positionModalLp = position;
   }
 }
 
