@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import { Location } from '@angular/common';
-import { Depot, HistoricalData, MetaConst, Share } from 'src/app/logic/data-models/data-models';
+import { ControlsMap, Depot, HistoricalData, MetaConst, OrderDetail, OrderType, PlaceShareOrder, Share } from 'src/app/logic/data-models/data-models';
 import { DepotService } from 'src/app/logic/services/depot.service';
 import { ShareService } from 'src/app/logic/services/share.service';
 import { ActivatedRoute } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MetaService } from 'src/app/logic/services/meta.service';
 
 @Component({
@@ -18,23 +18,22 @@ export class BuyComponent implements OnInit {
   public buyForm: FormGroup;
   public chartOption: EChartsOption;
   public depotArray: Array<Depot> = [];
-  public selectedOrderType: string;
   public share: Share;
   public metaConst: MetaConst;
   public expiredDateArray: Array<{ name: string, value: Date }>;
-  public dateName: string;
+  public algorithmTypesArray: Array<{ name: string, value: number }>;
   public selectedAlgorithm: any;
   public algorithmName: string;
-  private shareId: string;
+
+  // Pop up values
+  public currentPrice: number;
+  public sharePrice: number;
+
+  // statistic values
   private historicalData: HistoricalData;
   private fromDate: Date = new Date();
   private toDate: Date = new Date();
-  public sharePrice: number;
-  currentPrice: number;
-  selectedDepot: any;
-  public depotName: string;
-  selectedDate: any;
-  orderName: string = '';
+  private shareId: string;
 
 
   constructor(private location: Location,
@@ -46,31 +45,20 @@ export class BuyComponent implements OnInit {
     this.buildExpiredDateArray();
   }
 
-  orderTypesArray: Array<{name: string, value: string}> = [
+  public orderDetailsArray: Array<{ name: string, value: string }> = [
     {
       name: "Markt Preis",
-      value: "marketPrice"
+      value: OrderDetail.market
     },
     {
       name: "Limit Preis",
-      value: "limitPrice"
+      value: OrderDetail.limit
     },
     {
       name: "Stop Preis",
-      value: "stopPrice"
+      value: OrderDetail.stop
     },
   ];
-
-  // algorithmTypesArray: Array<{name: string, value: string}> = [
-  //   {
-  //     name: "Kein Algorithmus",
-  //     value: this.metaConst.ALGORITHMS.NO_ALG
-  //   },
-  //   {
-  //     name: "Split Algorithmus",
-  //     value: this.metaConst.ALGORITHMS.SPLIT_ALG
-  //   }
-  // ];
 
   ngOnInit(): void {
     this.fromDate.setDate(this.fromDate.getDate() - 30)
@@ -87,7 +75,14 @@ export class BuyComponent implements OnInit {
           this.createChart();
         }
       );
-    this.metaService.getMetaConsts().subscribe(metaConst => this.metaConst = metaConst);
+    this.metaService.getMetaConsts()
+      .toPromise()
+      .then(
+        data => {
+          this.metaConst = data;
+          this.buildAlgArray()
+        }
+      )
     this.createForm();
   }
 
@@ -109,22 +104,117 @@ export class BuyComponent implements OnInit {
     ];
   }
 
+  private buildAlgArray() {
+    this.algorithmTypesArray = [
+      {
+        name: "Kein Algorithmus",
+        value: this.metaConst.ALGORITHMS.NO_ALG
+      },
+      {
+        name: "Split Algorithmus",
+        value: this.metaConst.ALGORITHMS.SPLIT_ALG
+      }
+    ];
+  }
 
   public createForm(): void {
     this.buyForm = new FormGroup({
       depot: new FormControl('', Validators.required),
-      limitPrice: new FormControl('', Validators.required),
-      maxPrice: new FormControl('', Validators.required),
-      minPrice: new FormControl('', Validators.required),
+      orderDetail: new FormControl('', Validators.required),
+      sharePrice: new FormControl({ value: '', disabled: true }, Validators.required),
+      limitPrice: new FormControl({ value: '', disabled: true }, Validators.required),
+      maxPrice: new FormControl({ value: '', disabled: true }, Validators.required),
+      minPrice: new FormControl({ value: '', disabled: true }, Validators.required),
       dateOfExpiry: new FormControl('', Validators.required),
       numberOfShares: new FormControl('', Validators.required),
-      sharePrice: new FormControl({value: '', disabled: true}, Validators.required),
       algorithmicTradingType: new FormControl('', Validators.required),
+    });
+
+    this.buyForm.controls.orderDetail.valueChanges.subscribe(orderDetail => {
+      if (orderDetail == this.orderDetailsArray[0]) {
+        this.buyForm.controls.limitPrice.disable();
+        this.buyForm.controls.maxPrice.disable();
+        this.buyForm.controls.minPrice.disable();
+      } else if (orderDetail == this.orderDetailsArray[1]) {
+        this.buyForm.controls.limitPrice.enable();
+        this.buyForm.controls.maxPrice.disable();
+        this.buyForm.controls.minPrice.disable();
+      } else if (orderDetail == this.orderDetailsArray[2]) {
+        this.buyForm.controls.limitPrice.disable();
+        this.buyForm.controls.maxPrice.enable();
+        this.buyForm.controls.minPrice.enable();
+      }
     });
   }
 
   public onBuySubmit(): void {
+    console.log('test');
+    let order: PlaceShareOrder = {
+      depotId: this.buyValue.depot.value,
+      amount: this.buyValue.numberOfShares.value,
+      type: OrderType.buy,
+      detail: this.buyValue.orderDetail.value.value,
+      validity: this.buyValue.dateOfExpiry.value,
+      limit: this.buyValue.limitPrice.value,
+      stop: null,
+      stopLimit: null,
+      market: '',
+      shareId: this.shareId,
+    };
+    this.depotService.createOrder(order, this.buyValue.algorithmicTradingType.value.value).subscribe(data => console.log(data))
+  }
 
+  public get buyValue(): ControlsMap<AbstractControl> {
+    return this.buyForm.controls;
+  }
+
+  public onorderDetailSelected(event: any): void {
+    // if selected order type is markt price
+    if (this.buyValue.orderDetail.value == this.orderDetailsArray[0]) {
+      this.buyForm.patchValue({
+        minPrice: "",
+        maxPrice: "",
+        limitPrice: "",
+        numberOfShares: "",
+        sharePrice: ""
+      });
+    }
+    // if selected order type is limit price
+    else if (this.buyValue.orderDetail.value == this.orderDetailsArray[1]) {
+      this.buyForm.patchValue({
+        minPrice: "",
+        maxPrice: "",
+        numberOfShares: "",
+        sharePrice: ""
+      });
+    }
+    // if selected order type is stop price
+    else if (this.buyValue.orderDetail.value == this.orderDetailsArray[2]) {
+      this.buyForm.patchValue({
+        limitPrice: "",
+        numberOfShares: "",
+        sharePrice: ""
+      });
+    }
+  }
+
+  // TODO
+  public cancel(): void {
+    //this.location.back()
+  }
+
+  public calculateSharePrice(): void {
+    if (this.buyValue.orderDetail.value == this.orderDetailsArray[1]) {
+      this.currentPrice = +this.buyForm.controls.limitPrice.value;
+    } else if (this.buyValue.orderDetail.value == this.orderDetailsArray[2]) {
+      let maxPrice: number = +this.buyForm.controls.maxPrice.value;
+      let minPrice: number = +this.buyForm.controls.minPrice.value;
+      this.currentPrice = (maxPrice + minPrice) / 2;
+    } else {
+      this.currentPrice = this.share.lastRecordedValue;
+    }
+
+    this.sharePrice = this.buyForm.controls.numberOfShares.value * this.currentPrice;
   }
 
   public createChart(): void {
@@ -187,73 +277,4 @@ export class BuyComponent implements OnInit {
       ],
     };
   }
-
-  // TODO
-  public cancel(): void {
-    //this.location.back()
-  }
-
-  onDepotSelected(event: any): void {
-    this.selectedDepot = event.target.value;
-    this.depotName = (this.depotArray.filter(depot => depot.depotId == this.selectedDepot))[0].name;
-  }
-
-  onOrderTypeSelected(event: any): void {
-    this.selectedOrderType = event.target.value;
-      // if selected order type is markt price
-      if (this.selectedOrderType == this.orderTypesArray[0].value) {
-        this.buyForm.patchValue({
-          minPrice: "",
-          maxPrice: "",
-          limitPrice: "",
-          numberOfShares: "",
-          sharePrice: ""
-        });
-        this.orderName = this.orderTypesArray[0].name;
-      }
-      // if selected order type is limit price
-      else if (this.selectedOrderType == this.orderTypesArray[1].value) {
-        this.buyForm.patchValue({
-          minPrice: "",
-          maxPrice: "",
-          numberOfShares: "",
-          sharePrice: ""
-        });
-        this.orderName = this.orderTypesArray[1].name;
-      } 
-      // if selected order type is stop price
-      else if (this.selectedOrderType == this.orderTypesArray[2].value) {
-        this.buyForm.patchValue({
-          limitPrice: "",
-          numberOfShares: "",
-          sharePrice: ""
-        });
-        this.orderName = this.orderTypesArray[2].name;
-      }
-  }
-
-  onExpiredDateSelected(event: any): void {
-    this.selectedDate = event.target.value;
-    this.dateName = (this.expiredDateArray.filter(date => date.value == this.selectedDate))[0].name;
-  }
-
-  onAlgorithmicTradeSelected(event: any): void {
-    this.selectedAlgorithm = event.target.value;
-    // this.algorithmName = (this.algorithmTypesArray.filter(type => type.value == this.selectedDate))[0].name;
-  }
-
-  public calculateSharePrice(): void {
-    if (this.selectedOrderType === "limitPrice") {
-      this.currentPrice = +this.buyForm.controls.limitPrice.value;
-    } else if (this.selectedOrderType === "stopPrice") {
-      let maxPrice: number = +this.buyForm.controls.maxPrice.value;
-      let minPrice: number = +this.buyForm.controls.minPrice.value;
-      this.currentPrice = (maxPrice + minPrice) / 2;
-    } else {
-      this.currentPrice = this.share.lastRecordedValue;
-    }
-
-    this.sharePrice = this.buyForm.controls.numberOfShares.value * this.currentPrice;
-  }
-
 }
