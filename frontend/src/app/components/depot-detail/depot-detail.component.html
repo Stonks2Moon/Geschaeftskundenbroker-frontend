@@ -104,7 +104,7 @@
 
                         <td>platzhalter</td>
                         <td>{{jobWrapper.orderValidity | date:'dd.MM.yyyy'}}</td>
-                        <td><button class="uk-button uk-button-primary" (click)="cancelJobWrapper()">Löschen</button>
+                        <td><button class="uk-button uk-button-primary" (click)="cancelJobWrapper(jobWrapper.exchangeOrderId)">Löschen</button>
                         </td>
 
 
@@ -135,9 +135,14 @@
                         <td>{{returnShareOrder.detail}}</td>
 
                         <td>{{returnShareOrder.amount | number: '.' | removeComma}}</td>
-                        <td>{{returnShareOrder.limit}}</td>
-                        <td>{{returnShareOrder.stop}}</td>
-                        <td>{{returnShareOrder.stopLimit}}</td>
+
+                        <td *ngIf="returnShareOrder.limit !== null; elseIfBlock">{{returnShareOrder?.limit}}</td>
+                        <ng-template>
+                            <td *ngIf="returnShareOrder.stop !== null; elseBlock" #elseIfBlock>{{returnShareOrder?.stop}}</td>
+                        </ng-template>
+                        <ng-template>
+                            <td *ngIf="returnShareOrder.stopLimit !== null" #elseBlock>{{returnShareOrder?.stopLimit}}</td>
+                        </ng-template>
                         <td>1234</td>
                     </tr>
 
@@ -157,7 +162,7 @@
 <div *ngIf="positionArray.length == 0" class="uk-container">
     <div>
         <div class="uk-card uk-position-center uk-card-body uk-card-default uk-text-center">
-            <h3 class="uk-card-title">{{depot.name}}</h3>
+            <h3 class="uk-card-title">{{ depot?.name }}</h3>
             <p>Diesem Depot wurden noch keine Aktien hinzugefügt. Gerne können Aktien gekauft werden.</p>
             <button class="uk-button uk-button-primary " [routerLink]="['/trade']">Aktien kaufen</button>
         </div>
