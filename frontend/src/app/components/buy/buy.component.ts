@@ -43,9 +43,7 @@ export class BuyComponent implements OnInit {
     private metaService: MetaService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {
-    this.buildExpiredDateArray();
-  }
+  ) { }
 
   public orderDetailsArray: Array<{ name: string, value: string }> = [
     {
@@ -85,6 +83,7 @@ export class BuyComponent implements OnInit {
           this.buildAlgArray()
         }
       )
+    this.buildExpiredDateArray();
     this.createForm();
   }
 
@@ -161,8 +160,6 @@ export class BuyComponent implements OnInit {
       validity: this.buyValue.dateOfExpiry.value.value.toISOString().slice(0, 19).replace('T', ' '),
       limit: this.buyValue.limitPrice.value,
     };
-
-
 
     this.depotService.createOrder(order, this.buyValue.algorithmicTradingType.value.value)
       .subscribe(data => {

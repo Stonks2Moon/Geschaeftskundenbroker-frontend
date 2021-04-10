@@ -2,7 +2,7 @@
   <div uk-grid>
     <div class="uk-card uk-card-default uk-width-3-5@l">
       <div class="uk-card-header">
-        <h3 class="uk-card-title">Aktienname</h3>
+        <h3 class="uk-card-title">{{share.shareName}} - Kaufen</h3>
       </div>
 
       <div class="uk-card-body">
@@ -95,7 +95,7 @@
 
             <button class="uk-modal-close-default" type="button" uk-close></button>
             <div class="uk-modal-header">
-              <h2 class="uk-modal-title">Weiter?</h2>
+              <h2 class="uk-modal-title">Übersicht</h2>
             </div>
             <div class="uk-modal-body">
               <table class="uk-table uk-table-striped">
@@ -136,10 +136,8 @@
                   (click)="onBuySubmit()">Weiter</button>
               </div>
             </div>
-
           </div>
         </div>
-
       </div>
     </div>
 
