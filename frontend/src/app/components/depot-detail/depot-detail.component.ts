@@ -38,9 +38,7 @@ export class DepotDetailComponent implements OnInit {
       this.createPieChart();
     });
     this.getCompletedOrders();
-    this.depotService.getPendingOrdersByDepotIdAndSession(this.depotId).subscribe(data => {
-      this.jobWrapperArray = data;
-    });
+    this.getPendingOrders();
 
   }
   public createPieChart(): void {
@@ -110,15 +108,20 @@ export class DepotDetailComponent implements OnInit {
     ],
   }
 
-  public cancelJobWrapper(orderId: string){
-    console.log("hallo");
+  public cancelJobWrapper(orderId: string) {
     this.depotService.deleteOrderBySession(orderId).subscribe(data => console.log(data));
-    this.getCompletedOrders();
+    this.getPendingOrders();
   }
 
   private getCompletedOrders(): void {
     this.depotService.getCompletedOrdersByDepotIdAndSession(this.depotId).subscribe(data => {
-      this.returnShareOrderArray = data; 
+      this.returnShareOrderArray = data;
+    });
+  }
+
+  private getPendingOrders(): void {
+    this.depotService.getPendingOrdersByDepotIdAndSession(this.depotId).subscribe(data => {
+      this.jobWrapperArray = data;
     });
   }
 }

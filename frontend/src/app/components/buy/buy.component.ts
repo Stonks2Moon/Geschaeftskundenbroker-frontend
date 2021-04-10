@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { ControlsMap, Depot, HistoricalData, MetaConst, OrderDetail, OrderType, PlaceShareOrder, Share } from 'src/app/logic/data-models/data-models';
 import { DepotService } from 'src/app/logic/services/depot.service';
 import { ShareService } from 'src/app/logic/services/share.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MetaService } from 'src/app/logic/services/meta.service';
 
@@ -36,11 +36,13 @@ export class BuyComponent implements OnInit {
   private shareId: string;
 
 
-  constructor(private location: Location,
+  constructor(
+    private location: Location,
     private depotService: DepotService,
     private shareService: ShareService,
     private metaService: MetaService,
     private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.buildExpiredDateArray();
   }
@@ -88,16 +90,18 @@ export class BuyComponent implements OnInit {
 
   buildExpiredDateArray() {
     let today: Date = new Date();
+    let tomorrow: Date = new Date(today);
     let sevenDays: Date = new Date(today);
     let fourteenDays: Date = new Date(today);
     let thirtyDays: Date = new Date(today);
 
+    tomorrow.setDate(tomorrow.getDate() + 1);
     sevenDays.setDate(sevenDays.getDate() + 7);
     fourteenDays.setDate(sevenDays.getDate() + 14);
     thirtyDays.setDate(sevenDays.getDate() + 30);
 
     this.expiredDateArray = [
-      { name: 'Morgen', value: today },
+      { name: 'Morgen', value: tomorrow },
       { name: '7 Tage', value: sevenDays },
       { name: '14 Tage', value: fourteenDays },
       { name: '30 Tage', value: thirtyDays },
@@ -122,7 +126,7 @@ export class BuyComponent implements OnInit {
       depot: new FormControl('', Validators.required),
       orderDetail: new FormControl('', Validators.required),
       sharePrice: new FormControl({ value: '', disabled: true }, Validators.required),
-      limitPrice: new FormControl({ value: '', disabled: true }, Validators.required),
+      limitPrice: new FormControl({ value: 0, disabled: true }, [Validators.required, Validators.min(1)]),
       maxPrice: new FormControl({ value: '', disabled: true }, Validators.required),
       minPrice: new FormControl({ value: '', disabled: true }, Validators.required),
       dateOfExpiry: new FormControl('', Validators.required),
@@ -148,20 +152,22 @@ export class BuyComponent implements OnInit {
   }
 
   public onBuySubmit(): void {
-    console.log('test');
     let order: PlaceShareOrder = {
-      depotId: this.buyValue.depot.value,
-      amount: this.buyValue.numberOfShares.value,
+      shareId: this.shareId,
+      depotId: this.buyValue.depot.value.depotId,
       type: OrderType.buy,
       detail: this.buyValue.orderDetail.value.value,
-      validity: this.buyValue.dateOfExpiry.value,
+      amount: this.buyValue.numberOfShares.value,
+      validity: this.buyValue.dateOfExpiry.value.value.toISOString().slice(0, 19).replace('T', ' '),
       limit: this.buyValue.limitPrice.value,
-      stop: null,
-      stopLimit: null,
-      market: '',
-      shareId: this.shareId,
     };
-    this.depotService.createOrder(order, this.buyValue.algorithmicTradingType.value.value).subscribe(data => console.log(data))
+
+
+
+    this.depotService.createOrder(order, this.buyValue.algorithmicTradingType.value.value)
+      .subscribe(data => {
+        this.router.navigate(['depot-detail', this.buyValue.depot.value.depotId]);
+      })
   }
 
   public get buyValue(): ControlsMap<AbstractControl> {
@@ -227,11 +233,9 @@ export class BuyComponent implements OnInit {
       if (n1.recordedAt > n2.recordedAt) {
         return 1;
       }
-
       if (n1.recordedAt < n2.recordedAt) {
         return -1;
       }
-
       return 0;
     });
 

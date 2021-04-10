@@ -21,6 +21,7 @@ import { DepotDetailComponent } from './components/depot-detail/depot-detail.com
 import { SearchComponent } from './components/search/search.component';
 import { SellComponent } from './components/sell/sell.component';
 import { RemoveCommaPipe } from './remove-comma.pipe';
+import { ShareDepotOverviewComponent } from './components/_sub-components/share-depot-overview/share-depot-overview.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { RemoveCommaPipe } from './remove-comma.pipe';
     DepotDetailComponent,
     SearchComponent,
     SellComponent,
-    RemoveCommaPipe    
+    RemoveCommaPipe,
+    ShareDepotOverviewComponent    
   ],
   imports: [
     BrowserModule,

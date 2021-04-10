@@ -38,50 +38,50 @@ export class ShareComponent implements OnInit {
   ngOnInit(): void {
     this.shareId = this.route.snapshot.paramMap.get('shareId');
     this.shareService.getShareById(this.shareId).subscribe(share => this.share = share);
-    try{
+    try {
       this.shareService.getShareHistory({ shareId: this.shareId, fromDate: this.fromDate, toDate: this.toDate })
-      .toPromise()
-      .then(
-        data => {
-          this.historicalData = data;
-          this.createChart();
-        }
-      );
-    }catch(err){
+        .toPromise()
+        .then(
+          data => {
+            this.historicalData = data;
+            this.createChart();
+          }
+        );
+    } catch (err) {
       this.dataAvailable = 0
       console.log(err)
     }
-    try{
+    try {
       this.shareService.getShareHistory({ shareId: this.shareId, fromDate: this.yesterday, toDate: this.toDate })
-      .toPromise()
-      .then(
-        data => {
-          this.todayData = data;
-        }
-      );
-    }catch(err){
+        .toPromise()
+        .then(
+          data => {
+            this.todayData = data;
+          }
+        );
+    } catch (err) {
       console.log(err)
     }
-    try{
+    try {
       this.shareService.getStatisticsById(this.shareId)
-      .toPromise()
-      .then(
-        data => {
-          this.statistics = data;
-        }
-      );
-    }catch(err){
+        .toPromise()
+        .then(
+          data => {
+            this.statistics = data;
+          }
+        );
+    } catch (err) {
       console.log(err)
     }
-    
+
   }
 
-  public changeView(event): void{
-    if(event.target.id == "history"){
+  public changeView(event): void {
+    if (event.target.id == "history") {
       this.dayView = false
-    }else if(event.target.id =="today"){
+    } else if (event.target.id == "today") {
       this.dayView = true
-    }else{
+    } else {
       console.log("error with viewbutton")
     }
   }
@@ -91,32 +91,32 @@ export class ShareComponent implements OnInit {
     let y: Array<number> = [];
     let data: Array<any> = [];
     let dates: Array<string> = [];
-    let dailyaverages: Array<number> =[];
-    let weeklyaverages: Array<number> =[];
+    let dailyaverages: Array<number> = [];
+    let weeklyaverages: Array<number> = [];
 
-    if(this.historicalData.chartValues.length != 0){
+    if (this.historicalData.chartValues.length != 0) {
       let firstDate = new Date(this.historicalData.chartValues[0].recordedAt)
-      let lastDate = new Date(this.historicalData.chartValues[this.historicalData.chartValues.length -1].recordedAt)
-      if(firstDate.getFullYear() == lastDate.getFullYear() && firstDate.getMonth() == lastDate.getMonth() && firstDate.getDate() == lastDate.getDate()){
+      let lastDate = new Date(this.historicalData.chartValues[this.historicalData.chartValues.length - 1].recordedAt)
+      if (firstDate.getFullYear() == lastDate.getFullYear() && firstDate.getMonth() == lastDate.getMonth() && firstDate.getDate() == lastDate.getDate()) {
         //nur ein Tag
         this.dataAvailable = 1
         this.createDayChart()
-      }else{
-        if(this.todayData.chartValues.length == 0){
+      } else {
+        if (this.todayData.chartValues.length == 0) {
           //nur vergangenheitsdaten
           this.dataAvailable = 3
-        }else{
+        } else {
           //daten für mehrere tage
           this.dataAvailable = 2
           this.createDayChart()
           console.log(this.todayData)
         }
       }
-    }else{
+    } else {
       //keine Daten verfügbar
       this.dataAvailable = 0
     }
-    console.log(this.dataAvailable)
+
     let currentDate = new Date(this.historicalData.chartValues[0].recordedAt)
     let open = 0
     let close = 0
@@ -124,31 +124,31 @@ export class ShareComponent implements OnInit {
     let highest = 0
     this.historicalData?.chartValues.forEach(element => {
       let newDate = new Date(element.recordedAt)
-      if(newDate.getFullYear() == currentDate.getFullYear() && newDate.getMonth() == currentDate.getMonth() && newDate.getDay() == currentDate.getDay()){
-        if(open == 0){
+      if (newDate.getFullYear() == currentDate.getFullYear() && newDate.getMonth() == currentDate.getMonth() && newDate.getDay() == currentDate.getDay()) {
+        if (open == 0) {
           open = element.recordedValue
         }
         close = element.recordedValue
-        if(lowest == 0 || lowest > element.recordedValue){
+        if (lowest == 0 || lowest > element.recordedValue) {
           lowest = element.recordedValue
         }
-        if(highest == 0 || highest < element.recordedValue){
+        if (highest == 0 || highest < element.recordedValue) {
           highest = element.recordedValue
         }
-      }else{
-        data.push([open,close,lowest,highest])
-        let average = (lowest+highest+close+open)/4
+      } else {
+        data.push([open, close, lowest, highest])
+        let average = (lowest + highest + close + open) / 4
         dailyaverages.push(Number(average.toFixed(2)))
-        if(dailyaverages.length <= 7){
+        if (dailyaverages.length <= 7) {
           var weekstart = 0
-        }else{
-          var weekstart = (dailyaverages.length-7)
+        } else {
+          var weekstart = (dailyaverages.length - 7)
         }
-        var count=0;
-          for (var i=weekstart; i<dailyaverages.length; i++) {
-              count+=dailyaverages[i];
-          }
-        weeklyaverages.push(Number((count/7).toFixed(2)))
+        var count = 0;
+        for (var i = weekstart; i < dailyaverages.length; i++) {
+          count += dailyaverages[i];
+        }
+        weeklyaverages.push(Number((count / 7).toFixed(2)))
         open = element.recordedValue
         close = element.recordedValue
         lowest = element.recordedValue
@@ -157,50 +157,50 @@ export class ShareComponent implements OnInit {
         currentDate = new Date(element.recordedAt)
       }
     });
-    data.push([open,close,lowest,highest])
-    let average = (lowest+highest+close+open)/4
+    data.push([open, close, lowest, highest])
+    let average = (lowest + highest + close + open) / 4
     dailyaverages.push(Number(average.toFixed(2)))
-    if(dailyaverages.length <= 7){
+    if (dailyaverages.length <= 7) {
       var weekstart = 0
-    }else{
-      var weekstart = (dailyaverages.length-7)
+    } else {
+      var weekstart = (dailyaverages.length - 7)
     }
-    var count=0;
-      for (var i=weekstart; i<dailyaverages.length; i++) {
-          count+=dailyaverages[i];
-      }
-    weeklyaverages.push(Number((count/7).toFixed(2)))
+    var count = 0;
+    for (var i = weekstart; i < dailyaverages.length; i++) {
+      count += dailyaverages[i];
+    }
+    weeklyaverages.push(Number((count / 7).toFixed(2)))
     dates.push([currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate()].join('/'))
 
     this.chartOption = {
       tooltip: {
         trigger: 'axis',
-            axisPointer: {
-                type: 'cross'
-            },
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            textStyle: {
-                color: '#000'
-            },
-    },
+        axisPointer: {
+          type: 'cross'
+        },
+        borderWidth: 1,
+        borderColor: '#ccc',
+        padding: 10,
+        textStyle: {
+          color: '#000'
+        },
+      },
       toolbox: {
         feature: {
-            dataZoom: {
-                yAxisIndex: 'none'
+          dataZoom: {
+            yAxisIndex: 'none'
 
-            },
-            restore: {},
-            saveAsImage: {}
+          },
+          restore: {},
+          saveAsImage: {}
         }
-    },
-    
+      },
+
       xAxis: {
         type: 'category',
         data: dates,
-        min:'dataMin',
-        max:'dataMax',
+        min: 'dataMin',
+        max: 'dataMax',
       },
       yAxis: {
         type: 'value',
@@ -210,23 +210,23 @@ export class ShareComponent implements OnInit {
         filterMode: 'filter',
         startValue: Math.floor(data.length * 0.8),
         endValue: data.length
-        
-    }, {
+
+      }, {
         filterMode: 'empty'
-    }],
+      }],
       series: [
         {
           name: this.historicalData.share.shareName,
           data: data,
           type: 'candlestick',
-          itemStyle:{
-            color : '#28B557',
-            color0 :'#B54643',
+          itemStyle: {
+            color: '#28B557',
+            color0: '#B54643',
             borderColor: '#28B557',
             borderColor0: '#B54643',
-            
+
           },
-          
+
         },
         {
           name: "Tagesdurschnitt",
@@ -234,12 +234,12 @@ export class ShareComponent implements OnInit {
           type: 'line',
           smooth: false,
           symbol: 'diamond',
-          itemStyle:{
-            color : '#B5791F',
+          itemStyle: {
+            color: '#B5791F',
             borderColor: '#B5791F',
-            
-            
-          },         
+
+
+          },
         },
         {
           name: "Wochendurschnitt",
@@ -247,12 +247,12 @@ export class ShareComponent implements OnInit {
           type: 'line',
           smooth: false,
           symbol: 'diamond',
-          itemStyle:{
-            color : '#3A80B5',
-            borderColor: '#3A80B5',        
+          itemStyle: {
+            color: '#3A80B5',
+            borderColor: '#3A80B5',
           },
         },
-        
+
       ],
     };
   }
@@ -265,19 +265,19 @@ export class ShareComponent implements OnInit {
 
     let lastDay = new Date(this.historicalData?.chartValues[0].recordedAt)
     this.todayData?.chartValues.forEach(element => {
-        data.push([element.recordedAt ,element.recordedValue])
+      data.push([element.recordedAt, element.recordedValue])
     });
 
     this.dayChartOption = {
       tooltip: {
         trigger: 'axis',
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            textStyle: {
-                color: '#000'
-            },
-    },
+        borderWidth: 1,
+        borderColor: '#ccc',
+        padding: 10,
+        textStyle: {
+          color: '#000'
+        },
+      },
       xAxis: {
         type: 'time',
         boundaryGap: false,

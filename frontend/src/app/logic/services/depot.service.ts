@@ -84,7 +84,7 @@ export class DepotService {
     if (this.cookieService.check('session')) {
       const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
 
-      const placeOrder: PlaceOrder = { customreSession: session, order: order, tradeAlgorithm: tradeAlgorithm ?? 0 };
+      const placeOrder: PlaceOrder = { customerSession: session, order: order, tradeAlgorithm: tradeAlgorithm ?? 0 };
 
       return this.http.put<Depot>(`${this.apiUrl}depot/order`, placeOrder)
         .pipe(
@@ -153,13 +153,14 @@ export class DepotService {
     if (this.cookieService.check('session')) {
       const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
 
-
       const options = {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
         }),
         body: session,
       };
+
+      console.log(options)
 
       return this.http.delete<PlaceShareOrder>(`${this.apiUrl}depot/order/${orderId}`, options)
         .pipe(
