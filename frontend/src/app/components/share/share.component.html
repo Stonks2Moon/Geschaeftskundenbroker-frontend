@@ -62,7 +62,7 @@
             <p>Aktueller Kurs:</p>
           </li>
           <li>
-            <p>Veränderung pro Tag:</p>
+            <p>Veränderung:</p>
           </li>
           <li>
             <p>Veränderung in %:</p>
@@ -73,10 +73,10 @@
             <p>{{share?.lastRecordedValue}}</p>
           </li>
           <li>
-            <p>{{statistics?.difference}}</p>
+            <p>{{statistics?.difference | number: '.0-2'}}</p>
           </li>
           <li>
-            <p>{{statistics?.percent}} %</p>
+            <p>{{statistics?.percent | number: '.2-2' | removeComma}} %</p>
           </li>
         </ul>    
       </div>
