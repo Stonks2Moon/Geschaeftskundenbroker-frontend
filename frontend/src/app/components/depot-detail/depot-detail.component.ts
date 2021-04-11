@@ -28,6 +28,7 @@ export class DepotDetailComponent implements OnInit {
   public lpPositionArray: Array<LpPosition> = [];
   public date: Date;
   public positionModalLp: DepotPosition;
+  public positionLp: LpPosition;
 
   constructor(
     private depotService: DepotService,
@@ -65,6 +66,10 @@ export class DepotDetailComponent implements OnInit {
       )
   }
 
+  public onEndLpSubmit(): void {
+    // this.depotService.cancelLp(lpId).subscribe((data) => {})
+  }
+
   public cancelOrder(orderId: string) {
     this.depotService.deleteOrderBySession(orderId).subscribe(
       (data) => { },
@@ -94,6 +99,7 @@ export class DepotDetailComponent implements OnInit {
   public isLp(position: DepotPosition): boolean {
     let lpPosition = this.lpPositionArray.find(lpPosition => lpPosition.share.isin == position.share.isin);
     if (lpPosition) {
+      this.positionLp = lpPosition;
       return true;
     } 
     return false;

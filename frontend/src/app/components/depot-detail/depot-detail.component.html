@@ -28,9 +28,12 @@
                   <h3 class="uk-card-title u-align-left  uk-margin-remove-bottom ">{{ position.share.shareName}} </h3>
                   <p class=" uk-text-meta uk-margin-remove-top">{{ position.share.wkn}}</p>
                 </div>
-                <button *ngIf="!isLp(position)" class="uk-button-small uk-button-primary uk-width-2-5 uk-margin-small uk-text-bold"
-                  type="submit" (click)="openModalLp(position)" href="#modal-lp" uk-toggle>Liquiditätsspender
-                  werden</button>
+                <button *ngIf="!isLp(position); else endLp " class="uk-button-small uk-button-primary uk-width-2-5 uk-margin-small uk-text-bold"
+                  type="submit" (click)="openModalLp(position)" href="#modal-lp" uk-toggle>Liquiditätsspender werden</button>
+                  <ng-template #endLp>
+                    <button class="uk-button-small uk-button-primary uk-width-2-5 uk-margin-small uk-text-bold"
+                  type="submit" (click)="openModalLp(position)" href="#modal-endLp" uk-toggle>Liquiditätsspende beenden</button>
+                  </ng-template>
               </div>
               <div class="uk-grid">
                 <div class="uk-text-bold uk-width-1-2 uk-margin-bottom-small">
@@ -74,6 +77,14 @@
                   <p class="uk-align-right">{{ position.percentageChange }} %</p>
                 </div>
                 <hr class="uk-width-1-1 uk-align-right uk-margin-small">
+               
+                  <div *ngIf="isLp(position)" class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
+                    <p>Liquiditätsquote</p>
+                  </div>
+                  <div *ngIf="isLp(position)" class="uk-width-1-2 uk-margin-bottom-small">
+                    <p class="uk-align-right">{{ positionLp.lqQuote | number: '.2-2' | removeComma }}
+                      %</p>
+                </div>
               </div>
             </div>
           </div>
@@ -220,6 +231,28 @@
               <button class="uk-button uk-button-default uk-modal-close uk-align-right" type="button">Abbrechen</button>
             </div>
           </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="modal-endLp" class="uk-flex-top" uk-modal>
+  <div *ngIf="positionModalLp != undefined" class="uk-modal-dialog uk-width-2-5@m uk-margin-auto-vertical">
+    <button class="uk-modal-close-default" type="button" uk-close></button>
+    <div class="uk-modal-header">
+      <h2 class="uk-modal-title">Liquiditätsspende beenden?</h2>
+    </div>
+    <div class="uk-modal-body">
+      <div class="uk-child-width-1-2@s uk-grid-small" uk-grid>
+        <div class="uk-width-1-1 uk-margin-bottom">
+          <div>
+            <p>Möchten Sie Ihre Liquiditätsspende wirklich beenden?</p>
+            <p>{{ positionLp?.lpId }}</p>
+          </div>
+        </div>       
+        <div class="uk-width-1-1 ">
+          <button class="uk-button uk-button-default uk-modal-close uk-align-right" type="button"  (click)="onEndLpSubmit()">Spende beenden</button>
+              <button class="uk-button uk-button-primary uk-modal-close uk-align-right" type="button">Abbrechen</button>
         </div>
       </div>
     </div>
