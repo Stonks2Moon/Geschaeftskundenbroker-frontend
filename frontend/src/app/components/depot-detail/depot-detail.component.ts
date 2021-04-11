@@ -2,11 +2,12 @@ import { Position } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { EChartsOption, SeriesModel, SeriesOption,} from 'echarts';
+import { EChartsOption, SeriesModel, SeriesOption, } from 'echarts';
 import { ToastrService } from 'ngx-toastr';
 import { Depot, DepotPosition, HistoricalData, JobWrapper, LpPosition, LpRegister, ReturnShareOrder, Share } from 'src/app/logic/data-models/data-models';
 import { DepotService } from 'src/app/logic/services/depot.service';
 import { ShareService } from 'src/app/logic/services/share.service';
+import { HelperService } from 'src/app/logic/services/helper.service';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class DepotDetailComponent implements OnInit {
   public depot: Depot;
   public depotId: string;
   public orderId: string;
-  public shares: Array<Share> = [] 
+  public shares: Array<Share> = []
   public histories: Array<HistoricalData> = []
   public fromDate: Date = new Date();
   public toDate: Date = new Date();
@@ -37,6 +38,7 @@ export class DepotDetailComponent implements OnInit {
   public positionLp: LpPosition;
 
   constructor(
+    public helperService: HelperService,
     private depotService: DepotService,
     private shareService: ShareService,
     private route: ActivatedRoute,
@@ -45,13 +47,26 @@ export class DepotDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.depotId = this.route.snapshot.paramMap.get('depotId');
-    this.fromDate.setDate(this.toDate.getDate() -30)
+    this.fromDate.setDate(this.toDate.getDate() - 30)
 
     this.depotService.getDepotById(this.depotId).subscribe(depot => {
       this.depot = depot;
       this.positionArray = depot.positions;
       this.positionArray?.forEach(position => {
         this.shareService.getShareHistory({ shareId: position.share.shareId, fromDate: this.fromDate, toDate: this.toDate })
+          .toPromise()
+          .then(
+            data => {
+              this.histories.push(data);
+              this.createChart();
+            }
+          );
+      });
+      this.createPieChart();
+    });
+
+    this.positionArray?.forEach(position => {
+      this.shareService.getShareHistory({ shareId: position.share.shareId, fromDate: this.fromDate, toDate: this.toDate })
         .toPromise()
         .then(
           data => {
@@ -59,21 +74,8 @@ export class DepotDetailComponent implements OnInit {
             this.createChart();
           }
         );
-      });
-      this.createPieChart();
     });
-    
-    this.positionArray?.forEach(position => {
-      this.shareService.getShareHistory({ shareId: position.share.shareId, fromDate: this.fromDate, toDate: this.toDate })
-      .toPromise()
-      .then(
-        data => {
-          this.histories.push(data);
-          this.createChart();
-        }
-      );
-    });
-    
+
     this.getLps();
     this.getCompletedOrders();
     this.getPendingOrders();
@@ -89,7 +91,7 @@ export class DepotDetailComponent implements OnInit {
   public onLpSubmit(): void {
     this.depotService.registerAsLp(this.positionModalLp.depotId,
       this.positionModalLp.share.shareId,
-      this.lpForm.controls.lqQuote.value/100).subscribe(       
+      this.lpForm.controls.lqQuote.value / 100).subscribe(
         (data) => { },
         (error) => this.toastr.error(error.error.message, 'Registrierung als Liquiditätsspender ist fehlgeschlagen.')
       )
@@ -121,7 +123,7 @@ export class DepotDetailComponent implements OnInit {
 
   private getLps(): void {
     this.depotService.getLpBy(this.depotId).subscribe(data =>
-      this.lpPositionArray = data    
+      this.lpPositionArray = data
     );
   }
 
@@ -130,7 +132,7 @@ export class DepotDetailComponent implements OnInit {
     if (lpPosition) {
       this.positionLp = lpPosition;
       return true;
-    } 
+    }
     return false;
   }
 
@@ -187,7 +189,7 @@ export class DepotDetailComponent implements OnInit {
     }
   }
   public createChart(): void {
-    let series : Array<any> = []
+    let series: Array<any> = []
 
     this.histories?.forEach(history => {
       let newSeries
@@ -202,10 +204,10 @@ export class DepotDetailComponent implements OnInit {
         symbol: 'none',
         type: 'line',
       },
-      series.push(newSeries)
+        series.push(newSeries)
     });
-  
-    
+
+
     this.chartOption = {
       tooltip: {
         trigger: 'axis',

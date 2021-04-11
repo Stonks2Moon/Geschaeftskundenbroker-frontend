@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import { Location } from '@angular/common';
-import { ControlsMap, Depot, HistoricalData, MetaConst, OrderDetail, OrderType, PlaceShareOrder, Share } from 'src/app/logic/data-models/data-models';
+import { ControlsMap, Depot, HistoricalData, OrderDetail, OrderType, PlaceShareOrder, Share } from 'src/app/logic/data-models/data-models';
 import { DepotService } from 'src/app/logic/services/depot.service';
 import { ShareService } from 'src/app/logic/services/share.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MetaService } from 'src/app/logic/services/meta.service';
 import { ToastrService } from 'ngx-toastr';
+import { HelperService } from 'src/app/logic/services/helper.service';
 
 @Component({
   selector: 'app-buy-sell',
@@ -17,14 +18,13 @@ import { ToastrService } from 'ngx-toastr';
 export class BuySellComponent implements OnInit {
   public orderForm: FormGroup;
   public orderType: OrderType;
-  public depotArray: Array<Depot> = [];
   public share: Share;
-  public metaConst: MetaConst;
+  public detailDepot: Depot;
+
+  public depotArray: Array<Depot> = [];
+  public orderDetailsArray: Array<{ name: string, value: string }>;
   public expiredDateArray: Array<{ name: string, value: Date }>;
   public algorithmTypesArray: Array<{ name: string, value: number }>;
-  public selectedAlgorithm: any;
-  public algorithmName: string;
-  public detailDepot: Depot;
 
   // Pop up values
   public currentPrice: number;
@@ -39,34 +39,23 @@ export class BuySellComponent implements OnInit {
 
 
   constructor(
+    public helperService: HelperService,
     private _location: Location,
     private depotService: DepotService,
     private shareService: ShareService,
-    private metaService: MetaService,
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService,
   ) { }
 
-  public orderDetailsArray: Array<{ name: string, value: string }> = [
-    {
-      name: "Markt Preis",
-      value: OrderDetail.market
-    },
-    {
-      name: "Limit Preis",
-      value: OrderDetail.limit
-    },
-    {
-      name: "Stop Preis",
-      value: OrderDetail.stop
-    },
-  ];
 
   ngOnInit(): void {
     this.fromDate.setDate(this.fromDate.getDate() - 30)
     this.orderType = OrderType[this.route.snapshot.paramMap.get('orderType')];
     this.shareId = this.route.snapshot.paramMap.get('shareId');
+    this.orderDetailsArray = this.helperService.orderDetailsArray
+    this.helperService.getAlgArray()
+      .then(data => this.algorithmTypesArray = data)
 
     this.depotService.getAllDepotsBySession().subscribe(depots => {
       this.depotArray = depots;
@@ -80,25 +69,9 @@ export class BuySellComponent implements OnInit {
           this.createChart();
         }
       );
-    this.metaService.getMetaConsts()
-      .toPromise()
-      .then(
-        data => {
-          this.metaConst = data;
-          this.buildAlgArray()
-        }
-      )
     this.buildExpiredDateArray();
     this.createForm();
 
-  }
-
-  public getOrderTypeForUi(): string {
-    let oderTypeUi: string = 'Kaufen'
-    if (this.orderType == OrderType.sell) {
-      oderTypeUi = 'Verkaufen'
-    }
-    return oderTypeUi
   }
 
   buildExpiredDateArray() {
@@ -119,19 +92,6 @@ export class BuySellComponent implements OnInit {
       { name: '7 Tage', value: sevenDays },
       { name: '14 Tage', value: fourteenDays },
       { name: '30 Tage', value: thirtyDays },
-    ];
-  }
-
-  private buildAlgArray() {
-    this.algorithmTypesArray = [
-      {
-        name: "Kein Algorithmus",
-        value: this.metaConst.ALGORITHMS.NO_ALG
-      },
-      {
-        name: "Split Algorithmus",
-        value: this.metaConst.ALGORITHMS.SPLIT_ALG
-      }
     ];
   }
 
