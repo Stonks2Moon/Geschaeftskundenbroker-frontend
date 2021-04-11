@@ -236,11 +236,11 @@ export class DepotService {
     }
   }
 
-  public getLpBy(depotId: string): Observable<LpPosition> {
+  public getLpBy(depotId: string): Observable<Array<LpPosition>> {
     if (this.cookieService.check('session')) {
       const session: CustomerSession = JSON.parse(this.cookieService.get('session'));
 
-      return this.http.post<LpPosition>(`${this.apiUrl}depot/lp/show/${depotId}`, session)
+      return this.http.post<Array<LpPosition>>(`${this.apiUrl}depot/lp/show/${depotId}`, session)
         .pipe(
           tap(
             (data) => {

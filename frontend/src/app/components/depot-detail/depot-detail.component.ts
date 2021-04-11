@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EChartsOption } from 'echarts';
 import { ToastrService } from 'ngx-toastr';
-import { Depot, DepotPosition, JobWrapper, LpRegister, ReturnShareOrder, Share } from 'src/app/logic/data-models/data-models';
+import { Depot, DepotPosition, JobWrapper, LpPosition, LpRegister, ReturnShareOrder, Share } from 'src/app/logic/data-models/data-models';
 import { DepotService } from 'src/app/logic/services/depot.service';
 
 
@@ -25,6 +25,7 @@ export class DepotDetailComponent implements OnInit {
   public positionArray: Array<DepotPosition> = [];
   public returnShareOrderArray: Array<ReturnShareOrder> = [];
   public jobWrapperArray: Array<JobWrapper> = [];
+  public lpPositionArray: Array<LpPosition> = [];
   public date: Date;
   public positionModalLp: DepotPosition;
 
@@ -43,6 +44,7 @@ export class DepotDetailComponent implements OnInit {
       this.createChart();
       this.createPieChart();
     });
+    this.getLps();
     this.getCompletedOrders();
     this.getPendingOrders();
     this.createForm();
@@ -50,15 +52,14 @@ export class DepotDetailComponent implements OnInit {
 
   public createForm(): void {
     this.lpForm = new FormGroup({
-      lqQuote: new FormControl('', [Validators.required])
+      lqQuote: new FormControl('', [Validators.required, Validators.max(100), Validators.min(1), Validators.pattern(/^[0-9]\d*$/)])
     });
   }
 
   public onLpSubmit(): void {
-    console.log(this.lpForm.value)
     this.depotService.registerAsLp(this.positionModalLp.depotId,
       this.positionModalLp.share.shareId,
-      this.lpForm.controls.lqQuote.value).subscribe(
+      this.lpForm.controls.lqQuote.value/100).subscribe(
         (data) => console.log(data),
         (error) => this.toastr.error('Versuche es später nochmals.', 'LP Registrierung fehlgeschlagen')
       )
@@ -79,6 +80,20 @@ export class DepotDetailComponent implements OnInit {
     this.depotService.getPendingOrdersByDepotIdAndSession(this.depotId).subscribe(data => {
       this.jobWrapperArray = data;
     });
+  }
+
+  private getLps(): void {
+    this.depotService.getLpBy(this.depotId).subscribe(data =>
+      this.lpPositionArray = data    
+    );
+  }
+
+  public isLp(position: DepotPosition): boolean {
+    let lpPosition = this.lpPositionArray.find(lpPosition => lpPosition.share.isin == position.share.isin);
+    if (lpPosition) {
+      return true;
+    } 
+    return false;
   }
 
   public openModalLp(position: DepotPosition): void {
