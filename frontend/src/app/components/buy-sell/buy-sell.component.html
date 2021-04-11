@@ -8,7 +8,7 @@
       <div class="uk-card-body">
         <form [formGroup]="orderForm" class="uk-form-stacked uk-grid-small" uk-grid>
           <div class="uk-margin uk-width-1-1">
-            <label class="uk-form-label" for="depotSelect">Depot</label>
+            <label class="uk-form-label" for="depotSelect">Depot*</label>
             <select class="uk-select" id="depotSelect" formControlName="depot" (change)="getDepotDetail()">
               <option *ngFor="let depot of depotArray" [ngValue]="depot">{{depot.name}}</option>
             </select>
@@ -25,24 +25,24 @@
           <div class="uk-margin uk-width-1-2">
             <div
               *ngIf="orderValue.orderDetail.value.value !== 'stop' && orderValue.orderDetail.value.value !== 'limit'">
-              <label class="uk-form-label" for="orderPrice">Order-Preis</label>
+              <label class="uk-form-label" for="orderPrice">Order-Preis*</label>
               <input class="uk-input" id="orderPrice" type="number" disabled value={{share?.lastRecordedValue}}
                 (keyup)="calculateSharePrice()" (change)="calculateSharePrice()">
             </div>
             <div *ngIf="orderValue.orderDetail.value.value === 'limit'; else second">
-              <label class="uk-form-label" for="orderPrice">Order-Preis</label>
+              <label class="uk-form-label" for="orderPrice">Order-Preis*</label>
               <input class="uk-input" id="orderPrice" type="number" min="0" formControlName="limitPrice"
                 (keyup)="calculateSharePrice()" (change)="calculateSharePrice()">
             </div>
             <ng-template #second>
               <div *ngIf="orderValue.orderDetail.value.value === 'stop'" uk-grid>
                 <div class="uk-width-1-2">
-                  <label class="uk-form-label" for="minimum">Minimum</label>
+                  <label class="uk-form-label" for="minimum">Minimum*</label>
                   <input class="uk-input" type="number" min="0" id="minimum" formControlName="minPrice"
                     (keyup)="calculateSharePrice()" (change)="calculateSharePrice()">
                 </div>
                 <div class="uk-width-1-2">
-                  <label class="uk-form-label" for="maximum">Maximum</label>
+                  <label class="uk-form-label" for="maximum">Maximum*</label>
                   <input class="uk-input" type="number" min="0" id="maximum" formControlName="maxPrice"
                     (keyup)="calculateSharePrice()" (change)="calculateSharePrice()">
                 </div>
@@ -50,7 +50,7 @@
             </ng-template>
           </div>
           <div class="uk-margin uk-width-1-2">
-            <label class="uk-form-label" for="expiredDateSelect">Gültig bis</label>
+            <label class="uk-form-label" for="expiredDateSelect">Gültig bis*</label>
             <select class="uk-select" id="expiredDateSelect" formControlName="dateOfExpiry">
               <option *ngFor="let expiredDate of expiredDateArray" [ngValue]="expiredDate">
                 {{expiredDate.name}}</option>
@@ -58,7 +58,7 @@
           </div>
 
           <div class="uk-margin uk-width-1-2">
-            <label class="uk-form-label" for="algorithmicTradingType">Algorithmisches Handeln:</label>
+            <label class="uk-form-label" for="algorithmicTradingType">Algorithmisches Handeln*</label>
             <select class="uk-select" id="algorithmicTradingType" formControlName="algorithmicTradingType">
               <option *ngFor="let algorithmType of algorithmTypesArray" [ngValue]="algorithmType">
                 {{algorithmType.name}}</option>
@@ -66,7 +66,7 @@
           </div>
 
           <div class="uk-margin uk-form-controls uk-width-2-5@s">
-            <label class="uk-form-label" for="numberOfShares">Anzahl der Aktien (in Stk.)</label>
+            <label class="uk-form-label" for="numberOfShares">Anzahl der Aktien (in Stk.)*</label>
             <input class="uk-input" type="number" min="1" ng-max="2" id="numberOfShares" (keyup)="calculateSharePrice()"
               (change)="calculateSharePrice()" formControlName="numberOfShares">
             <p *ngIf="detailDepot">
