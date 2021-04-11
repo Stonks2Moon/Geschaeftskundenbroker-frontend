@@ -1,75 +1,31 @@
-<!-- <div class="uk-container uk-width-3-4@m uk-width-1-1@s">
-  <div uk-grid>
-    <div class="uk-card uk-card-default uk-width-3-5@l uk-width-1-1@m">
-      <div class="uk-card-header">
-        <h3 class="uk-card-title">Aktienname</h3>
-      </div>
-
-      <div class="uk-card-body">
-
-        <form class="uk-form-stacked uk-grid-small" uk-grid>
-          <div class="uk-width-1-1 uk-margin">
-            <label class="uk-form-label" for="orderPrice">Orderpreis</label>
-            <input class="uk-input" id="orderPrice" type="text">
-          </div>
-          <div class="uk-width-1-1 uk-margin">
-            <label class="uk-form-label" for="expiredDate">Gültig bis</label>
-            <input class="uk-input" id="expiredDate" type="text" placeholder="100">
-          </div>
-
-          <div class="uk-width-2-5@s uk-margin">
-            <label class="uk-form-label" for="share">Anzahl der Aktien in Stk.</label>
-            <input class="uk-input uk-form-width-large" id="share">
-          </div>
-
-          <div class="uk-width-1-5@s uk-margin">
-            <label class="uk-form-label" for="equal">&nbsp;</label>
-            <div class="uk-input input-equal" id="equal"><i class="fas fa-equals"></i></div>
-          </div>
-
-          <div class="uk-width-2-5@s uk-margin">
-            <label class="uk-form-label" for="value">Wert in Euro</label>
-            <input class="uk-input uk-form-width-large" id="value">
-          </div>
-
-          <div class="uk-width-1-1 uk-margin">
-            <button class="uk-button uk-button-primary uk-align-right" type="submit">Verkaufen</button>
-          </div>
-
-        </form>
-      </div>
-    </div>
-
-    <div class="uk-card uk-width-2-5@l uk-width-1-1@m">
-      <div class="uk-card-header">
-        <h3 class="uk-card-title">Statistik</h3>
-      </div>
-
-      <div class="uk-card-body">
-        <div echarts [options]="chartOption" class="demo-chart"></div>
-        <div>Aktienkurs</div>
-        <div>Du besitzt xxx Aktien im Wert von xxx €</div>
-      </div>
-    </div>
-  </div>
-</div> -->
 <div class="uk-card uk-width-3-4@m uk-width-1-1@s uk-position-center uk-card-default">
   <div class="uk-card-header ">
     <span class="uk-align-left" uk-icon="icon: user; ratio:4"></span>
-    <h3 class="uk-align-left uk-card-title">Hans Peter der 5.</h3>
+    <h3 class="uk-align-left uk-card-title uk-margin-top">{{currentCustomer.firstName}} {{currentCustomer.lastName}}</h3>
   </div>
   <div class="uk-card-body">
-    <div class="uk-grid">
-      <div class="uk-width-1-2">
-        <p>Unternehemen des Nutzers</p>
-        <p>Anzahl der Depots</p>
-        <p>E-Mail-Adresse</p>
-      </div>
-      <div class="uk-width-1-2">
-        <p>Finanzhaie Mannheim GmbH</p>
-        <p>4</p>
-        <p>hans-peter-fünf@mail.com</p>
-      </div>
-    </div>
+    <table class="uk-table uk-table-striped">
+      <tbody>
+        <tr>
+          <td> Unternehemen des Nutzers</td>
+          <td> {{currentCustomer.company.companyName}}</td>
+        </tr>
+        <tr>
+          <td> Unternehemennummer</td>
+          <td> {{currentCustomer.company.companyCode}}</td>
+        </tr>
+        <tr>
+          <td>Adresse des Unternehmens</td>
+          <td>{{currentCustomer.company.address.postCode}} {{currentCustomer.company.address.city}} <br> 
+            {{currentCustomer.company.address.street}} {{currentCustomer.company.address.houseNumber}}
+          </td>
+
+        </tr>
+        <tr>
+          <td> E-Mail des Benutzers</td>
+          <td> {{currentCustomer.email}}</td>
+        </tr>
+      </tbody>
+    </table> 
   </div>
 </div>

@@ -1,8 +1,12 @@
+import { Position } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EChartsOption } from 'echarts';
-import { Depot, DepotPosition } from 'src/app/logic/data-models/data-models';
+import { ToastrService } from 'ngx-toastr';
+import { Depot, DepotPosition, JobWrapper, LpRegister, ReturnShareOrder, Share } from 'src/app/logic/data-models/data-models';
 import { DepotService } from 'src/app/logic/services/depot.service';
+
 
 @Component({
   selector: 'app-depot-detail',
@@ -10,34 +14,84 @@ import { DepotService } from 'src/app/logic/services/depot.service';
   styleUrls: ['./depot-detail.component.scss']
 })
 export class DepotDetailComponent implements OnInit {
+  public lpForm: FormGroup;
 
-  constructor(private depotService: DepotService,
-    private route: ActivatedRoute,) {
-
-  }
   public pieChartOption: EChartsOption;
 
   public depot: Depot;
   public depotId: string;
+  public orderId: string;
 
+  public positionArray: Array<DepotPosition> = [];
+  public returnShareOrderArray: Array<ReturnShareOrder> = [];
+  public jobWrapperArray: Array<JobWrapper> = [];
+  public date: Date;
+  public positionModalLp: DepotPosition;
+
+  constructor(
+    private depotService: DepotService,
+    private route: ActivatedRoute,
+    private toastr: ToastrService,
+  ) { }
 
   ngOnInit(): void {
     this.depotId = this.route.snapshot.paramMap.get('depotId');
-    this.depotService.getDepotById(this.depotId).subscribe(depot => {
 
+    this.depotService.getDepotById(this.depotId).subscribe(depot => {
       this.depot = depot;
+      this.positionArray = depot.positions;
       this.createChart();
       this.createPieChart();
-
     });
-
+    this.getCompletedOrders();
+    this.getPendingOrders();
+    this.createForm();
   }
+
+  public createForm(): void {
+    this.lpForm = new FormGroup({
+      lqQuote: new FormControl('', [Validators.required])
+    });
+  }
+
+  public onLpSubmit(): void {
+    console.log(this.lpForm.value)
+    this.depotService.registerAsLp(this.positionModalLp.depotId,
+      this.positionModalLp.share.shareId,
+      this.lpForm.controls.lqQuote.value).subscribe(
+        (data) => console.log(data),
+        (error) => this.toastr.error('Versuche es später nochmals.', 'LP Registrierung fehlgeschlagen')
+      )
+  }
+
+  public cancelJobWrapper(orderId: string) {
+    this.depotService.deleteOrderBySession(orderId).subscribe(data => console.log(data));
+    this.getPendingOrders();
+  }
+
+  private getCompletedOrders(): void {
+    this.depotService.getCompletedOrdersByDepotIdAndSession(this.depotId).subscribe(data => {
+      this.returnShareOrderArray = data;
+    });
+  }
+
+  private getPendingOrders(): void {
+    this.depotService.getPendingOrdersByDepotIdAndSession(this.depotId).subscribe(data => {
+      this.jobWrapperArray = data;
+    });
+  }
+
+  public openModalLp(position: DepotPosition): void {
+    this.positionModalLp = position;
+  }
+
+
   public createPieChart(): void {
 
     let data: Array<any> = [];
 
-    this.depot.positions?.forEach(element => {
-      let dataObj = { value: element.amount, name: element.share.shareName }
+    this.depot.positions?.forEach(position => {
+      let dataObj = { value: position.amount, name: position.share.shareName }
       data.push(dataObj);
     });
 
@@ -80,7 +134,7 @@ export class DepotDetailComponent implements OnInit {
     }
   }
   public createChart(): void {
-    
+
   }
 
   chartOption: EChartsOption = {
@@ -97,5 +151,7 @@ export class DepotDetailComponent implements OnInit {
         type: 'line',
       },
     ],
-  };
+  }
+
 }
+

@@ -11,7 +11,6 @@ import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 import { TradeComponent } from './components/trade/trade.component';
 import { DepotComponent } from './components/depot/depot.component';
-import { HistoryComponent } from './components/history/history.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
@@ -20,6 +19,13 @@ import { BuyComponent } from './components/buy/buy.component';
 import { ShareComponent } from './components/share/share.component';
 import { DepotDetailComponent } from './components/depot-detail/depot-detail.component';
 import { SearchComponent } from './components/search/search.component';
+import { SellComponent } from './components/sell/sell.component';
+import { RemoveCommaPipe } from './remove-comma.pipe';
+import { ShareDepotOverviewComponent } from './components/_sub-components/share-depot-overview/share-depot-overview.component';
+
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -30,12 +36,14 @@ import { SearchComponent } from './components/search/search.component';
     HomeComponent,
     TradeComponent,
     DepotComponent,
-    HistoryComponent,
     ProfileComponent,
     BuyComponent,
     ShareComponent,
     DepotDetailComponent,
-    SearchComponent    
+    SearchComponent,
+    SellComponent,
+    RemoveCommaPipe,
+    ShareDepotOverviewComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +53,9 @@ import { SearchComponent } from './components/search/search.component';
     Ng2FlatpickrModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts'),
-    })
+    }),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

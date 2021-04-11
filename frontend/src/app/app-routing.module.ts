@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DepotComponent } from './components/depot/depot.component';
 import { DepotDetailComponent } from './components/depot-detail/depot-detail.component';
-import { HistoryComponent } from './components/history/history.component';
 import { HomeComponent } from './components/home/home.component';
 import { BuyComponent } from './components/buy/buy.component';
 import { LoginComponent } from './components/login/login.component';
@@ -12,6 +11,7 @@ import { TradeComponent } from './components/trade/trade.component';
 import { AuthenticationGuard } from './logic/guard/authentication.guard';
 import { ShareComponent } from './components/share/share.component';
 import { SearchComponent } from './components/search/search.component';
+import { SellComponent } from './components/sell/sell.component';
 
 const routes: Routes = [
   {
@@ -45,14 +45,14 @@ const routes: Routes = [
     component: DepotDetailComponent
   },
   {
-    path: 'history',
-    canActivate: [AuthenticationGuard],
-    component: HistoryComponent
-  },
-  {
     path: 'profile',
     canActivate: [AuthenticationGuard],
     component: ProfileComponent
+  },
+  {
+    path: 'share/:shareId',
+    canActivate: [AuthenticationGuard],
+    component: ShareComponent
   },
   {
     path: 'buy/:shareId',
@@ -60,9 +60,9 @@ const routes: Routes = [
     component: BuyComponent
   },
   {
-    path: 'share/:shareId',
+    path: 'sell/:shareId',
     canActivate: [AuthenticationGuard],
-    component: ShareComponent
+    component: SellComponent
   },
   {
     path: 'search/:query',

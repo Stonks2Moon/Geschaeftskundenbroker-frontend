@@ -1,0 +1,155 @@
+<div class="uk-container uk-width-3-4@m uk-width-1-1@s">
+  <div uk-grid>
+    <div class="uk-card uk-card-default uk-width-3-5@l">
+      <div class="uk-card-header">
+        <h3 class="uk-card-title">{{share.shareName}} - Verkaufen</h3>
+      </div>
+
+      <div class="uk-card-body">
+        <form [formGroup]="sellForm" class="uk-form-stacked uk-grid-small" uk-grid>
+          <div class="uk-margin uk-width-1-1">
+            <label class="uk-form-label" for="depotSelect">Depot</label>
+            <select class="uk-select" id="depotSelect" formControlName="depot">
+              <option *ngFor="let depot of depotArray" [ngValue]="depot">{{depot.name}}</option>
+            </select>
+          </div>
+
+          <div class="uk-margin uk-width-1-2">
+            <label class="uk-form-label" for="orderDetail">Order-Art*</label>
+            <select #orderDetail class="uk-select" id="orderDetail" formControlName="orderDetail">
+              <option *ngFor="let orderDetail of orderDetailsArray" [ngValue]="orderDetail">{{orderDetail.name}}
+              </option>
+            </select>
+          </div>
+
+          <div class="uk-margin uk-width-1-2">
+            <div *ngIf="sellValue.orderDetail.value.value !== 'stop' && sellValue.orderDetail.value.value !== 'limit'">
+              <label class="uk-form-label" for="orderPrice">Order-Preis</label>
+              <input class="uk-input" id="orderPrice" type="number" disabled value={{share.lastRecordedValue}}
+                (keyup)="calculateSharePrice()" (change)="calculateSharePrice()">
+            </div>
+            <div *ngIf="sellValue.orderDetail.value.value === 'limit'; else second">
+              <label class="uk-form-label" for="orderPrice">Order-Preis</label>
+              <input class="uk-input" id="orderPrice" type="number" formControlName="limitPrice"
+                (keyup)="calculateSharePrice()" (change)="calculateSharePrice()">
+            </div>
+            <ng-template #second>
+              <div *ngIf="sellValue.orderDetail.value.value === 'stop'" uk-grid>
+                <div class="uk-width-1-2">
+                  <label class="uk-form-label" for="minimum">Minimum</label>
+                  <input class="uk-input" type="number" id="minimum" formControlName="minPrice"
+                    (keyup)="calculateSharePrice()" (change)="calculateSharePrice()">
+                </div>
+                <div class="uk-width-1-2">
+                  <label class="uk-form-label" for="maximum">Maximum</label>
+                  <input class="uk-input" type="number" id="maximum" formControlName="maxPrice"
+                    (keyup)="calculateSharePrice()" (change)="calculateSharePrice()">
+                </div>
+              </div>
+            </ng-template>
+          </div>
+          <div class="uk-margin uk-width-1-2">
+            <label class="uk-form-label" for="expiredDateSelect">Gültig bis</label>
+            <select class="uk-select" id="expiredDateSelect" formControlName="dateOfExpiry">
+              <option *ngFor="let expiredDate of expiredDateArray" [ngValue]="expiredDate">
+                {{expiredDate.name}}</option>
+            </select>
+          </div>
+
+          <div class="uk-margin uk-width-1-2">
+            <label class="uk-form-label" for="algorithmicTradingType">Algorithmisches Handeln:</label>
+            <select class="uk-select" id="algorithmicTradingType" formControlName="algorithmicTradingType">
+              <option *ngFor="let algorithmType of algorithmTypesArray" [ngValue]="algorithmType">
+                {{algorithmType.name}}</option>
+            </select>
+          </div>
+
+          <div class="uk-margin uk-form-controls uk-width-2-5@s">
+            <label class="uk-form-label" for="numberOfShares">Anzahl der Aktien (in Stk.)</label>
+            <input class="uk-input" type="number" id="numberOfShares" (keyup)="calculateSharePrice()"
+              (change)="calculateSharePrice()" formControlName="numberOfShares">
+          </div>
+
+          <div class="uk-margin uk-width-1-5@s">
+            <label class="uk-form-label" for="equal">&nbsp;</label>
+            <div class="uk-input input-equal" id="equal"><i class="fas fa-equals"></i></div>
+          </div>
+
+          <div class="uk-margin uk-width-2-5@s">
+            <label class="uk-form-label" for="number">Wert der Aktien (in €)</label>
+            <input class="uk-input" type="number" id="sharePrice" value={{sharePrice}} formControlName="sharePrice">
+          </div>
+
+
+          <div class="uk-margin uk-width-1-2">
+            <button class="uk-button" (click)="cancel()">Abbrechen</button>
+          </div>
+          <div class="uk-margin uk-width-1-2">
+            <button class="uk-button uk-button-primary uk-align-right" type="submit" href="#modal-center" uk-toggle
+              [disabled]="sellForm.invalid">Verkaufen</button>
+          </div>
+        </form>
+
+        <div id="modal-center" class="uk-flex-top" uk-modal>
+          <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div class="uk-modal-header">
+              <h2 class="uk-modal-title">Übersicht</h2>
+            </div>
+            <div class="uk-modal-body">
+              <table class="uk-table uk-table-striped">
+                <tbody>
+                  <tr>
+                    <td><b>Depot:</b></td>
+                    <td>{{sellValue.depot.value.name}}</td>
+                  </tr>
+                  <tr>
+                    <td><b>Order Art:</b></td>
+                    <td>{{sellValue.orderDetail.value.name}}</td>
+                  </tr>
+                  <tr>
+                    <td><b>Preis:</b></td>
+                    <td>{{currentPrice}} €</td>
+                  </tr>
+                  <tr>
+                    <td><b>Gültig bis:</b></td>
+                    <td>{{sellValue.dateOfExpiry.value.name}}</td>
+                  </tr>
+                  <tr>
+                    <td><b>Anzahl der Aktien:</b></td>
+                    <td>{{sellValue.numberOfShares.value}}</td>
+                  </tr>
+                  <tr>
+                    <td><b>Wert der Aktien:</b></td>
+                    <td>{{sharePrice}} €</td>
+                  </tr>
+                  <tr>
+                    <td><b>Algorithmisches Handeln</b></td>
+                    <td>{{sellValue.algorithmicTradingType.value.name}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="uk-modal-footer uk-text-right">
+                <button class="uk-button uk-button-default uk-modal-close" type="button">Abbrechen</button>
+                <button class="uk-button uk-button-primary uk-modal-close" type="button"
+                  (click)="onSellSubmit()">Weiter</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="uk-card uk-width-2-5@l">
+      <div class="uk-card-header">
+        <h3 class="uk-card-title">Statistik</h3>
+      </div>
+      <div class="uk-card-body">
+        <div echarts [options]="chartOption" class="demo-chart"></div>
+        <div>Aktienkurs</div>
+        <div>Du besitzt xxx Aktien im Wert von xxx €</div>
+      </div>
+    </div>
+  </div>
+</div>

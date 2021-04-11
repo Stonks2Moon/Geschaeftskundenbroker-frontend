@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { EChartsOption } from 'echarts';
+import { Customer, Company, StockExchangePricing} from 'src/app/logic/data-models/data-models';
+import { AuthenticationService } from 'src/app/logic/services/authentication.service';
+import { MetaService } from 'src/app/logic/services/meta.service';
 
 @Component({
   selector: 'app-profile',
@@ -8,26 +10,18 @@ import { EChartsOption } from 'echarts';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor() { }
+  public currentCustomer: Customer;
+  public metaPricing: StockExchangePricing;
 
-  ngOnInit(): void {
+  constructor(
+    private authenticationService: AuthenticationService,
+    private metaService: MetaService,
+  ) { 
+    this.authenticationService.currentCustomer.subscribe(customer => this.currentCustomer = customer);
   }
 
-  chartOption: EChartsOption = {
-    xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    },
-    yAxis: {
-      type: 'value',
-    },
-    series: [
-      {
-        data: [820, 932, 901, 934, 1290, 1330, 1320],
-        type: 'line',
-      },
-    ],
-  };
-
+  ngOnInit(): void {
+    this.metaService.getMetaPricing().subscribe(metaPricing => { console.log(metaPricing);this.metaPricing = metaPricing });
+  }
 
 }

@@ -27,12 +27,12 @@ export class SearchComponent implements OnInit {
   private getSearchResult(): void {
     this.shareService.getAllShares({ search: this.query }).subscribe(
       (data) => {
-        console.log(data);
         this.shareArray = data;
+        this.error = false;
         return data;
       },
       (error) => {
-        error = true;
+        this.error = true;
       }
     )
   }

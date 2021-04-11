@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'https://stonks.multiflexxx.de/api/'
+  // apiUrl: 'http://localhost:3000/'
 };
 
 /*
