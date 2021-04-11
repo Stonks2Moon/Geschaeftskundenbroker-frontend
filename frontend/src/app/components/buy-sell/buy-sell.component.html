@@ -9,7 +9,7 @@
         <form [formGroup]="orderForm" class="uk-form-stacked uk-grid-small" uk-grid>
           <div class="uk-margin uk-width-1-1">
             <label class="uk-form-label" for="depotSelect">Depot</label>
-            <select class="uk-select" id="depotSelect" formControlName="depot">
+            <select class="uk-select" id="depotSelect" formControlName="depot" (change)="getDepotDetail()">
               <option *ngFor="let depot of depotArray" [ngValue]="depot">{{depot.name}}</option>
             </select>
           </div>
@@ -67,8 +67,12 @@
 
           <div class="uk-margin uk-form-controls uk-width-2-5@s">
             <label class="uk-form-label" for="numberOfShares">Anzahl der Aktien (in Stk.)</label>
-            <input class="uk-input" type="number" min="0" id="numberOfShares" (keyup)="calculateSharePrice()"
+            <input class="uk-input" type="number" min="1" ng-max="2" id="numberOfShares" (keyup)="calculateSharePrice()"
               (change)="calculateSharePrice()" formControlName="numberOfShares">
+            <p *ngIf="detailDepot">
+              Sie können nicht mehr als {{getShareAmount() | number: '.' | removeComma}} Aktien von {{share?.shareName}}
+              verkaufen
+            </p>
           </div>
 
           <div class="uk-margin uk-width-1-5@s">

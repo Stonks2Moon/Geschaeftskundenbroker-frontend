@@ -7,6 +7,7 @@ import { ShareService } from 'src/app/logic/services/share.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MetaService } from 'src/app/logic/services/meta.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-buy-sell',
@@ -23,6 +24,7 @@ export class BuySellComponent implements OnInit {
   public algorithmTypesArray: Array<{ name: string, value: number }>;
   public selectedAlgorithm: any;
   public algorithmName: string;
+  public detailDepot: Depot;
 
   // Pop up values
   public currentPrice: number;
@@ -43,6 +45,7 @@ export class BuySellComponent implements OnInit {
     private metaService: MetaService,
     private route: ActivatedRoute,
     private router: Router,
+    private toastr: ToastrService,
   ) { }
 
   public orderDetailsArray: Array<{ name: string, value: string }> = [
@@ -106,6 +109,7 @@ export class BuySellComponent implements OnInit {
     let thirtyDays: Date = new Date(today);
 
     tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setDate(tomorrow.getHours() + 6);
     sevenDays.setDate(sevenDays.getDate() + 7);
     fourteenDays.setDate(sevenDays.getDate() + 14);
     thirtyDays.setDate(sevenDays.getDate() + 30);
@@ -172,46 +176,25 @@ export class BuySellComponent implements OnInit {
       limit: this.orderValue.limitPrice.value,
     };
 
-    console.log(this.orderType);
-
     this.depotService.createOrder(order, this.orderValue.algorithmicTradingType.value.value)
-      .subscribe(data => {
-        this.router.navigate(['depot-detail', this.orderValue.depot.value.depotId]);
-      })
+      .subscribe(
+        (data) =>
+          this.router.navigate(['depot-detail', this.orderValue.depot.value.depotId]),
+        (error) => this.toastr.error(error.error.message, 'Order konnte nicht erstellt werden.')
+      )
   }
 
   public get orderValue(): ControlsMap<AbstractControl> {
     return this.orderForm.controls;
   }
 
-  public onorderDetailSelected(event: any): void {
-    // if selected order type is markt price
-    if (this.orderValue.orderDetail.value == this.orderDetailsArray[0]) {
-      this.orderForm.patchValue({
-        minPrice: "",
-        maxPrice: "",
-        limitPrice: "",
-        numberOfShares: "",
-        sharePrice: ""
-      });
-    }
-    // if selected order type is limit price
-    else if (this.orderValue.orderDetail.value == this.orderDetailsArray[1]) {
-      this.orderForm.patchValue({
-        minPrice: "",
-        maxPrice: "",
-        numberOfShares: "",
-        sharePrice: ""
-      });
-    }
-    // if selected order type is stop price
-    else if (this.orderValue.orderDetail.value == this.orderDetailsArray[2]) {
-      this.orderForm.patchValue({
-        limitPrice: "",
-        numberOfShares: "",
-        sharePrice: ""
-      });
-    }
+  public getDepotDetail(): void {
+    this.depotService.getDepotById(this.orderValue.depot.value.depotId).subscribe(
+      data => this.detailDepot = data)
+  }
+
+  public getShareAmount(): number {
+    return this.detailDepot.positions.find(position => position.share.isin === this.share?.isin).amount
   }
 
   public cancel(): void {
