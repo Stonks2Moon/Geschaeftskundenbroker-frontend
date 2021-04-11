@@ -9,7 +9,7 @@
   </ul>
   <ul class="uk-switcher uk-margin">
     <li>
-      <ng-container *ngIf="positionArray.length > 0">
+      <ng-container *ngIf="positionArray.length > 0; else elseShareBlock">
         <div class="uk-container">
           <div class=" uk-child-width-1-3@s uk-grid-small" uk-grid>
             <div class="uk-width-1-3@m">
@@ -20,7 +20,7 @@
             </div>
           </div>
         </div>
-        <div class="uk-child-width-1-2@s uk-grid-small  " uk-grid>
+        <div class="uk-child-width-1-2@s uk-grid-small" uk-grid>
           <div *ngFor="let position of positionArray">
             <div class="uk-card uk-card-default uk-card-body uk-card-medium uk-padding-small">
               <div class="uk-child-width-1-2@s uk-grid-small" uk-grid>
