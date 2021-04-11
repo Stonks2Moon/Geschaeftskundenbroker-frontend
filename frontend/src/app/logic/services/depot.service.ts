@@ -135,6 +135,7 @@ export class DepotService {
         .pipe(
           tap(
             (data) => {
+              console.log(data)
               return data;
             },
             (error) => {

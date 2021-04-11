@@ -12,4 +12,6 @@ export interface JobWrapper {
   jobType: OrderType,
   market: string,
   isLpJob: boolean,
+  costValue?: number,
+  isLp?: boolean,
 }

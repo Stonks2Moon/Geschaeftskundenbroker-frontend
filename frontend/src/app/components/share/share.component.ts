@@ -109,7 +109,6 @@ export class ShareComponent implements OnInit {
           //daten für mehrere tage
           this.dataAvailable = 2
           this.createDayChart()
-          console.log(this.todayData)
         }
       }
     } else {

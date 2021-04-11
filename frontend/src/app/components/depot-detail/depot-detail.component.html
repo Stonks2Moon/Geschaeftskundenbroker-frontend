@@ -20,7 +20,7 @@
             </div>
           </div>
         </div>
-        <div class="uk-child-width-1-2@s uk-grid-small  " uk-grid>  
+        <div class="uk-child-width-1-2@s uk-grid-small  " uk-grid>
           <div *ngFor="let position of positionArray">
             <div class="uk-card uk-card-default uk-card-body uk-card-medium uk-padding-small">
               <div class="uk-child-width-1-2@s uk-grid-small" uk-grid>
@@ -51,21 +51,24 @@
                   <p> Aktueller Wert einer Aktie</p>
                 </div>
                 <div class="uk-width-2-5 uk-margin-bottom-small">
-                  <p class="uk-align-right">{{ position.share.lastRecordedValue | number: '.2-2' | removeComma}} {{ position.share.currencyCode }}</p>
+                  <p class="uk-align-right">{{ position.share.lastRecordedValue | number: '.2-2' | removeComma}}
+                    {{ position.share.currencyCode }}</p>
                 </div>
                 <hr class="uk-width-1-1 uk-align-right uk-margin-small">
                 <div class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
                   <p>Aktienwert im Depot</p>
                 </div>
                 <div class="uk-width-1-2 uk-margin-bottom-small">
-                  <p class="uk-align-right">{{ position.currentValue | number: '.2-2' | removeComma}} {{ position.share.currencyCode }}
+                  <p class="uk-align-right">{{ position.currentValue | number: '.2-2' | removeComma}}
+                    {{ position.share.currencyCode }}
                   </p>
                 </div>
                 <div class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
                   <p>Investierter Wert</p>
                 </div>
                 <div class="uk-width-1-2 uk-margin-bottom-small">
-                  <p class="uk-align-right">{{ position.costValue | number: '.2-2' | removeComma }} {{ position.share.currencyCode }}</p>
+                  <p class="uk-align-right">{{ position.costValue | number: '.2-2' | removeComma }}
+                    {{ position.share.currencyCode }}</p>
                 </div>
                 <hr class="uk-width-1-1 uk-align-right uk-margin-small">
                 <div class="uk-width-1-2 uk-text-bold uk-margin-bottom-small">
@@ -116,12 +119,12 @@
         </thead>
         <tbody>
           <tr *ngFor="let jobWrapper of jobWrapperArray">
-            <td>{{jobWrapper.placeOrder.type}}</td>
+            <td>{{helperService.getOrderTypeForUi(jobWrapper.placeOrder.type)}}</td>
             <td>{{jobWrapper.share.shareName}}</td>
             <td>{{jobWrapper.exchangeOrderId}}</td>
-            <td>{{jobWrapper.detail}}</td>
+            <td>{{helperService.getOrderDetailForUi(jobWrapper.detail)}}</td>
             <td>{{jobWrapper.placeOrder.amount}}</td>
-            <td>Was ist letzter Preis</td>
+            <td>{{jobWrapper.costValue | number: '.2-2' | removeComma}} {{jobWrapper.share.currencyCode}}</td>
             <td>{{jobWrapper.orderValidity | date:'dd.MM.yyyy'}}</td>
             <td><button class="uk-button uk-button-primary"
                 (click)="cancelOrder(jobWrapper.exchangeOrderId)">Löschen</button>
@@ -144,19 +147,12 @@
         </thead>
         <tbody>
           <tr *ngFor="let returnShareOrder of returnShareOrderArray">
-            <td>{{returnShareOrder.type}}</td>
+            <td>{{helperService.getOrderTypeForUi(returnShareOrder.type)}}</td>
             <td>{{returnShareOrder.share.shareName}}</td>
-            <td>{{returnShareOrder.detail}}</td>
+            <td>{{helperService.getOrderDetailForUi(returnShareOrder.detail)}}</td>
             <td>{{returnShareOrder.amount | number: '.' | removeComma}}</td>
-            <td *ngIf="returnShareOrder.limit !== null; elseIfBlock">{{returnShareOrder?.limit}}</td>
-            <ng-template>
-              <td *ngIf="returnShareOrder.stop !== null; elseBlock" #elseIfBlock>
-                {{returnShareOrder?.stop}}</td>
-            </ng-template>
-            <ng-template>
-              <td *ngIf="returnShareOrder.stopLimit !== null" #elseBlock>{{returnShareOrder?.stopLimit}}
-              </td>
-            </ng-template>
+            <td>{{returnShareOrder.costValue | number: '.2-2' | removeComma}} {{returnShareOrder.share.currencyCode}}
+            </td>
             <td>1234</td>
           </tr>
         </tbody>
@@ -231,11 +227,13 @@
         <div class="uk-width-1-1 ">
           <form [formGroup]="lpForm">
             <div class="uk-margin">
-              <label class="uk-form-label " for="lpPercent">LQ-Quote in %*</label>            
-               <input class="uk-input uk-align-right" id="lpPercent" type="number" formControlName="lqQuote" min="1" max="100" placeholder="Anteil der Liquiditätsaktien">
+              <label class="uk-form-label " for="lpPercent">LQ-Quote in %*</label>
+              <input class="uk-input uk-align-right" id="lpPercent" type="number" formControlName="lqQuote" min="1"
+                max="100" placeholder="Anteil der Liquiditätsaktien">
             </div>
             <div class="uk-margin">
-              <button class="uk-button uk-button-primary uk-modal-close uk-align-right" type="button" [disabled]="lpForm.invalid" (click)="onLpSubmit()">Spender werden</button>
+              <button class="uk-button uk-button-primary uk-modal-close uk-align-right" type="button"
+                [disabled]="lpForm.invalid" (click)="onLpSubmit()">Spender werden</button>
               <button class="uk-button uk-button-default uk-modal-close uk-align-right" type="button">Abbrechen</button>
             </div>
           </form>
@@ -257,7 +255,7 @@
           <div>
             <p>Möchten Sie Ihre Liquiditätsspende von {{ getLp(positionModalLp)?.lqQuote * 100 | number: '.' | removeComma }} % wirklich beenden?</p>
           </div>
-        </div>       
+        </div>
         <div class="uk-width-1-1 ">
           <button class="uk-button uk-button-default uk-modal-close uk-align-right" type="button"  (click)="onEndLpSubmit(getLp(positionModalLp)?.lpId)">Spende beenden</button>
           <button class="uk-button uk-button-primary uk-modal-close uk-align-right" type="button">Abbrechen</button>

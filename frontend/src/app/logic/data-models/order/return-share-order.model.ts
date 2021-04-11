@@ -11,4 +11,6 @@ export interface ReturnShareOrder {
     market?: string,
     orderId?: string,
     share?: Share,
+    costValue?: number,
+    isLp?: boolean,
 }
