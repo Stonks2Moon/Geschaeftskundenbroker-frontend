@@ -2,11 +2,11 @@
   <div uk-grid>
     <div class="uk-card uk-card-default uk-width-3-5@l">
       <div class="uk-card-header">
-        <h3 class="uk-card-title">{{share.shareName}} - Kaufen</h3>
+        <h3 class="uk-card-title">{{share?.shareName}} - {{getOrderTypeForUi()}}</h3>
       </div>
 
       <div class="uk-card-body">
-        <form [formGroup]="buyForm" class="uk-form-stacked uk-grid-small" uk-grid>
+        <form [formGroup]="orderForm" class="uk-form-stacked uk-grid-small" uk-grid>
           <div class="uk-margin uk-width-1-1">
             <label class="uk-form-label" for="depotSelect">Depot</label>
             <select class="uk-select" id="depotSelect" formControlName="depot">
@@ -23,26 +23,27 @@
           </div>
 
           <div class="uk-margin uk-width-1-2">
-            <div *ngIf="buyValue.orderDetail.value.value !== 'stop' && buyValue.orderDetail.value.value !== 'limit'">
+            <div
+              *ngIf="orderValue.orderDetail.value.value !== 'stop' && orderValue.orderDetail.value.value !== 'limit'">
               <label class="uk-form-label" for="orderPrice">Order-Preis</label>
-              <input class="uk-input" id="orderPrice" type="number" disabled value={{share.lastRecordedValue}}
+              <input class="uk-input" id="orderPrice" type="number" disabled value={{share?.lastRecordedValue}}
                 (keyup)="calculateSharePrice()" (change)="calculateSharePrice()">
             </div>
-            <div *ngIf="buyValue.orderDetail.value.value === 'limit'; else second">
+            <div *ngIf="orderValue.orderDetail.value.value === 'limit'; else second">
               <label class="uk-form-label" for="orderPrice">Order-Preis</label>
-              <input class="uk-input" id="orderPrice" type="number" formControlName="limitPrice"
+              <input class="uk-input" id="orderPrice" type="number" min="0" formControlName="limitPrice"
                 (keyup)="calculateSharePrice()" (change)="calculateSharePrice()">
             </div>
             <ng-template #second>
-              <div *ngIf="buyValue.orderDetail.value.value === 'stop'" uk-grid>
+              <div *ngIf="orderValue.orderDetail.value.value === 'stop'" uk-grid>
                 <div class="uk-width-1-2">
                   <label class="uk-form-label" for="minimum">Minimum</label>
-                  <input class="uk-input" type="number" id="minimum" formControlName="minPrice"
+                  <input class="uk-input" type="number" min="0" id="minimum" formControlName="minPrice"
                     (keyup)="calculateSharePrice()" (change)="calculateSharePrice()">
                 </div>
                 <div class="uk-width-1-2">
                   <label class="uk-form-label" for="maximum">Maximum</label>
-                  <input class="uk-input" type="number" id="maximum" formControlName="maxPrice"
+                  <input class="uk-input" type="number" min="0" id="maximum" formControlName="maxPrice"
                     (keyup)="calculateSharePrice()" (change)="calculateSharePrice()">
                 </div>
               </div>
@@ -66,7 +67,7 @@
 
           <div class="uk-margin uk-form-controls uk-width-2-5@s">
             <label class="uk-form-label" for="numberOfShares">Anzahl der Aktien (in Stk.)</label>
-            <input class="uk-input" type="number" id="numberOfShares" (keyup)="calculateSharePrice()"
+            <input class="uk-input" type="number" min="0" id="numberOfShares" (keyup)="calculateSharePrice()"
               (change)="calculateSharePrice()" formControlName="numberOfShares">
           </div>
 
@@ -77,16 +78,16 @@
 
           <div class="uk-margin uk-width-2-5@s">
             <label class="uk-form-label" for="number">Wert der Aktien (in €)</label>
-            <input class="uk-input" type="number" id="sharePrice" value={{sharePrice}} formControlName="sharePrice">
+            <input class="uk-input" type="number" min="0" id="sharePrice" value={{sharePrice}}
+              formControlName="sharePrice">
           </div>
 
-
           <div class="uk-margin uk-width-1-2">
-            <button class="uk-button" (click)="cancel()">Abbrechen</button>
+            <button class="uk-button" type="button" (click)="cancel()">Abbrechen</button>
           </div>
           <div class="uk-margin uk-width-1-2">
             <button class="uk-button uk-button-primary uk-align-right" type="submit" href="#modal-center" uk-toggle
-              [disabled]="buyForm.invalid">Kaufen</button>
+              [disabled]="orderForm.invalid">{{getOrderTypeForUi()}}</button>
           </div>
         </form>
 
@@ -102,11 +103,11 @@
                 <tbody>
                   <tr>
                     <td><b>Depot:</b></td>
-                    <td>{{buyValue.depot.value.name}}</td>
+                    <td>{{orderValue.depot.value.name}}</td>
                   </tr>
                   <tr>
                     <td><b>Order Art:</b></td>
-                    <td>{{buyValue.orderDetail.value.name}}</td>
+                    <td>{{orderValue.orderDetail.value.name}}</td>
                   </tr>
                   <tr>
                     <td><b>Preis:</b></td>
@@ -114,11 +115,11 @@
                   </tr>
                   <tr>
                     <td><b>Gültig bis:</b></td>
-                    <td>{{buyValue.dateOfExpiry.value.name}}</td>
+                    <td>{{orderValue.dateOfExpiry.value.name}}</td>
                   </tr>
                   <tr>
                     <td><b>Anzahl der Aktien:</b></td>
-                    <td>{{buyValue.numberOfShares.value}}</td>
+                    <td>{{orderValue.numberOfShares.value}}</td>
                   </tr>
                   <tr>
                     <td><b>Wert der Aktien:</b></td>
@@ -126,14 +127,14 @@
                   </tr>
                   <tr>
                     <td><b>Algorithmisches Handeln</b></td>
-                    <td>{{buyValue.algorithmicTradingType.value.name}}</td>
+                    <td>{{orderValue.algorithmicTradingType.value.name}}</td>
                   </tr>
                 </tbody>
               </table>
               <div class="uk-modal-footer uk-text-right">
                 <button class="uk-button uk-button-default uk-modal-close" type="button">Abbrechen</button>
                 <button class="uk-button uk-button-primary uk-modal-close" type="button"
-                  (click)="onBuySubmit()">Weiter</button>
+                  (click)="onOrderSubmit()">Weiter</button>
               </div>
             </div>
           </div>

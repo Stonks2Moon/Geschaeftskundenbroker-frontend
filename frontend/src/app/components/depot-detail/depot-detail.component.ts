@@ -59,13 +59,16 @@ export class DepotDetailComponent implements OnInit {
     this.depotService.registerAsLp(this.positionModalLp.depotId,
       this.positionModalLp.share.shareId,
       this.lpForm.controls.lqQuote.value).subscribe(
-        (data) => console.log(data),
-        (error) => this.toastr.error('Versuche es später nochmals.', 'LP Registrierung fehlgeschlagen')
+        (data) => { },
+        (error) => this.toastr.error(error.error.message, 'Registrierung als Liquiditätsspender ist fehlgeschlagen.')
       )
   }
 
-  public cancelJobWrapper(orderId: string) {
-    this.depotService.deleteOrderBySession(orderId).subscribe(data => console.log(data));
+  public cancelOrder(orderId: string) {
+    this.depotService.deleteOrderBySession(orderId).subscribe(
+      (data) => { },
+      (error) => this.toastr.error(error.error.message, 'Löschen der Order fehlgeschlagen.')
+    );
     this.getPendingOrders();
   }
 
