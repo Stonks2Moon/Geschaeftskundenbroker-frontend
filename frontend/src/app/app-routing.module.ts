@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DepotComponent } from './components/depot/depot.component';
 import { DepotDetailComponent } from './components/depot-detail/depot-detail.component';
-import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -24,14 +23,14 @@ const routes: Routes = [
     component: RegisterComponent
   },
   {
-    path: 'home',
-    canActivate: [AuthenticationGuard],
-    component: HomeComponent
-  },
-  {
     path: 'trade',
     canActivate: [AuthenticationGuard],
     component: TradeComponent
+  },
+  {
+    path: 'share/:shareId',
+    canActivate: [AuthenticationGuard],
+    component: ShareComponent
   },
   {
     path: 'trade/:orderType/:shareId',
@@ -52,11 +51,6 @@ const routes: Routes = [
     path: 'profile',
     canActivate: [AuthenticationGuard],
     component: ProfileComponent
-  },
-  {
-    path: 'share/:shareId',
-    canActivate: [AuthenticationGuard],
-    component: ShareComponent
   },
   {
     path: 'search/:query',

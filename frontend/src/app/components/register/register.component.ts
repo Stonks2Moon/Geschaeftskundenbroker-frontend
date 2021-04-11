@@ -60,7 +60,7 @@ export class RegisterComponent implements OnInit {
   public onRegisterSubmit(): void {
     this.authenticationService.signUp(this.registerValue).subscribe(
       (data) => {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/depot']);
         this.error = false;
       },
       (error) => {

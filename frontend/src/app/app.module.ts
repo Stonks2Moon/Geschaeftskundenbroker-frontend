@@ -11,7 +11,6 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './components/nav/nav.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { HomeComponent } from './components/home/home.component';
 import { TradeComponent } from './components/trade/trade.component';
 import { DepotComponent } from './components/depot/depot.component';
 import { ProfileComponent } from './components/profile/profile.component';
@@ -32,7 +31,6 @@ import { BuySellComponent } from './components/buy-sell/buy-sell.component';
     NavComponent,
     LoginComponent,
     RegisterComponent,
-    HomeComponent,
     TradeComponent,
     DepotComponent,
     ProfileComponent,
