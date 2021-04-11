@@ -35,7 +35,6 @@ export class DepotDetailComponent implements OnInit {
   public lpPositionArray: Array<LpPosition> = [];
   public date: Date;
   public positionModalLp: DepotPosition;
-  public positionLp: LpPosition;
 
   constructor(
     public helperService: HelperService,
@@ -91,14 +90,17 @@ export class DepotDetailComponent implements OnInit {
   public onLpSubmit(): void {
     this.depotService.registerAsLp(this.positionModalLp.depotId,
       this.positionModalLp.share.shareId,
-      this.lpForm.controls.lqQuote.value / 100).subscribe(
-        (data) => { },
+      this.lpForm.controls.lqQuote.value/100).subscribe(       
+        (data) => this.getLps(),
         (error) => this.toastr.error(error.error.message, 'Registrierung als Liquiditätsspender ist fehlgeschlagen.')
       )
   }
 
-  public onEndLpSubmit(): void {
-    // this.depotService.cancelLp(lpId).subscribe((data) => {})
+  public onEndLpSubmit(lpId: number): void {
+    this.depotService.cancelLp(lpId).subscribe(
+      (data) => this.getLps(),
+      (error) => this.toastr.error(error.error.message, 'Liquiditätsspende wurde nicht beendet')
+      )
   }
 
   public cancelOrder(orderId: string) {
@@ -129,19 +131,17 @@ export class DepotDetailComponent implements OnInit {
     );
   }
 
-  public isLp(position: DepotPosition): boolean {
+  public getLp(position: DepotPosition): LpPosition {
     let lpPosition = this.lpPositionArray.find(lpPosition => lpPosition.share.isin == position.share.isin);
     if (lpPosition) {
-      this.positionLp = lpPosition;
-      return true;
+      return lpPosition;
     }
-    return false;
+    return null;
   }
 
   public openModalLp(position: DepotPosition): void {
     this.positionModalLp = position;
   }
-
 
   public createPieChart(): void {
 
