@@ -163,7 +163,7 @@ export class BuySellComponent implements OnInit {
   }
 
   public isValidForm(): boolean {
-    return (this.orderForm.invalid || (this.getShareAmount() < this.orderValue.numberOfShares.value))
+    return (this.orderForm.invalid || ((this.getShareAmount() < this.orderValue.numberOfShares.value) && this.orderType == OrderType.sell))
   }
 
   public cancel(): void {
