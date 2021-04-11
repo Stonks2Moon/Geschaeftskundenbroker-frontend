@@ -47,7 +47,6 @@ export class HelperService {
         data => {
           metaConst = data;
           algorithmTypesArray = this.buildAlgArray(algorithmTypesArray, metaConst)
-          console.log(algorithmTypesArray)
           return algorithmTypesArray;
         }
       )

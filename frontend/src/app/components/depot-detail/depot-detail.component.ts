@@ -103,10 +103,12 @@ export class DepotDetailComponent implements OnInit {
 
   public cancelOrder(orderId: string) {
     this.depotService.deleteOrderBySession(orderId).subscribe(
-      (data) => { },
-      (error) => this.toastr.error(error.error.message, 'Löschen der Order fehlgeschlagen.')
+      (data) => { this.getPendingOrders() },
+      (error) => {
+        this.getPendingOrders()
+        this.toastr.error(error.error.message, 'Löschen der Order fehlgeschlagen.')
+      }
     );
-    this.getPendingOrders();
   }
 
   private getCompletedOrders(): void {

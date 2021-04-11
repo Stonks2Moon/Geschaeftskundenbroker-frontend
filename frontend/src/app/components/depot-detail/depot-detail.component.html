@@ -118,7 +118,7 @@
             <td>{{jobWrapper.exchangeOrderId}}</td>
             <td>{{helperService.getOrderDetailForUi(jobWrapper.detail)}}</td>
             <td>{{jobWrapper.placeOrder.amount}}</td>
-            <td>Was ist letzter Preis</td>
+            <td>{{jobWrapper.costValue | number: '.2-2' | removeComma}} {{jobWrapper.share.currencyCode}}</td>
             <td>{{jobWrapper.orderValidity | date:'dd.MM.yyyy'}}</td>
             <td><button class="uk-button uk-button-primary"
                 (click)="cancelOrder(jobWrapper.exchangeOrderId)">Löschen</button>
@@ -141,19 +141,12 @@
         </thead>
         <tbody>
           <tr *ngFor="let returnShareOrder of returnShareOrderArray">
-            <td>{{returnShareOrder.type}}</td>
+            <td>{{helperService.getOrderTypeForUi(returnShareOrder.type)}}</td>
             <td>{{returnShareOrder.share.shareName}}</td>
-            <td>{{returnShareOrder.detail}}</td>
+            <td>{{helperService.getOrderDetailForUi(returnShareOrder.detail)}}</td>
             <td>{{returnShareOrder.amount | number: '.' | removeComma}}</td>
-            <td *ngIf="returnShareOrder.limit !== null; elseIfBlock">{{returnShareOrder?.limit}}</td>
-            <ng-template>
-              <td *ngIf="returnShareOrder.stop !== null; elseBlock" #elseIfBlock>
-                {{returnShareOrder?.stop}}</td>
-            </ng-template>
-            <ng-template>
-              <td *ngIf="returnShareOrder.stopLimit !== null" #elseBlock>{{returnShareOrder?.stopLimit}}
-              </td>
-            </ng-template>
+            <td>{{returnShareOrder.costValue | number: '.2-2' | removeComma}} {{returnShareOrder.share.currencyCode}}
+            </td>
             <td>1234</td>
           </tr>
         </tbody>
