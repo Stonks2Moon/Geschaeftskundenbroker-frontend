@@ -91,7 +91,7 @@
                     <p>Liquiditätsquote</p>
                   </div>
                   <div class="uk-width-1-2 uk-margin-bottom-small">
-                    <p class="uk-align-right">{{ getLp(position)?.lqQuote | number: '.2-2' | removeComma }}
+                    <p class="uk-align-right">{{ getLp(position)?.lqQuote*100 | number: '.' | removeComma }}
                       %</p>
                   </div>
                 </ng-container>
