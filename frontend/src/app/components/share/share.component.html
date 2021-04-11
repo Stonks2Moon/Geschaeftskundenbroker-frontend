@@ -1,9 +1,11 @@
 <div class="uk-container">
   <h2 class="uk-align-left uk-h3">{{share?.shareName}}</h2>
 
-  <a class="uk-button uk-button-primary uk-align-right" [routerLink]="['/buy', share?.shareId]">Aktien kaufen</a>
+  <a class="uk-button uk-button-primary uk-align-right" [routerLink]="['/trade', 'buy', share?.shareId]">Aktien
+    kaufen</a>
 
-  <a class="uk-button uk-button-primary uk-align-right" [routerLink]="['/sell', share?.shareId]">Aktien verkaufen</a>
+  <a class="uk-button uk-button-primary uk-align-right" [routerLink]="['/trade', 'sell', share?.shareId]">Aktien
+    verkaufen</a>
 
 </div>
 
@@ -12,27 +14,28 @@
 </div>
 
 <div *ngIf="dataAvailable == 3">
-    <div class="uk-container">
-      <div echarts [options]="chartOption" class="demo-chart"></div>
-    </div>
+  <div class="uk-container">
+    <div echarts [options]="chartOption" class="demo-chart"></div>
+  </div>
 </div>
 <div *ngIf="dataAvailable == 2">
   <div class="uk-container">
     <div uk-switcher="animation: uk-animation-fade; toggle: > *" class="uk-align-right">
-      <button class="uk-button uk-button-default" type="button" (click)="changeView($event)" id="history">History</button>
+      <button class="uk-button uk-button-default" type="button" (click)="changeView($event)"
+        id="history">History</button>
       <button class="uk-button uk-button-default" type="button" (click)="changeView($event)" id="today">Today</button>
     </div>
   </div>
   <div *ngIf="dayView">
-  <div class="uk-container">
-    <div echarts [options]="dayChartOption" class="demo-chart"></div>
-  </div>
+    <div class="uk-container">
+      <div echarts [options]="dayChartOption" class="demo-chart"></div>
+    </div>
   </div>
   <div *ngIf="!dayView">
     <div class="uk-container">
       <div echarts [options]="chartOption" class="demo-chart"></div>
     </div>
-    </div>
+  </div>
 </div>
 <div *ngIf="dataAvailable == 1">
   <div class="uk-container">
@@ -46,13 +49,10 @@
 </div>
 
 
-<div class="uk-container">
+<div class="uk-container uk-margin">
   <hr>
 </div>
-<div class="uk-container uk-margin-small">
-  <h2 class="uk-align-left">Statistik</h2>
-  <a class="uk-button uk-button-primary default uk-align-right" href="#">Liquiditätsspender werden</a>
-</div>
+
 <div class="uk-container">
   <div class="uk-grid-small uk-child-width-1-2@s" uk-grid>
     <div class="uk-card">
@@ -78,9 +78,9 @@
           <li>
             <p>{{statistics?.percent | number: '.2-2' | removeComma}} %</p>
           </li>
-        </ul>    
+        </ul>
       </div>
-      
+
     </div>
     <div class="uk-card">
       <div class="uk-grid-match uk-child-width-1-2@m" uk-grid>
@@ -105,9 +105,9 @@
           <li>
             <p>{{share?.currencyName}} ({{share?.currencyCode}})</p>
           </li>
-        </ul>    
+        </ul>
       </div>
-      
+
     </div>
   </div>
 </div>

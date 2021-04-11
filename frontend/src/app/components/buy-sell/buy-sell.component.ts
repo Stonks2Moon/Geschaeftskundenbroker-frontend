@@ -1,34 +1,37 @@
 import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import { Location } from '@angular/common';
-import { ControlsMap, Depot, HistoricalData, MetaConst, OrderDetail, OrderType, PlaceShareOrder, Share } from 'src/app/logic/data-models/data-models';
+import { ControlsMap, Depot, HistoricalData, OrderDetail, OrderType, PlaceShareOrder, Share } from 'src/app/logic/data-models/data-models';
 import { DepotService } from 'src/app/logic/services/depot.service';
 import { ShareService } from 'src/app/logic/services/share.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MetaService } from 'src/app/logic/services/meta.service';
+import { ToastrService } from 'ngx-toastr';
+import { HelperService } from 'src/app/logic/services/helper.service';
 
 @Component({
-  selector: 'app-sell',
-  templateUrl: './sell.component.html',
-  styleUrls: ['./sell.component.scss']
+  selector: 'app-buy-sell',
+  templateUrl: './buy-sell.component.html',
+  styleUrls: ['./buy-sell.component.scss']
 })
-export class SellComponent implements OnInit {
-  public sellForm: FormGroup;
-  public chartOption: EChartsOption;
-  public depotArray: Array<Depot> = [];
+export class BuySellComponent implements OnInit {
+  public orderForm: FormGroup;
+  public orderType: OrderType;
   public share: Share;
-  public metaConst: MetaConst;
+  public detailDepot: Depot;
+
+  public depotArray: Array<Depot> = [];
+  public orderDetailsArray: Array<{ name: string, value: string }>;
   public expiredDateArray: Array<{ name: string, value: Date }>;
   public algorithmTypesArray: Array<{ name: string, value: number }>;
-  public selectedAlgorithm: any;
-  public algorithmName: string;
 
   // Pop up values
   public currentPrice: number;
   public sharePrice: number;
 
-  // statistic values
+  // statistic values 
+  public chartOption: EChartsOption;
   private historicalData: HistoricalData;
   private fromDate: Date = new Date();
   private toDate: Date = new Date();
@@ -36,36 +39,27 @@ export class SellComponent implements OnInit {
 
 
   constructor(
-    private location: Location,
+    public helperService: HelperService,
+    private _location: Location,
     private depotService: DepotService,
     private shareService: ShareService,
-    private metaService: MetaService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {
-  }
+    private toastr: ToastrService,
+  ) { }
 
-  public orderDetailsArray: Array<{ name: string, value: string }> = [
-    {
-      name: "Markt Preis",
-      value: OrderDetail.market
-    },
-    {
-      name: "Limit Preis",
-      value: OrderDetail.limit
-    },
-    {
-      name: "Stop Preis",
-      value: OrderDetail.stop
-    },
-  ];
 
   ngOnInit(): void {
     this.fromDate.setDate(this.fromDate.getDate() - 30)
+    this.orderType = OrderType[this.route.snapshot.paramMap.get('orderType')];
+    this.shareId = this.route.snapshot.paramMap.get('shareId');
+    this.orderDetailsArray = this.helperService.orderDetailsArray
+    this.helperService.getAlgArray()
+      .then(data => this.algorithmTypesArray = data)
+
     this.depotService.getAllDepotsBySession().subscribe(depots => {
       this.depotArray = depots;
     });
-    this.shareId = this.route.snapshot.paramMap.get('shareId');
     this.shareService.getShareById(this.shareId).subscribe(share => this.share = share);
     this.shareService.getShareHistory({ shareId: this.shareId, fromDate: this.fromDate, toDate: this.toDate })
       .toPromise()
@@ -75,16 +69,9 @@ export class SellComponent implements OnInit {
           this.createChart();
         }
       );
-    this.metaService.getMetaConsts()
-      .toPromise()
-      .then(
-        data => {
-          this.metaConst = data;
-          this.buildAlgArray()
-        }
-      )
     this.buildExpiredDateArray();
     this.createForm();
+
   }
 
   buildExpiredDateArray() {
@@ -95,6 +82,7 @@ export class SellComponent implements OnInit {
     let thirtyDays: Date = new Date(today);
 
     tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setDate(tomorrow.getHours() + 6);
     sevenDays.setDate(sevenDays.getDate() + 7);
     fourteenDays.setDate(sevenDays.getDate() + 14);
     thirtyDays.setDate(sevenDays.getDate() + 30);
@@ -107,118 +95,93 @@ export class SellComponent implements OnInit {
     ];
   }
 
-  private buildAlgArray() {
-    this.algorithmTypesArray = [
-      {
-        name: "Kein Algorithmus",
-        value: this.metaConst.ALGORITHMS.NO_ALG
-      },
-      {
-        name: "Split Algorithmus",
-        value: this.metaConst.ALGORITHMS.SPLIT_ALG
-      }
-    ];
-  }
-
   public createForm(): void {
-    this.sellForm = new FormGroup({
+    this.orderForm = new FormGroup({
       depot: new FormControl('', Validators.required),
       orderDetail: new FormControl('', Validators.required),
       sharePrice: new FormControl({ value: '', disabled: true }, Validators.required),
       limitPrice: new FormControl({ value: 0, disabled: true }, [Validators.required, Validators.min(1)]),
-      maxPrice: new FormControl({ value: '', disabled: true }, Validators.required),
-      minPrice: new FormControl({ value: '', disabled: true }, Validators.required),
+      maxPrice: new FormControl({ value: 0, disabled: true }, Validators.required),
+      minPrice: new FormControl({ value: 0, disabled: true }, Validators.required),
       dateOfExpiry: new FormControl('', Validators.required),
-      numberOfShares: new FormControl('', Validators.required),
+      numberOfShares: new FormControl(0, [Validators.required, Validators.min(1), Validators.max(100000)]),
       algorithmicTradingType: new FormControl('', Validators.required),
     });
 
-    this.sellForm.controls.orderDetail.valueChanges.subscribe(orderDetail => {
+    this.orderForm.controls.orderDetail.valueChanges.subscribe(orderDetail => {
       if (orderDetail == this.orderDetailsArray[0]) {
-        this.sellForm.controls.limitPrice.disable();
-        this.sellForm.controls.maxPrice.disable();
-        this.sellForm.controls.minPrice.disable();
+        this.orderForm.controls.limitPrice.disable();
+        this.orderForm.controls.maxPrice.disable();
+        this.orderForm.controls.minPrice.disable();
       } else if (orderDetail == this.orderDetailsArray[1]) {
-        this.sellForm.controls.limitPrice.enable();
-        this.sellForm.controls.maxPrice.disable();
-        this.sellForm.controls.minPrice.disable();
+        this.orderForm.controls.limitPrice.enable();
+        this.orderForm.controls.maxPrice.disable();
+        this.orderForm.controls.minPrice.disable();
       } else if (orderDetail == this.orderDetailsArray[2]) {
-        this.sellForm.controls.limitPrice.disable();
-        this.sellForm.controls.maxPrice.enable();
-        this.sellForm.controls.minPrice.enable();
+        this.orderForm.controls.limitPrice.disable();
+        this.orderForm.controls.maxPrice.enable();
+        this.orderForm.controls.minPrice.enable();
       }
     });
   }
 
-  public onSellSubmit(): void {
+  public onOrderSubmit(): void {
     let order: PlaceShareOrder = {
       shareId: this.shareId,
-      depotId: this.sellValue.depot.value.depotId,
-      type: OrderType.sell,
-      detail: this.sellValue.orderDetail.value.value,
-      amount: this.sellValue.numberOfShares.value,
-      validity: this.sellValue.dateOfExpiry.value.value.toISOString().slice(0, 19).replace('T', ' '),
-      limit: this.sellValue.limitPrice.value,
+      depotId: this.orderValue.depot.value.depotId,
+      type: this.orderType,
+      detail: this.orderValue.orderDetail.value.value,
+      amount: this.orderValue.numberOfShares.value,
+      validity: this.orderValue.dateOfExpiry.value.value.toISOString().slice(0, 19).replace('T', ' '),
+      limit: this.orderValue.limitPrice.value,
     };
 
-    this.depotService.createOrder(order, this.sellValue.algorithmicTradingType.value.value)
-      .subscribe(data => {
-        console.log(data)
-        this.router.navigate(['depot-detail', this.sellValue.depot.value.depotId]);
-      })
+    this.depotService.createOrder(order, this.orderValue.algorithmicTradingType.value.value)
+      .subscribe(
+        (data) => {
+          this.router.navigate(['depot-detail', this.orderValue.depot.value.depotId]);
+          this.toastr.success('', 'Order wurde platziert.')
+        },
+        (error) => this.toastr.error(error.error.message, 'Order konnte nicht erstellt werden.')
+      )
   }
 
-  public get sellValue(): ControlsMap<AbstractControl> {
-    return this.sellForm.controls;
+  public get orderValue(): ControlsMap<AbstractControl> {
+    return this.orderForm.controls;
   }
 
-  public onorderDetailSelected(event: any): void {
-    // if selected order type is markt price
-    if (this.sellValue.orderDetail.value == this.orderDetailsArray[0]) {
-      this.sellForm.patchValue({
-        minPrice: "",
-        maxPrice: "",
-        limitPrice: "",
-        numberOfShares: "",
-        sharePrice: ""
-      });
-    }
-    // if selected order type is limit price
-    else if (this.sellValue.orderDetail.value == this.orderDetailsArray[1]) {
-      this.sellForm.patchValue({
-        minPrice: "",
-        maxPrice: "",
-        numberOfShares: "",
-        sharePrice: ""
-      });
-    }
-    // if selected order type is stop price
-    else if (this.sellValue.orderDetail.value == this.orderDetailsArray[2]) {
-      this.sellForm.patchValue({
-        limitPrice: "",
-        numberOfShares: "",
-        sharePrice: ""
-      });
-    }
+  public getDepotDetail(): void {
+    this.depotService.getDepotById(this.orderValue.depot.value.depotId).subscribe(
+      data => this.detailDepot = data)
   }
 
-  // TODO
+  public getShareAmount(): number {
+    if (this.detailDepot) {
+      return this.detailDepot.positions.find(position => position.share.isin === this.share?.isin).amount
+    }
+    return 100001;
+  }
+
+  public isValidForm(): boolean {
+    return (this.orderForm.invalid || (this.getShareAmount() < this.orderValue.numberOfShares.value))
+  }
+
   public cancel(): void {
-    //this.location.back()
+    this._location.back()
   }
 
   public calculateSharePrice(): void {
-    if (this.sellValue.orderDetail.value == this.orderDetailsArray[1]) {
-      this.currentPrice = +this.sellForm.controls.limitPrice.value;
-    } else if (this.sellValue.orderDetail.value == this.orderDetailsArray[2]) {
-      let maxPrice: number = +this.sellForm.controls.maxPrice.value;
-      let minPrice: number = +this.sellForm.controls.minPrice.value;
+    if (this.orderValue.orderDetail.value == this.orderDetailsArray[1]) {
+      this.currentPrice = +this.orderForm.controls.limitPrice.value;
+    } else if (this.orderValue.orderDetail.value == this.orderDetailsArray[2]) {
+      let maxPrice: number = +this.orderForm.controls.maxPrice.value;
+      let minPrice: number = +this.orderForm.controls.minPrice.value;
       this.currentPrice = (maxPrice + minPrice) / 2;
     } else {
       this.currentPrice = this.share.lastRecordedValue;
     }
 
-    this.sharePrice = this.sellForm.controls.numberOfShares.value * this.currentPrice;
+    this.sharePrice = this.orderForm.controls.numberOfShares.value * this.currentPrice;
   }
 
   public createChart(): void {
@@ -279,5 +242,4 @@ export class SellComponent implements OnInit {
       ],
     };
   }
-
 }

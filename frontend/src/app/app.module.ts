@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,19 +16,15 @@ import { TradeComponent } from './components/trade/trade.component';
 import { DepotComponent } from './components/depot/depot.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
-import { Ng2FlatpickrModule } from 'ng2-flatpickr';
-import { NgxEchartsModule } from 'ngx-echarts';
-import { BuyComponent } from './components/buy/buy.component';
 import { ShareComponent } from './components/share/share.component';
 import { DepotDetailComponent } from './components/depot-detail/depot-detail.component';
 import { SearchComponent } from './components/search/search.component';
-import { SellComponent } from './components/sell/sell.component';
 import { RemoveCommaPipe } from './remove-comma.pipe';
 import { ShareDepotOverviewComponent } from './components/_sub-components/share-depot-overview/share-depot-overview.component';
+import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ngx-toastr';
+
 
 @NgModule({
   declarations: [
@@ -37,25 +36,26 @@ import { ToastrModule } from 'ngx-toastr';
     TradeComponent,
     DepotComponent,
     ProfileComponent,
-    BuyComponent,
     ShareComponent,
     DepotDetailComponent,
     SearchComponent,
-    SellComponent,
     RemoveCommaPipe,
-    ShareDepotOverviewComponent
+    ShareDepotOverviewComponent,
+    BuySellComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    Ng2FlatpickrModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts'),
     }),
     BrowserAnimationsModule,
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({
+      timeOut: 10000,
+      preventDuplicates: true,
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]
