@@ -141,10 +141,10 @@ export class BuySellComponent implements OnInit {
       orderDetail: new FormControl('', Validators.required),
       sharePrice: new FormControl({ value: '', disabled: true }, Validators.required),
       limitPrice: new FormControl({ value: 0, disabled: true }, [Validators.required, Validators.min(1)]),
-      maxPrice: new FormControl({ value: '', disabled: true }, Validators.required),
-      minPrice: new FormControl({ value: '', disabled: true }, Validators.required),
+      maxPrice: new FormControl({ value: 0, disabled: true }, Validators.required),
+      minPrice: new FormControl({ value: 0, disabled: true }, Validators.required),
       dateOfExpiry: new FormControl('', Validators.required),
-      numberOfShares: new FormControl('', Validators.required),
+      numberOfShares: new FormControl(0, [Validators.required, Validators.min(1), Validators.max(100000)]),
       algorithmicTradingType: new FormControl('', Validators.required),
     });
 
@@ -178,8 +178,10 @@ export class BuySellComponent implements OnInit {
 
     this.depotService.createOrder(order, this.orderValue.algorithmicTradingType.value.value)
       .subscribe(
-        (data) =>
-          this.router.navigate(['depot-detail', this.orderValue.depot.value.depotId]),
+        (data) => {
+          this.router.navigate(['depot-detail', this.orderValue.depot.value.depotId]);
+          this.toastr.success('', 'Order wurde platziert.')
+        },
         (error) => this.toastr.error(error.error.message, 'Order konnte nicht erstellt werden.')
       )
   }
@@ -194,7 +196,14 @@ export class BuySellComponent implements OnInit {
   }
 
   public getShareAmount(): number {
-    return this.detailDepot.positions.find(position => position.share.isin === this.share?.isin).amount
+    if (this.detailDepot) {
+      return this.detailDepot.positions.find(position => position.share.isin === this.share?.isin).amount
+    }
+    return 100001;
+  }
+
+  public isValidForm(): boolean {
+    return (this.orderForm.invalid || (this.getShareAmount() < this.orderValue.numberOfShares.value))
   }
 
   public cancel(): void {
