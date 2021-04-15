@@ -48,7 +48,7 @@ export class AuthenticationGuard implements CanActivate {
     this.authenticationService.signInWithSession(session).subscribe(
       (data) => {
         if (url === '/' || url === '/register' || url === '/login') {
-          this.router.navigate(['/home']);
+          this.router.navigate(['/depot']);
         } else {
           this.router.navigate([url]);
         }

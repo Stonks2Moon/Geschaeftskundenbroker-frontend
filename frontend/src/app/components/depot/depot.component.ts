@@ -17,9 +17,7 @@ export class DepotComponent implements OnInit {
   constructor(private depotService: DepotService) { }
 
   ngOnInit(): void {
-    this.depotService.getAllDepotsBySession().subscribe(depots => {
-      this.depotArray = depots;
-    });
+    this.getDepots();
     this.createForm();
   }
 
@@ -32,10 +30,11 @@ export class DepotComponent implements OnInit {
   public get depotValue(): ControlsMap<AbstractControl> {
     return this.depotForm.controls;
   }
+  
   public onDepotSubmit(): void {
     this.depotService.createDepot(this.depotValue).subscribe(
       (data) => {
-        console.log(data);
+        this.getDepots();
         this.error = false;
       },
       (error) => {
@@ -44,5 +43,10 @@ export class DepotComponent implements OnInit {
     );
   }
 
+  private getDepots(): void {
+    this.depotService.getAllDepotsBySession().subscribe(depots => {
+      this.depotArray = depots;
+    });
+  }
 
 }

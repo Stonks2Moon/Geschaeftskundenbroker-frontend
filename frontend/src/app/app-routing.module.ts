@@ -2,9 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DepotComponent } from './components/depot/depot.component';
 import { DepotDetailComponent } from './components/depot-detail/depot-detail.component';
-import { HistoryComponent } from './components/history/history.component';
-import { HomeComponent } from './components/home/home.component';
-import { BuyComponent } from './components/buy/buy.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -12,7 +9,7 @@ import { TradeComponent } from './components/trade/trade.component';
 import { AuthenticationGuard } from './logic/guard/authentication.guard';
 import { ShareComponent } from './components/share/share.component';
 import { SearchComponent } from './components/search/search.component';
-import { SellComponent } from './components/sell/sell.component';
+import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 
 const routes: Routes = [
   {
@@ -26,14 +23,19 @@ const routes: Routes = [
     component: RegisterComponent
   },
   {
-    path: 'home',
-    canActivate: [AuthenticationGuard],
-    component: HomeComponent
-  },
-  {
     path: 'trade',
     canActivate: [AuthenticationGuard],
     component: TradeComponent
+  },
+  {
+    path: 'share/:shareId',
+    canActivate: [AuthenticationGuard],
+    component: ShareComponent
+  },
+  {
+    path: 'trade/:orderType/:shareId',
+    canActivate: [AuthenticationGuard],
+    component: BuySellComponent
   },
   {
     path: 'depot',
@@ -46,29 +48,9 @@ const routes: Routes = [
     component: DepotDetailComponent
   },
   {
-    path: 'history',
-    canActivate: [AuthenticationGuard],
-    component: HistoryComponent
-  },
-  {
     path: 'profile',
     canActivate: [AuthenticationGuard],
     component: ProfileComponent
-  },
-  {
-    path: 'share/:shareId',
-    canActivate: [AuthenticationGuard],
-    component: ShareComponent
-  },
-  {
-    path: 'buy/:shareId',
-    canActivate: [AuthenticationGuard],
-    component: BuyComponent
-  },
-  {
-    path: 'sell/:shareId',
-    canActivate: [AuthenticationGuard],
-    component: SellComponent
   },
   {
     path: 'search/:query',

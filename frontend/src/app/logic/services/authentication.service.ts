@@ -65,7 +65,7 @@ export class AuthenticationService {
 
   public signUp(registerValue: ControlsMap<AbstractControl>): Observable<{ session: CustomerSession, customer: Customer }> {
 
-    const customer: Customer = { firstName: registerValue.firstName.value, lastName: registerValue.firstName.value, email: registerValue.email.value, password: registerValue.password.value, companyCode: registerValue.companyCode.value }
+    const customer: Customer = { firstName: registerValue.firstName.value, lastName: registerValue.lastName.value, email: registerValue.email.value, password: registerValue.password.value, companyCode: registerValue.companyCode.value }
 
     return this.http.put<{ session: CustomerSession, customer: Customer }>(`${this.apiUrl}customer`, customer)
       .pipe(

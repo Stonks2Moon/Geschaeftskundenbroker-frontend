@@ -5,6 +5,7 @@ export interface PlaceShareOrder {
     amount: number,
     type: OrderType,
     detail: OrderDetail,
+    validity: string,
     limit?: number,
     stop?: number,
     stopLimit?: number,

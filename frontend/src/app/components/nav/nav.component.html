@@ -2,9 +2,6 @@
 
   <div class="nav-overlay uk-navbar-left">
     <a class="uk-navbar-item uk-logo">{{currentCustomer.company.companyName}}</a>
-    <ul class="uk-navbar-nav">
-      <li routerLinkActive="uk-active"><a [routerLink]="['/home']">Home</a></li>
-    </ul>
   </div>
 
   <div class="uk-navbar-right">
@@ -20,9 +17,8 @@
     </div>
 
     <ul class="uk-navbar-nav">
-      <li routerLinkActive="uk-active"><a [routerLink]="['/trade']">Handel</a></li>
       <li routerLinkActive="uk-active"><a [routerLink]="['/depot']">Depot</a></li>
-      <li routerLinkActive="uk-active"><a [routerLink]="['/history']">Historie</a></li>
+      <li routerLinkActive="uk-active"><a [routerLink]="['/trade']">Handel</a></li>
       <li routerLinkActive="uk-active"><a [routerLink]="['/profile']">Profil</a></li>
     </ul>
 

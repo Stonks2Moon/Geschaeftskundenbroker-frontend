@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
   public onLoginSubmit(): void {
     this.authenticationService.signInWithEmailAndPassword(this.loginValue).subscribe(
       (data) => {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/depot']);
         this.error = false;
       },
       (error) => {
