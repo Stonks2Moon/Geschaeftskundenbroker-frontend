@@ -1,31 +1,65 @@
-<div class="uk-card uk-width-3-4@m uk-width-1-1@s uk-position-center uk-card-default">
-  <div class="uk-card-header ">
-    <span class="uk-align-left" uk-icon="icon: user; ratio:4"></span>
-    <h3 class="uk-align-left uk-card-title uk-margin-top">{{currentCustomer.firstName}} {{currentCustomer.lastName}}</h3>
-  </div>
-  <div class="uk-card-body">
-    <table class="uk-table uk-table-striped">
-      <tbody>
-        <tr>
-          <td> Unternehemen des Nutzers</td>
-          <td> {{currentCustomer.company.companyName}}</td>
-        </tr>
-        <tr>
-          <td> Unternehemennummer</td>
-          <td> {{currentCustomer.company.companyCode}}</td>
-        </tr>
-        <tr>
-          <td>Adresse des Unternehmens</td>
-          <td>{{currentCustomer.company.address.postCode}} {{currentCustomer.company.address.city}} <br> 
-            {{currentCustomer.company.address.street}} {{currentCustomer.company.address.houseNumber}}
-          </td>
+<div class="uk-container uk-width-3-4@m uk-width-1-1@s">
+  <div uk-grid>
+  <div class="uk-card uk-card-default uk-width-1-1">
+    <div class="uk-card-header ">
+      <span class="uk-align-left" uk-icon="icon: user; ratio:4"></span>
+      <h3 class="uk-align-left uk-card-title uk-margin-top">{{currentCustomer.firstName}} {{currentCustomer.lastName}}
+      </h3>
+    </div>
+    <div class="uk-card-body">
+      <table class="uk-table uk-table-striped">
+        <tbody>
+          <tr>
+            <td> Unternehemen des Nutzers</td>
+            <td> {{currentCustomer.company.companyName}}</td>
+          </tr>
+          <tr>
+            <td> Unternehemennummer</td>
+            <td> {{currentCustomer.company.companyCode}}</td>
+          </tr>
+          <tr>
+            <td>Adresse des Unternehmens</td>
+            <td>{{currentCustomer.company.address.postCode}} {{currentCustomer.company.address.city}} <br>
+              {{currentCustomer.company.address.street}} {{currentCustomer.company.address.houseNumber}}
+            </td>
 
-        </tr>
+          </tr>
+          <tr>
+            <td> E-Mail des Benutzers</td>
+            <td> {{currentCustomer.email}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="uk-card uk-card-default uk-width-1-1">
+    <table class="uk-table uk-table-striped">
+      <thead>
         <tr>
-          <td> E-Mail des Benutzers</td>
-          <td> {{currentCustomer.email}}</td>
+          <th>Changeover Limit</th>
+          <th>Fixum</th>
+          <th>Handel Promille</th>
+          <th>Handel Minimum</th>
+          <th>Handel Maximum</th>
+          <th>Transaktions Minimum</th>
+          <th>Transaktions Maximum</th>
+          <th>Transaktions Promille</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let metaPrice of metaPricing.entries">
+          <td>{{metaPrice.changeoverLimit}}</td>
+          <td>{{metaPrice.fixum}}</td>
+          <td>{{metaPrice.tradePromille}}</td>
+          <td>{{metaPrice.tradeMin}}</td>
+          <td>{{metaPrice.tradeMax}}</td>
+          <td>{{metaPrice.transactionMax}}</td>
+          <td>{{metaPrice.transactionMin}}</td>
+          <td>{{metaPrice.transactionPromille}}</td>
         </tr>
       </tbody>
-    </table> 
+    </table>
   </div>
+</div>
 </div>
