@@ -24,4 +24,6 @@ export class ProfileComponent implements OnInit {
     this.metaService.getMetaPricing().subscribe(metaPricing => { console.log(metaPricing);this.metaPricing = metaPricing });
   }
 
+
+
 }
