@@ -105,7 +105,7 @@ export class BuySellComponent implements OnInit {
       minPrice: new FormControl({ value: 0, disabled: true }, Validators.required),
       dateOfExpiry: new FormControl('', Validators.required),
       numberOfShares: new FormControl(0, [Validators.required, Validators.min(1), Validators.max(100000)]),
-      algorithmicTradingType: new FormControl('', Validators.required),
+       algorithmicTradingType: new FormControl('', Validators.required),
     });
 
     this.orderForm.controls.orderDetail.valueChanges.subscribe(orderDetail => {
@@ -163,7 +163,8 @@ export class BuySellComponent implements OnInit {
   }
 
   public isValidForm(): boolean {
-    return (this.orderForm.invalid || ((this.getShareAmount() < this.orderValue.numberOfShares.value) && this.orderType == OrderType.sell))
+    console.log
+    return (this.orderForm.invalid || ( this.orderType == OrderType.sell && (this.getShareAmount() < this.orderValue.numberOfShares.value)))
   }
 
   public cancel(): void {

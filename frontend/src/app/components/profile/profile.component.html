@@ -49,13 +49,13 @@
       </thead>
       <tbody>
         <tr *ngFor="let metaPrice of metaPricing.entries">
-          <td>{{metaPrice.changeoverLimit}}</td>
+          <td>{{metaPrice.changeoverLimit | number: '.' | removeComma}}</td>
           <td>{{metaPrice.fixum}}</td>
           <td>{{metaPrice.tradePromille}}</td>
-          <td>{{metaPrice.tradeMin}}</td>
-          <td>{{metaPrice.tradeMax}}</td>
-          <td>{{metaPrice.transactionMax}}</td>
-          <td>{{metaPrice.transactionMin}}</td>
+          <td>{{metaPrice.tradeMin | number: '.2-2' | removeComma}}</td>
+          <td>{{metaPrice.tradeMax | number: '.2-2' | removeComma}}</td>
+          <td>{{metaPrice.transactionMax | number: '.2-2' | removeComma}}</td>
+          <td>{{metaPrice.transactionMin | number: '.2-2' | removeComma}}</td>
           <td>{{metaPrice.transactionPromille}}</td>
         </tr>
       </tbody>
