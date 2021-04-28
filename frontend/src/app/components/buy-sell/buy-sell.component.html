@@ -69,9 +69,12 @@
             <label class="uk-form-label" for="numberOfShares">Anzahl der Aktien (in Stk.)*</label>
             <input class="uk-input" type="number" min="1" ng-max="2" id="numberOfShares" (keyup)="calculateSharePrice()"
               (change)="calculateSharePrice()" formControlName="numberOfShares">
-            <p *ngIf="detailDepot">
-              Sie können nicht mehr als {{getShareAmount() | number: '.' | removeComma}} Aktien von {{share?.shareName}}
-              verkaufen
+            <p *ngIf="detailDepot && orderType == sell && getShareAmount() < 100001">
+              Sie können nicht mehr als {{getShareAmount() | number: '.' | removeComma}} Aktie(n) von {{share?.shareName}}
+              verkaufen.
+            </p>
+            <p *ngIf="detailDepot && orderType == sell && getShareAmount() == 100001">
+              Sie haben keine Aktien von {{share?.shareName}}.              
             </p>
           </div>
 
