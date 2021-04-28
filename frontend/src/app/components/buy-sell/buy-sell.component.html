@@ -73,7 +73,7 @@
               Sie können nicht mehr als {{getShareAmount() | number: '.' | removeComma}} Aktie(n) von {{share?.shareName}}
               verkaufen.
             </p>
-            <p *ngIf="detailDepot && orderType == 'sell' && getShareAmount() == 100001">
+            <p *ngIf="detailDepot && orderType == 'sell' && getShareAmount() == 0">
               Sie haben keine Aktien von {{share?.shareName}}.              
             </p>
           </div>
